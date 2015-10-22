@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TagScanner.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="LibraryFilter" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">ID3 Media Library Files|*.id3lib|All Files (*.*)|*.*</Value>
+    </Setting>
+    <Setting Name="MediaFilter" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">AV Files (*.avi;*.m4a;*.mp3;*.mp4;*.wma;*.wmv)|*.avi;*.m4a;*.mp3;*.mp4;*.wma;*.wmv|Audio Files (*.m4a;*.mp3;*.wma)|*.m4a;*.mp3;*.wma|Video Files (*.avi;*.mp4;*.wmv)|*.avi;*.mp4;*.wmv|Image Files (*.bmp;*.gif;*.jpeg;*.jpg;*.png)|*.bmp;*.gif;*.jpeg;*.jpg;*.png|All Files (*.*)|*.*</Value>
+    </Setting>
+    <Setting Name="PlayerFilter" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Playlists|*.wpl|All Files (*.*)|*.*</Value>
+    </Setting>
+    <Setting Name="SearchFilter" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">ID3 Media Library Search Filters|*.id3filter|All Files (*.*)|*.*</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
