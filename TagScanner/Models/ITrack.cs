@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace TagScanner.Models
 {
@@ -6,20 +7,26 @@ namespace TagScanner.Models
 	{
 		string Album { get; set; }
 		string[] AlbumArtists { get; set; }
+		int AlbumArtistsCount { get; }
 		string[] AlbumArtistsSort { get; set; }
+		int AlbumArtistsSortCount { get; }
 		string AlbumIndex { get; }
 		string AlbumSort { get; set; }
 		string AmazonId { get; set; }
 		string[] Artists { get; set; }
+		int ArtistsCount { get; }
 		int AudioBitrate { get; }
 		int AudioChannels { get; }
 		int AudioSampleRate { get; }
 		int BeatsPerMinute { get; set; }
 		int BitsPerSample { get; }
 		string Century { get; }
+		string Codecs { get; }
 		string Comment { get; set; }
 		string[] Composers { get; set; }
+		int ComposersCount { get; }
 		string[] ComposersSort { get; set; }
+		int ComposersSortCount { get; }
 		string Conductor { get; set; }
 		string Copyright { get; set; }
 		string Decade { get; }
@@ -29,9 +36,15 @@ namespace TagScanner.Models
 		string DiscOf { get; }
 		string DiscTrack { get; }
 		TimeSpan Duration { get; }
+		FileAttributes FileAttributes { get; }
+		DateTime FileCreationTime { get; }
+		DateTime FileCreationTimeUtc { get; }
 		string FileExtension { get; }
-		long FileLength { get; }
-		string FileName { get; }
+		DateTime FileLastAccessTime { get; }
+		DateTime FileLastAccessTimeUtc { get; }
+		DateTime FileLastWriteTime { get; }
+		DateTime FileLastWriteTimeUtc { get; }
+        string FileName { get; }
 		string FileNameWithoutExtension { get; }
 		string FilePath { get; }
 		long FileSize { get; }
@@ -44,6 +57,7 @@ namespace TagScanner.Models
 		string FirstPerformer { get; }
 		string FirstPerformerSort { get; }
 		string[] Genres { get; set; }
+		int GenresCount { get; }
 		string Grouping { get; set; }
 		long InvariantEndPosition { get; }
 		long InvariantStartPosition { get; }
@@ -69,12 +83,14 @@ namespace TagScanner.Models
 		string MusicBrainzTrackId { get; set; }
 		string MusicIpId { get; set; }
 		string[] Performers { get; set; }
+		int PerformersCount { get; }
 		string[] PerformersSort { get; set; }
+		int PerformersSortCount { get; }
 		int PhotoHeight { get; }
 		int PhotoQuality { get; }
 		int PhotoWidth { get; }
-		int PictureCount { get; }
 		Picture[] Pictures { get; }
+		int PicturesCount { get; }
 		Logical PossiblyCorrupt { get; }
         TagLib.TagTypes TagTypes { get; }
 		TagLib.TagTypes TagTypesOnDisk { get; }

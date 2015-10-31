@@ -1,26 +1,22 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
+using TagScanner.Models;
 
 namespace TagScanner.ValueConverters
 {
-	public class LogicalConverter : IValueConverter
+	public class DateTimeConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			switch (value.ToString())
-			{
-				case "Yes":
-					return true;
-				case "No":
-					return false;
-			};
+			if (value is DateTime)
+				return ((DateTime)value).ToString("g");
 			return value;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			throw new NotImplementedException();
+			return value;
 		}
 	}
 }

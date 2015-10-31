@@ -66,36 +66,21 @@ namespace TagScanner.Controllers
 			}
 			set
 			{
-				if (View != null)
-					DisconnectView();
 				_view = value;
-				if (View != null)
+				if (View.Child == null)
 				{
-					ReconnectView();
-					RefreshDataSource();
+					View.Child = new GridElement();
+					Grid.Columns.Clear();
+					foreach (var column in GetColumns())
+						Grid.Columns.Add(column);
+					Grid.GridLinesVisibility = DataGridGridLinesVisibility.Vertical;
 				}
+				Grid.SelectionChanged += Grid_SelectionChanged;
+				RefreshDataSource();
 			}
 		}
 
 		private DataGrid Grid { get { return ((GridElement)View.Child).DataGrid; } }
-
-		private void DisconnectView()
-		{
-			Grid.SelectionChanged -= Grid_SelectionChanged;
-		}
-
-		private void ReconnectView()
-		{
-			if (View.Child == null)
-			{
-				View.Child = new GridElement();
-				Grid.Columns.Clear();
-				foreach (var column in GetColumns())
-					Grid.Columns.Add(column);
-				Grid.GridLinesVisibility = DataGridGridLinesVisibility.Vertical;
-            }
-			Grid.SelectionChanged += Grid_SelectionChanged;
-		}
 
 		private void RefreshDataSource()
 		{
@@ -112,30 +97,38 @@ namespace TagScanner.Controllers
 
 		#region Columns
 
-		private IEnumerable<string> _visibleColumnNames = new[] { "FilePath" };
-		public IEnumerable<string> VisibleColumnNames
+		public void EditTagVisibility()
+		{
+			var trackVisibleTags = VisibleTags.ToList();
+			var ok = new TagSelectorController(Metadata.TrackPropertyInfos).Execute(trackVisibleTags);
+			if (ok)
+				VisibleTags = VisibleTags.Intersect(trackVisibleTags).Union(trackVisibleTags);
+		}
+
+		private IEnumerable<string> _visibleTags = new[] { "FilePath" };
+		public IEnumerable<string> VisibleTags
 		{
 			get
 			{
-				return _visibleColumnNames;
+				return _visibleTags;
 			}
 			set
 			{
-				if (VisibleColumnNames.SequenceEqual(value))
+				if (VisibleTags.SequenceEqual(value))
 					return;
-				_visibleColumnNames = value;
-				InitVisibleColumns();
+				_visibleTags = value;
+				InitVisibleTags();
 			}
 		}
 
-		private void InitVisibleColumns()
+		private void InitVisibleTags()
 		{
 			foreach (var column in Grid.Columns)
 				column.Visibility = Visibility.Collapsed;
 			var displayIndex = 0;
-			foreach (var columnName in VisibleColumnNames)
+			foreach (var tag in VisibleTags)
 			{
-				var column = Grid.Columns.Single(c => (string)c.Header == columnName);
+				var column = Grid.Columns.Single(c => (string)c.Header == tag);
 				column.DisplayIndex = displayIndex++;
 				column.Visibility = Visibility.Visible;
 			}
@@ -146,22 +139,6 @@ namespace TagScanner.Controllers
 			var column = new DataGridCheckBoxColumn();
 			column.Width = 80;
 			return column;
-		}
-
-		private static DataGridBoundColumn GetColumn(string propertyTypeName)
-		{
-			switch (propertyTypeName)
-			{
-				case "String":
-					return GetTextBoxColumn(StringAlignment.Near);
-				case "Int32":
-				case "Int64":
-				case "TimeSpan":
-					return GetTextBoxColumn(StringAlignment.Far);
-				case "Logical":
-					return GetCheckBoxColumn();
-			}
-			return null;
 		}
 
 		private static DataGridBoundColumn GetColumn(PropertyInfo propertyInfo)
@@ -183,9 +160,23 @@ namespace TagScanner.Controllers
 			return column;
 		}
 
+		private static DataGridBoundColumn GetColumn(string propertyTypeName)
+		{
+			switch (propertyTypeName)
+			{
+				case "Int32":
+				case "Int64":
+				case "TimeSpan":
+					return GetTextBoxColumn(StringAlignment.Far);
+				case "Logical":
+					return GetCheckBoxColumn();
+			}
+			return GetTextBoxColumn(StringAlignment.Near);
+		}
+
 		private static IEnumerable<DataGridBoundColumn> GetColumns()
 		{
-			return SimpleCondition.SortablePropertyInfos.Select(GetColumn);
+			return Metadata.TrackPropertyInfos.Select(GetColumn);
 		}
 
 		private static Style GetColumnStyle(PropertyInfo propertyInfo)
@@ -211,8 +202,12 @@ namespace TagScanner.Controllers
 		{
 			switch (propertyInfo.PropertyType.Name)
 			{
+				case "DateTime":
+					return new DateTimeConverter();
 				case "Logical":
 					return new LogicalConverter();
+				case "String[]":
+					return new StringsConverter();
 				case "TimeSpan":
 					return new TimeSpanConverter();
 			}
@@ -352,6 +347,16 @@ namespace TagScanner.Controllers
 		{
         }
 
+		public void Find()
+		{
+
+		}
+
+		public void Replace()
+		{
+
+		}
+
 		private void Grid_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			OnSelectionChanged();
@@ -366,85 +371,38 @@ namespace TagScanner.Controllers
 
 		#region Presets
 
+		private static string[] VisibleTagsDefault = new[] { "DiscTrack", "Title", "Duration", "FileSize"};
+		private static IEnumerable<string> VisibleTagsExtended = VisibleTagsDefault.Union(new[] { "JoinedPerformers", "Album" });
+
+		private void ViewBy(IEnumerable<string> visibleTags, IEnumerable<string> groups)
+		{
+			VisibleTags = visibleTags.Union(VisibleTags);
+			Groups = groups;
+		}
+
 		public void ViewByAlbumTitle()
 		{
-			VisibleColumnNames = new[]
-			{
-				"DiscTrack",
-				"Title",
-				"Duration",
-				"FileSize"
-			};
-			Groups = new[]
-			{
-				"Album",
-				"JoinedPerformers"
-			};
+			ViewBy(VisibleTagsDefault, new[] { "Album", "JoinedPerformers" });
 		}
 
 		public void ViewByArtist()
 		{
-			VisibleColumnNames = new[]
-			{
-				"DiscTrack",
-				"Title",
-				"Duration",
-				"FileSize"
-			};
-			Groups = new[]
-			{
-				"JoinedPerformers",
-				"YearAlbum"
-			};
+			ViewBy(VisibleTagsDefault, new[] { "JoinedPerformers", "YearAlbum" });
 		}
 
 		public void ViewByGenre()
 		{
-			VisibleColumnNames = new[]
-			{
-				"DiscTrack",
-				"Title",
-				"Duration",
-				"FileSize"
-			};
-			Groups = new[]
-			{
-				"JoinedGenres",
-				"JoinedPerformers",
-				"YearAlbum"
-			};
+			ViewBy(VisibleTagsDefault, new[] { "JoinedGenres", "JoinedPerformers", "YearAlbum" });
 		}
 
 		public void ViewBySongTitle()
 		{
-			VisibleColumnNames = new[]
-			{
-				"DiscTrack",
-				"Title",
-				"Duration",
-				"FileSize",
-				"JoinedPerformers",
-				"Album"
-			};
-			Groups = new string[0];
+			ViewBy(VisibleTagsExtended, new string[0]);
 		}
 
 		public void ViewByYear()
 		{
-			VisibleColumnNames = new[]
-			{
-				"DiscTrack",
-				"Title",
-				"Duration",
-				"FileSize",
-				"JoinedPerformers",
-				"Album"
-			};
-			Groups = new[]
-			{
-				"Decade",
-				"Year"
-			};
+			ViewBy(VisibleTagsExtended, new[] { "Decade", "Year" });
 		}
 
 		#endregion

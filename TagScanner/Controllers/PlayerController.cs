@@ -21,20 +21,12 @@ namespace TagScanner.Controllers
 			get
 			{
 				return _gridFormController;
-            }
+			}
 			set
 			{
-				if (GridFormController != null)
-				{
-					View.PopupPlaylistCreateNew.Click -= PlaylistCreateNew_Click;
-					View.PopupPlaylistAddToCurrent.Click -= PlaylistAddToCurrent_Click;
-				}
 				_gridFormController = value;
-				if (GridFormController != null)
-				{
-					View.PopupPlaylistCreateNew.Click += PlaylistCreateNew_Click;
-					View.PopupPlaylistAddToCurrent.Click += PlaylistAddToCurrent_Click;
-				}
+				View.PopupPlaylistCreateNew.Click += PlaylistCreateNew_Click;
+				View.PopupPlaylistAddToCurrent.Click += PlaylistAddToCurrent_Click;
 			}
 		}
 
@@ -77,12 +69,12 @@ namespace TagScanner.Controllers
 			View.TabControl.SelectedTab = View.tabPlayer;
 		}
 
-		protected override bool LoadFromStream(Stream stream)
+		protected override bool LoadFromStream(Stream stream, string format)
 		{
 			return true;
 		}
 
-		protected override bool SaveToStream(Stream stream)
+		protected override bool SaveToStream(Stream stream, string format)
 		{
 			return true;
 		}

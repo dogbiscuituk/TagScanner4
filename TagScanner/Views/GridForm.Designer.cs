@@ -32,12 +32,12 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GridForm));
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.GridElementHost = new System.Windows.Forms.Integration.ElementHost();
-			this.PopupMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.PopupColumns = new System.Windows.Forms.ToolStripMenuItem();
-			this.PopupFilters = new System.Windows.Forms.ToolStripMenuItem();
-			this.PopupGroups = new System.Windows.Forms.ToolStripMenuItem();
+			this.GridPopupMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.GridPopupTags = new System.Windows.Forms.ToolStripMenuItem();
+			this.GridPopupFilters = new System.Windows.Forms.ToolStripMenuItem();
+			this.GridPopupGroups = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
-			this.PopupPlaylist = new System.Windows.Forms.ToolStripMenuItem();
+			this.GridPopupPlaylist = new System.Windows.Forms.ToolStripMenuItem();
 			this.PopupPlaylistCreateNew = new System.Windows.Forms.ToolStripMenuItem();
 			this.PopupPlaylistAddToCurrent = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripSeparator();
@@ -49,8 +49,9 @@
 			this.splitContainer2 = new System.Windows.Forms.SplitContainer();
 			this.PictureBox = new System.Windows.Forms.PictureBox();
 			this.TabControl = new System.Windows.Forms.TabControl();
-			this.tabProperties = new System.Windows.Forms.TabPage();
+			this.tabTags = new System.Windows.Forms.TabPage();
 			this.PropertyGrid = new System.Windows.Forms.PropertyGrid();
+			this.PropertyGridPopupMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.tabPlayer = new System.Windows.Forms.TabPage();
 			this.MediaPlayer = new AxWMPLib.AxWindowsMediaPlayer();
 			this.MainMenu = new System.Windows.Forms.MenuStrip();
@@ -66,6 +67,9 @@
 			this.EditMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.EditSelectAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.EditInvertSelection = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+			this.EditFind = new System.Windows.Forms.ToolStripMenuItem();
+			this.EditReplace = new System.Windows.Forms.ToolStripMenuItem();
 			this.ViewMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.ViewByArtist = new System.Windows.Forms.ToolStripMenuItem();
 			this.ViewByGenre = new System.Windows.Forms.ToolStripMenuItem();
@@ -84,18 +88,20 @@
 			this.AddFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.StatusBar = new System.Windows.Forms.StatusStrip();
 			this.ModifiedLabel = new System.Windows.Forms.ToolStripStatusLabel();
+			this.PropertyGridPopupTagVisibility = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
 			this.splitContainer1.SuspendLayout();
-			this.PopupMenu.SuspendLayout();
+			this.GridPopupMenu.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
 			this.splitContainer2.Panel1.SuspendLayout();
 			this.splitContainer2.Panel2.SuspendLayout();
 			this.splitContainer2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.PictureBox)).BeginInit();
 			this.TabControl.SuspendLayout();
-			this.tabProperties.SuspendLayout();
+			this.tabTags.SuspendLayout();
+			this.PropertyGridPopupMenu.SuspendLayout();
 			this.tabPlayer.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.MediaPlayer)).BeginInit();
 			this.MainMenu.SuspendLayout();
@@ -121,7 +127,7 @@
 			// 
 			// GridElementHost
 			// 
-			this.GridElementHost.ContextMenuStrip = this.PopupMenu;
+			this.GridElementHost.ContextMenuStrip = this.GridPopupMenu;
 			this.GridElementHost.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.GridElementHost.Location = new System.Drawing.Point(0, 0);
 			this.GridElementHost.Margin = new System.Windows.Forms.Padding(0);
@@ -131,43 +137,43 @@
 			this.GridElementHost.Text = "GridContainerHost";
 			this.GridElementHost.Child = null;
 			// 
-			// PopupMenu
+			// GridPopupMenu
 			// 
-			this.PopupMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.PopupColumns,
-            this.PopupFilters,
-            this.PopupGroups,
+			this.GridPopupMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.GridPopupTags,
+            this.GridPopupFilters,
+            this.GridPopupGroups,
             this.toolStripMenuItem6,
-            this.PopupPlaylist});
-			this.PopupMenu.Name = "PopupMenu";
-			this.PopupMenu.Size = new System.Drawing.Size(132, 98);
+            this.GridPopupPlaylist});
+			this.GridPopupMenu.Name = "PopupMenu";
+			this.GridPopupMenu.Size = new System.Drawing.Size(122, 98);
 			// 
-			// PopupColumns
+			// GridPopupTags
 			// 
-			this.PopupColumns.Name = "PopupColumns";
-			this.PopupColumns.Size = new System.Drawing.Size(131, 22);
-			this.PopupColumns.Text = "&Columns...";
+			this.GridPopupTags.Name = "GridPopupTags";
+			this.GridPopupTags.Size = new System.Drawing.Size(121, 22);
+			this.GridPopupTags.Text = "&Tags...";
 			// 
-			// PopupFilters
+			// GridPopupFilters
 			// 
-			this.PopupFilters.Name = "PopupFilters";
-			this.PopupFilters.Size = new System.Drawing.Size(131, 22);
-			this.PopupFilters.Text = "&Filters...";
+			this.GridPopupFilters.Name = "GridPopupFilters";
+			this.GridPopupFilters.Size = new System.Drawing.Size(121, 22);
+			this.GridPopupFilters.Text = "&Filters...";
 			// 
-			// PopupGroups
+			// GridPopupGroups
 			// 
-			this.PopupGroups.Name = "PopupGroups";
-			this.PopupGroups.Size = new System.Drawing.Size(131, 22);
-			this.PopupGroups.Text = "&Groups...";
+			this.GridPopupGroups.Name = "GridPopupGroups";
+			this.GridPopupGroups.Size = new System.Drawing.Size(121, 22);
+			this.GridPopupGroups.Text = "&Groups...";
 			// 
 			// toolStripMenuItem6
 			// 
 			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-			this.toolStripMenuItem6.Size = new System.Drawing.Size(128, 6);
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(118, 6);
 			// 
-			// PopupPlaylist
+			// GridPopupPlaylist
 			// 
-			this.PopupPlaylist.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.GridPopupPlaylist.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.PopupPlaylistCreateNew,
             this.PopupPlaylistAddToCurrent,
             this.toolStripMenuItem8,
@@ -176,9 +182,9 @@
             this.toolStripMenuItem9,
             this.PopupPlaylistSave,
             this.PopupPlaylistSaveAs});
-			this.PopupPlaylist.Name = "PopupPlaylist";
-			this.PopupPlaylist.Size = new System.Drawing.Size(131, 22);
-			this.PopupPlaylist.Text = "&Playlist";
+			this.GridPopupPlaylist.Name = "GridPopupPlaylist";
+			this.GridPopupPlaylist.Size = new System.Drawing.Size(121, 22);
+			this.GridPopupPlaylist.Text = "&Playlist";
 			// 
 			// PopupPlaylistCreateNew
 			// 
@@ -255,7 +261,7 @@
 			// 
 			// TabControl
 			// 
-			this.TabControl.Controls.Add(this.tabProperties);
+			this.TabControl.Controls.Add(this.tabTags);
 			this.TabControl.Controls.Add(this.tabPlayer);
 			this.TabControl.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.TabControl.Location = new System.Drawing.Point(0, 0);
@@ -267,20 +273,21 @@
 			this.TabControl.Size = new System.Drawing.Size(233, 378);
 			this.TabControl.TabIndex = 1;
 			// 
-			// tabProperties
+			// tabTags
 			// 
-			this.tabProperties.BackColor = System.Drawing.SystemColors.Control;
-			this.tabProperties.Controls.Add(this.PropertyGrid);
-			this.tabProperties.Location = new System.Drawing.Point(4, 22);
-			this.tabProperties.Margin = new System.Windows.Forms.Padding(0);
-			this.tabProperties.Name = "tabProperties";
-			this.tabProperties.Size = new System.Drawing.Size(225, 352);
-			this.tabProperties.TabIndex = 0;
-			this.tabProperties.Text = "Properties";
+			this.tabTags.BackColor = System.Drawing.SystemColors.Control;
+			this.tabTags.Controls.Add(this.PropertyGrid);
+			this.tabTags.Location = new System.Drawing.Point(4, 22);
+			this.tabTags.Margin = new System.Windows.Forms.Padding(0);
+			this.tabTags.Name = "tabTags";
+			this.tabTags.Size = new System.Drawing.Size(225, 352);
+			this.tabTags.TabIndex = 0;
+			this.tabTags.Text = "Tags";
 			// 
 			// PropertyGrid
 			// 
 			this.PropertyGrid.CategoryForeColor = System.Drawing.SystemColors.InactiveCaptionText;
+			this.PropertyGrid.ContextMenuStrip = this.PropertyGridPopupMenu;
 			this.PropertyGrid.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.PropertyGrid.Location = new System.Drawing.Point(0, 0);
 			this.PropertyGrid.Margin = new System.Windows.Forms.Padding(0);
@@ -288,13 +295,20 @@
 			this.PropertyGrid.Size = new System.Drawing.Size(225, 352);
 			this.PropertyGrid.TabIndex = 0;
 			// 
+			// PropertyGridPopupMenu
+			// 
+			this.PropertyGridPopupMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.PropertyGridPopupTagVisibility});
+			this.PropertyGridPopupMenu.Name = "PropertyGridPopupMenu";
+			this.PropertyGridPopupMenu.Size = new System.Drawing.Size(153, 48);
+			// 
 			// tabPlayer
 			// 
 			this.tabPlayer.Controls.Add(this.MediaPlayer);
 			this.tabPlayer.Location = new System.Drawing.Point(4, 22);
 			this.tabPlayer.Name = "tabPlayer";
 			this.tabPlayer.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPlayer.Size = new System.Drawing.Size(225, 333);
+			this.tabPlayer.Size = new System.Drawing.Size(225, 352);
 			this.tabPlayer.TabIndex = 4;
 			this.tabPlayer.Text = "Player";
 			this.tabPlayer.UseVisualStyleBackColor = true;
@@ -306,7 +320,7 @@
 			this.MediaPlayer.Location = new System.Drawing.Point(3, 3);
 			this.MediaPlayer.Name = "MediaPlayer";
 			this.MediaPlayer.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("MediaPlayer.OcxState")));
-			this.MediaPlayer.Size = new System.Drawing.Size(219, 327);
+			this.MediaPlayer.Size = new System.Drawing.Size(219, 346);
 			this.MediaPlayer.TabIndex = 0;
 			// 
 			// MainMenu
@@ -392,7 +406,10 @@
 			// 
 			this.EditMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.EditSelectAll,
-            this.EditInvertSelection});
+            this.EditInvertSelection,
+            this.toolStripMenuItem2,
+            this.EditFind,
+            this.EditReplace});
 			this.EditMenu.Name = "EditMenu";
 			this.EditMenu.Size = new System.Drawing.Size(39, 20);
 			this.EditMenu.Text = "&Edit";
@@ -401,14 +418,33 @@
 			// 
 			this.EditSelectAll.Name = "EditSelectAll";
 			this.EditSelectAll.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
-			this.EditSelectAll.Size = new System.Drawing.Size(164, 22);
+			this.EditSelectAll.Size = new System.Drawing.Size(167, 22);
 			this.EditSelectAll.Text = "Select &All";
 			// 
 			// EditInvertSelection
 			// 
 			this.EditInvertSelection.Name = "EditInvertSelection";
-			this.EditInvertSelection.Size = new System.Drawing.Size(164, 22);
+			this.EditInvertSelection.Size = new System.Drawing.Size(167, 22);
 			this.EditInvertSelection.Text = "&Invert Selection";
+			// 
+			// toolStripMenuItem2
+			// 
+			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(164, 6);
+			// 
+			// EditFind
+			// 
+			this.EditFind.Name = "EditFind";
+			this.EditFind.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
+			this.EditFind.Size = new System.Drawing.Size(167, 22);
+			this.EditFind.Text = "&Find...";
+			// 
+			// EditReplace
+			// 
+			this.EditReplace.Name = "EditReplace";
+			this.EditReplace.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
+			this.EditReplace.Size = new System.Drawing.Size(167, 22);
+			this.EditReplace.Text = "&Replace...";
 			// 
 			// ViewMenu
 			// 
@@ -532,6 +568,12 @@
 			this.ModifiedLabel.Text = "Modified";
 			this.ModifiedLabel.Visible = false;
 			// 
+			// PropertyGridPopupTagVisibility
+			// 
+			this.PropertyGridPopupTagVisibility.Name = "PropertyGridPopupTagVisibility";
+			this.PropertyGridPopupTagVisibility.Size = new System.Drawing.Size(152, 22);
+			this.PropertyGridPopupTagVisibility.Text = "&Tag Visibility...";
+			// 
 			// GridForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -546,14 +588,15 @@
 			this.splitContainer1.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
 			this.splitContainer1.ResumeLayout(false);
-			this.PopupMenu.ResumeLayout(false);
+			this.GridPopupMenu.ResumeLayout(false);
 			this.splitContainer2.Panel1.ResumeLayout(false);
 			this.splitContainer2.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
 			this.splitContainer2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.PictureBox)).EndInit();
 			this.TabControl.ResumeLayout(false);
-			this.tabProperties.ResumeLayout(false);
+			this.tabTags.ResumeLayout(false);
+			this.PropertyGridPopupMenu.ResumeLayout(false);
 			this.tabPlayer.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.MediaPlayer)).EndInit();
 			this.MainMenu.ResumeLayout(false);
@@ -596,15 +639,15 @@
 		public System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
 		public System.Windows.Forms.ToolStripStatusLabel ModifiedLabel;
 		public System.Windows.Forms.Integration.ElementHost GridElementHost;
-		public System.Windows.Forms.ContextMenuStrip PopupMenu;
-		public System.Windows.Forms.ToolStripMenuItem PopupColumns;
-		public System.Windows.Forms.ToolStripMenuItem PopupGroups;
-		public System.Windows.Forms.ToolStripMenuItem PopupFilters;
+		public System.Windows.Forms.ContextMenuStrip GridPopupMenu;
+		public System.Windows.Forms.ToolStripMenuItem GridPopupTags;
+		public System.Windows.Forms.ToolStripMenuItem GridPopupGroups;
+		public System.Windows.Forms.ToolStripMenuItem GridPopupFilters;
 		public System.Windows.Forms.TabControl TabControl;
-		public System.Windows.Forms.TabPage tabProperties;
+		public System.Windows.Forms.TabPage tabTags;
 		public System.Windows.Forms.PropertyGrid PropertyGrid;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
-		public System.Windows.Forms.ToolStripMenuItem PopupPlaylist;
+		public System.Windows.Forms.ToolStripMenuItem GridPopupPlaylist;
 		public AxWMPLib.AxWindowsMediaPlayer MediaPlayer;
 		public System.Windows.Forms.ToolStripMenuItem PopupPlaylistCreateNew;
 		public System.Windows.Forms.ToolStripMenuItem PopupPlaylistAddToCurrent;
@@ -621,6 +664,11 @@
 		public System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
 		public System.Windows.Forms.ToolStripMenuItem ViewByAlbumTitle;
 		public System.Windows.Forms.ToolStripMenuItem ViewBySongTitle;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+		public System.Windows.Forms.ToolStripMenuItem EditFind;
+		public System.Windows.Forms.ToolStripMenuItem EditReplace;
+		private System.Windows.Forms.ContextMenuStrip PropertyGridPopupMenu;
+		public System.Windows.Forms.ToolStripMenuItem PropertyGridPopupTagVisibility;
 	}
 }
 

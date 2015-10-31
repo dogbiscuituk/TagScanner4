@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using TagScanner.Models;
 
 namespace TagScanner
@@ -22,9 +24,10 @@ namespace TagScanner
 
 		public readonly IEnumerable<ITrack> Tracks;
 
+		[Browsable(true)]
 		[Category("Selection")]
 		[Description("The total number of tracks in the current selection.")]
-		public int TotalTracks
+		public int SelectedTracksCount
 		{
 			get
 			{
@@ -32,9 +35,10 @@ namespace TagScanner
 			}
 		}
 
+		[Browsable(true)]
 		[Category("Selection")]
 		[Description("The number of unique album titles in the current selection.")]
-		public int UniqueAlbums
+		public int SelectedAlbumsCount
 		{
 			get
 			{
@@ -42,19 +46,21 @@ namespace TagScanner
 			}
 		}
 
+		[Browsable(true)]
 		[Category("Selection")]
 		[Description("The number of unique artists in the current selection.")]
-		public int UniqueArtists
+		public int SelectedArtistsCount
 		{
 			get
 			{
-				return Tracks.Select(f => f.JoinedPerformers).Distinct().Count();
+				return Tracks.SelectMany(f => f.Performers).Distinct().Count();
 			}
 		}
 
+		[Browsable(true)]
 		[Category("Selection")]
 		[Description("The number of unique genres in the current selection.")]
-		public int UniqueGenres
+		public int SelectedGenresCount
 		{
 			get
 			{
@@ -67,8 +73,9 @@ namespace TagScanner
 		#region ITrack
 
 		private string _album;
+		[Browsable(true)]
 		[Category("Details")]
-		[Description("A string containing the album of the media represented by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the album name of the media represented by the selected item(s), or an empty string if no value is present.")]
 		public string Album
 		{
 			get { return GetString(p => p.Album, ref _album); }
@@ -81,8 +88,9 @@ namespace TagScanner
 		}
 
 		private string[] _albumArtists;
+		[Browsable(true)]
 		[Category("Personnel")]
-		[Description("A string array containing the band or artist who is credited in the creation of the entire album or collection containing the media described by the selected item(s), or an empty array if no value is present.")]
+		[Description("A string array containing the band(s) or artist(s) credited in the creation of the entire album or collection containing the media described by the selected item(s), or an empty array if no value is present.")]
 		public string[] AlbumArtists
 		{
 			get { return GetStringArray(p => p.AlbumArtists, ref _albumArtists); }
@@ -95,7 +103,19 @@ namespace TagScanner
 			}
 		}
 
+		[Browsable(false)]
+		[Category("Personnel")]
+		[DefaultValue(0)]
+		public int AlbumArtistsCount
+		{
+			get
+			{
+				return AlbumArtists.Length;
+			}
+		}
+
 		private string[] _albumArtistsSort;
+		[Browsable(false)]
 		[Category("Personnel")]
 		[Description("A string array containing the sort names for the band or artist who is credited in the creation of the entire album or collection containing the media described by the selected item(s), or an empty array if no value is present.")]
 		public string[] AlbumArtistsSort
@@ -110,14 +130,27 @@ namespace TagScanner
 		}
 
 		[Browsable(false)]
+		[Category("Personnel")]
+		[DefaultValue(0)]
+		public int AlbumArtistsSortCount
+		{
+			get
+			{
+				return AlbumArtistsSort.Length;
+			}
+		}
+
+		[Browsable(false)]
+		[Category("Details")]
 		public string AlbumIndex
 		{
 			get { return AlbumSort.Coalesce(Album).GetIndex(); }
 		}
 
 		private string _albumSort;
+		[Browsable(false)]
 		[Category("Details")]
-		[Description("A string containing the sort names for the Album Title in the media described by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the sort names for the Album Title in the media described by the selected item(s), or an empty string if no value is present.")]
 		public string AlbumSort
 		{
 			get { return GetString(p => p.AlbumSort, ref _albumSort); }
@@ -129,7 +162,8 @@ namespace TagScanner
 		}
 
 		private string _amazonId;
-		[Description("A string containing the AmazonID for the media described by the selected item(s), or null if no value is present.")]
+		[Browsable(false)]
+		[Description("A string containing the AmazonID for the media described by the selected item(s), or an empty string if no value is present.")]
 		public string AmazonId
 		{
 			get { return GetString(p => p.AmazonId, ref _amazonId); }
@@ -141,8 +175,9 @@ namespace TagScanner
 		}
 
 		private string[] _artists;
+		[Browsable(false)]
 		[Category("Personnel")]
-		[Description("A string array containing the sort names for the performers or artists who performed in the media described by the selected item(s), or an empty array if no value is present. (Obsolete. For album artists, use AlbumArtists. For track artists, use Performers.)")]
+		[Description("A string array containing the performers or artists who performed in the media described by the selected item(s), or an empty array if no value is present. (Obsolete. For album artists, use AlbumArtists. For track artists, use Performers.)")]
 		public string[] Artists
 		{
 			get { return GetStringArray(p => p.Artists, ref _artists); }
@@ -155,7 +190,19 @@ namespace TagScanner
 			}
 		}
 
+		[Browsable(false)]
+		[Category("Personnel")]
+		[DefaultValue(0)]
+		public int ArtistsCount
+		{
+			get
+			{
+				return Artists.Length;
+			}
+		}
+
 		private int _audioBitrate = int.MaxValue;
+		[Browsable(true)]
 		[Category("Format")]
 		[DefaultValue(0)]
 		[Description("An integer containing the bitrate of the audio represented by the selected item(s). This value is equal to the first non-zero audio bitrate.")]
@@ -165,6 +212,7 @@ namespace TagScanner
 		}
 
 		private int _audioChannels = int.MaxValue;
+		[Browsable(false)]
 		[Category("Format")]
 		[DefaultValue(0)]
 		[Description("An integer containing the number of channels in the audio represented by the selected item(s). This value is equal to the first non-zero audio channel count.")]
@@ -174,6 +222,7 @@ namespace TagScanner
 		}
 
 		private int _audioSampleRate = int.MaxValue;
+		[Browsable(false)]
 		[Category("Format")]
 		[DefaultValue(0)]
 		[Description("An integer containing the sample rate of the audio represented by the selected item(s). This value is equal to the first non-zero audio sample rate.")]
@@ -183,7 +232,8 @@ namespace TagScanner
 		}
 
 		private int _beatsPerMinute = int.MaxValue;
-		/*[Category("Details")]*/
+		[Browsable(true)]
+		[Category("Details")]
 		[DefaultValue(0)]
 		[Description("An unsigned integer containing the number of beats per minute in the audio of the media represented by the selected item(s), or zero if not specified.")]
 		public int BeatsPerMinute
@@ -197,6 +247,7 @@ namespace TagScanner
 		}
 
 		private int _bitsPerSample = int.MaxValue;
+		[Browsable(false)]
 		[Category("Format")]
 		[DefaultValue(0)]
 		[Description("An integer value containing the number of bits per sample in the audio represented by the selected item(s). This value is equal to the first non-zero quantization.")]
@@ -214,8 +265,18 @@ namespace TagScanner
 			get { return GetString(p => p.Century, ref _century); }
 		}
 
+		private string _codecs;
+		[Browsable(false)]
+		[Category("Format")]
+		[Description("A string containing a description of the media represented by the selected item(s). The value contains the summaries of the codecs separated by semicolons.")]
+		public string Codecs
+		{
+			get { return GetString(p => p.Codecs, ref _codecs); }
+		}
+
 		private string _comment;
-		[Description("A string containing user comments on the media represented by the selected item(s), or null if no value is present.")]
+		[Browsable(true)]
+		[Description("A string containing user comments on the media represented by the selected item(s), or an empty string if no value is present.")]
 		public string Comment
 		{
 			get { return GetString(p => p.Comment, ref _comment); }
@@ -227,6 +288,7 @@ namespace TagScanner
 		}
 
 		private string[] _composers;
+		[Browsable(true)]
 		[Category("Personnel")]
 		[Description("A string array containing the composers of the media represented by the selected item(s), or an empty array if no value is present.")]
 		public string[] Composers
@@ -241,7 +303,19 @@ namespace TagScanner
 			}
 		}
 
+		[Browsable(false)]
+		[Category("Personnel")]
+		[DefaultValue(0)]
+		public int ComposersCount
+		{
+			get
+			{
+				return Composers.Length;
+			}
+		}
+
 		private string[] _composersSort;
+		[Browsable(false)]
 		[Category("Personnel")]
 		[Description("A string array containing the sort names for the Composers in the media described by the selected item(s), or an empty array if no value is present.")]
 		public string[] ComposersSort
@@ -255,9 +329,21 @@ namespace TagScanner
 			}
 		}
 
-		private string _conductor;
+		[Browsable(false)]
 		[Category("Personnel")]
-		[Description("A string containing the conductor or director of the media represented by the selected item(s), or null if no value is present.")]
+		[DefaultValue(0)]
+		public int ComposersSortCount
+		{
+			get
+			{
+				return ComposersSort.Length;
+			}
+		}
+
+		private string _conductor;
+		[Browsable(true)]
+		[Category("Personnel")]
+		[Description("A string containing the conductor or director of the media represented by the selected item(s), or an empty string if no value is present.")]
 		public string Conductor
 		{
 			get { return GetString(p => p.Conductor, ref _conductor); }
@@ -269,7 +355,8 @@ namespace TagScanner
 		}
 
 		private string _copyright;
-		[Description("A string containing the copyright information for the media represented by the selected item(s), or null if no value is present.")]
+		[Browsable(true)]
+		[Description("A string containing the copyright information for the media represented by the selected item(s), or an empty string if no value is present.")]
 		public string Copyright
 		{
 			get { return GetString(p => p.Copyright, ref _copyright); }
@@ -290,6 +377,7 @@ namespace TagScanner
 		}
 
 		private string _description;
+		[Browsable(true)]
 		[Category("Format")]
 		[Description("A string containing a description of the media represented by the selected item(s). The value contains the descriptions of the codecs joined by colons.")]
 		public string Description
@@ -298,6 +386,7 @@ namespace TagScanner
 		}
 
 		private int _discCount = int.MaxValue;
+		[Browsable(true)]
 		[Category("Media")]
 		[DefaultValue(0)]
 		[Description("An unsigned integer containing the number of discs in the boxed set containing the media represented by the selected item(s), or zero if not specified.")]
@@ -312,6 +401,7 @@ namespace TagScanner
 		}
 
 		private int _discNumber = int.MaxValue;
+		[Browsable(true)]
 		[Category("Media")]
 		[DefaultValue(0)]
 		[Description("An unsigned integer containing the number of the disc containing the media represented by the selected item(s) in the boxed set.")]
@@ -344,11 +434,41 @@ namespace TagScanner
 		}
 
 		private TimeSpan _duration = TimeSpan.MaxValue;
+		[Browsable(true)]
 		[Category("Details")]
 		[Description("A TimeSpan containing the duration of the media represented by the selected item(s). If the duration was set in the constructor, that value is returned. Otherwise, the longest codec duration is used.")]
 		public TimeSpan Duration
 		{
 			get { return GetTimeSpan(p => p.Duration, ref _duration); }
+		}
+
+		private FileAttributes _fileAttributes = (FileAttributes)(-1);
+		public FileAttributes FileAttributes
+		{
+			get
+			{
+				return GetFileAttributes(p => p.FileAttributes, ref _fileAttributes);
+			}
+		}
+
+		private DateTime _fileCreationTime = DateTime.MaxValue;
+		[Browsable(false)]
+		public DateTime FileCreationTime
+		{
+			get
+			{
+				return GetDateTime(p => p.FileCreationTime, ref _fileCreationTime);
+			}
+		}
+
+		private DateTime _fileCreationTimeUtc = DateTime.MaxValue;
+		[Browsable(false)]
+		public DateTime FileCreationTimeUtc
+		{
+			get
+			{
+				return GetDateTime(p => p.FileCreationTimeUtc, ref _fileCreationTimeUtc);
+			}
 		}
 
 		private string _fileExtension;
@@ -360,14 +480,44 @@ namespace TagScanner
 			get { return GetString(p => p.FileExtension, ref _fileExtension); }
 		}
 
-		private long _fileLength = long.MaxValue;
+		private DateTime _fileLastAccessTime = DateTime.MaxValue;
 		[Browsable(false)]
-		[Category("Details")]
-		[DefaultValue(0)]
-		[Description("A long integer containing the byte length of the media file in the filesystem.")]
-		public long FileLength
+		public DateTime FileLastAccessTime
 		{
-			get { return GetLong(p => p.FileLength, ref _fileLength, true); }
+			get
+			{
+				return GetDateTime(p => p.FileLastAccessTime, ref _fileLastAccessTime);
+			}
+		}
+
+		private DateTime _fileLastAccessTimeUtc = DateTime.MaxValue;
+		[Browsable(false)]
+		public DateTime FileLastAccessTimeUtc
+		{
+            get
+			{
+				return GetDateTime(p => p.FileLastAccessTimeUtc, ref _fileLastAccessTimeUtc);
+			}
+		}
+
+		private DateTime _fileLastWriteTime = DateTime.MaxValue;
+		[Browsable(false)]
+		public DateTime FileLastWriteTime
+		{
+			get
+			{
+				return GetDateTime(p => p.FileLastWriteTime, ref _fileLastWriteTime);
+			}
+		}
+
+		private DateTime _fileLastWriteTimeUtc = DateTime.MaxValue;
+		[Browsable(false)]
+		public DateTime FileLastWriteTimeUtc
+		{
+			get
+			{
+				return GetDateTime(p => p.FileLastWriteTimeUtc, ref _fileLastWriteTimeUtc);
+			}
 		}
 
 		private string _fileName;
@@ -389,6 +539,7 @@ namespace TagScanner
 		}
 
 		private string _filePath;
+		[Browsable(true)]
 		[Category("Details")]
 		[Description("A string containing the full path to the media file or folder in the filesystem.")]
 		public string FilePath
@@ -397,6 +548,7 @@ namespace TagScanner
 		}
 
 		private long _fileSize = long.MaxValue;
+		[Browsable(true)]
 		[Category("Details")]
 		[DefaultValue(0)]
 		[Description("A long integer containing the byte length of the media file in the filesystem.")]
@@ -412,7 +564,7 @@ namespace TagScanner
 		private string _firstAlbumArtist;
 		[Browsable(false)]
 		[Category("Personnel")]
-		[Description("A string containing the first band or artist who is credited in the creation of the entire album or collection containing the media described by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the first band or artist who is credited in the creation of the entire album or collection containing the media described by the selected item(s), or an empty string if no value is present.")]
 		public string FirstAlbumArtist
 		{
 			get { return GetString(p => p.FirstAlbumArtist, ref _firstAlbumArtist); }
@@ -421,7 +573,7 @@ namespace TagScanner
 		private string _firstAlbumArtistSort;
 		[Browsable(false)]
 		[Category("Personnel")]
-		[Description("A string containing the sort names for the first band or artist who is credited in the creation of the entire album or collection containing the media described by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the sort names for the first band or artist who is credited in the creation of the entire album or collection containing the media described by the selected item(s), or an empty string if no value is present.")]
 		public string FirstAlbumArtistSort
 		{
 			get { return GetString(p => p.FirstAlbumArtistSort, ref _firstAlbumArtistSort); }
@@ -430,7 +582,7 @@ namespace TagScanner
 		private string _firstArtist;
 		[Browsable(false)]
 		[Category("Personnel")]
-		[Description("A string containing the sort name for the first performer or artist who performed in the media described by the selected item(s), or null if no value is present. (Obsolete. For album artists, use FirstAlbumArtist. For track artists, use FirstPerformer.)")]
+		[Description("A string containing the sort name for the first performer or artist who performed in the media described by the selected item(s), or an empty string if no value is present. (Obsolete. For album artists, use FirstAlbumArtist. For track artists, use FirstPerformer.)")]
 		public string FirstArtist
 		{
 			get { return GetString(p => p.FirstArtist, ref _firstArtist); }
@@ -439,7 +591,7 @@ namespace TagScanner
 		private string _firstComposer;
 		[Browsable(false)]
 		[Category("Personnel")]
-		[Description("A string containing the first composer of the media represented by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the first composer of the media represented by the selected item(s), or an empty string if no value is present.")]
 		public string FirstComposer
 		{
 			get { return GetString(p => p.FirstComposer, ref _firstComposer); }
@@ -448,7 +600,7 @@ namespace TagScanner
 		private string _firstComposerSort;
 		[Browsable(false)]
 		[Category("Personnel")]
-		[Description("A string containing the sort name for first composer of the media represented by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the sort name for first composer of the media represented by the selected item(s), or an empty string if no value is present.")]
 		public string FirstComposerSort
 		{
 			get { return GetString(p => p.FirstComposerSort, ref _firstComposerSort); }
@@ -457,7 +609,7 @@ namespace TagScanner
 		private string _firstGenre;
 		[Browsable(false)]
 		[Category("Details")]
-		[Description("A string containing the first genre of the media represented by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the first genre of the media represented by the selected item(s), or an empty string if no value is present.")]
 		public string FirstGenre
 		{
 			get { return GetString(p => p.FirstGenre, ref _firstGenre); }
@@ -466,7 +618,7 @@ namespace TagScanner
 		private string _firstPerformer;
 		[Browsable(false)]
 		[Category("Personnel")]
-		[Description("A string containing the first performer or artist who performed in the media described by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the first performer or artist who performed in the media described by the selected item(s), or an empty string if no value is present.")]
 		public string FirstPerformer
 		{
 			get { return GetString(p => p.FirstPerformer, ref _firstPerformer); }
@@ -475,13 +627,14 @@ namespace TagScanner
 		private string _firstPerformerSort;
 		[Browsable(false)]
 		[Category("Personnel")]
-		[Description("A string containing the sort name for the first performer or artist who performed in the media described by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the sort name for the first performer or artist who performed in the media described by the selected item(s), or an empty string if no value is present.")]
 		public string FirstPerformerSort
 		{
 			get { return GetString(p => p.FirstPerformerSort, ref _firstPerformerSort); }
 		}
 
 		private string[] _genres;
+		[Browsable(true)]
 		[Category("Details")]
 		[Description("A string array containing the genres of the media represented by the selected item(s), or an empty array if no value is present.")]
 		public string[] Genres
@@ -497,8 +650,21 @@ namespace TagScanner
 			}
 		}
 
+		[Browsable(false)]
+		[Category("Details")]
+		[DefaultValue(0)]
+		public int GenresCount
+		{
+			get
+			{
+				return Genres.Length;
+			}
+		}
+
 		private string _grouping;
-		[Description("A string containing the grouping on the album which the media in the selected item(s) belongs to, or null if no value is present.")]
+		[Browsable(false)]
+		[Category("Details")]
+		[Description("A string containing the grouping on the album which the media in the selected item(s) belongs to, or an empty string if no value is present.")]
 		public string Grouping
 		{
 			get { return GetString(p => p.Grouping, ref _grouping); }
@@ -510,6 +676,7 @@ namespace TagScanner
 		}
 
 		private long _invariantEndPosition = long.MaxValue;
+		[Browsable(false)]
 		[Category("Format")]
 		[DefaultValue(0)]
 		[Description("A long integer containing the position at which the invariant portion of the selected item(s) ends.")]
@@ -519,6 +686,7 @@ namespace TagScanner
 		}
 
 		private long _invariantStartPosition = long.MaxValue;
+		[Browsable(false)]
 		[Category("Format")]
 		[DefaultValue(0)]
 		[Description("A long integer containing the position at which the invariant portion of the selected item(s) begins.")]
@@ -528,6 +696,7 @@ namespace TagScanner
 		}
 
 		private Logical _isClassical;
+		[Browsable(false)]
 		[Category("Details")]
 		[Description("A bool indicating whether or not the first genre of the selected item(s) is 'Classical'.")]
 		public Logical IsClassical
@@ -536,6 +705,7 @@ namespace TagScanner
 		}
 
 		private Logical _isEmpty;
+		[Browsable(false)]
 		[Category("Format")]
 		[Description("A bool indicating whether the selected item(s) contains any tag values.")]
 		public Logical IsEmpty
@@ -544,61 +714,69 @@ namespace TagScanner
 		}
 
 		private string _joinedAlbumArtists;
+		[Browsable(true)]
 		[Category("Personnel")]
-		[Description("A string containing the artist(s) credited in the creation of the entire album or collection containing the media described by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the artist(s) credited in the creation of the entire album or collection containing the media described by the selected item(s), or an empty string if no value is present.")]
 		public string JoinedAlbumArtists
 		{
 			get { return GetString(p => p.JoinedAlbumArtists, ref _joinedAlbumArtists); }
 		}
 
 		private string _joinedArtists;
+		[Browsable(false)]
 		[Category("Personnel")]
-		[Description("A string containing the sort names for the performers or artists who performed in the media described by the selected item(s), or null if no value is present. (Obsolete. For album artists, use JoinedAlbumArtists. For track artists, use JoinedPerformers.)")]
+		[Description("A string containing the sort names for the performers or artists who performed in the media described by the selected item(s), or an empty string if no value is present. (Obsolete. For album artists, use JoinedAlbumArtists. For track artists, use JoinedPerformers.)")]
 		public string JoinedArtists
 		{
 			get { return GetString(p => p.JoinedArtists, ref _joinedArtists); }
 		}
 
 		private string _joinedComposers;
+		[Browsable(true)]
 		[Category("Personnel")]
-		[Description("A string containing the composers of the media represented by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the composers of the media represented by the selected item(s), or an empty string if no value is present.")]
 		public string JoinedComposers
 		{
 			get { return GetString(p => p.JoinedComposers, ref _joinedComposers); }
 		}
 
 		private string _joinedGenres;
+		[Browsable(true)]
 		[Category("Details")]
-		[Description("A string containing the genres of the media represented by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the genres of the media represented by the selected item(s), or an empty string if no value is present.")]
 		public string JoinedGenres
 		{
 			get { return GetString(p => p.JoinedGenres, ref _joinedGenres); }
 		}
 
 		private string _joinedPerformers;
+		[Browsable(true)]
 		[Category("Personnel")]
-		[Description("A string containing the performers or artists who performed in the media described by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the performers or artists who performed in the media described by the selected item(s), or an empty string if no value is present.")]
 		public string JoinedPerformers
 		{
 			get { return GetString(p => p.JoinedPerformers, ref _joinedPerformers); }
 		}
 
 		[Browsable(false)]
+		[Category("Personnel")]
 		public string JoinedPerformersIndex
 		{
 			get { return JoinedPerformersSort.Coalesce(JoinedPerformers).GetIndex(); }
 		}
 
 		private string _joinedPerformersSort;
+		[Browsable(false)]
 		[Category("Personnel")]
-		[Description("A string containing the sort names for the performers or artists who performed in the media described by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the sort names for the performers or artists who performed in the media described by the selected item(s), or an empty string if no value is present.")]
 		public string JoinedPerformersSort
 		{
 			get { return GetString(p => p.JoinedPerformersSort, ref _joinedPerformersSort); }
 		}
 
 		private string _lyrics;
-		[Description("A string containing the lyrics or script of the media represented by the selected item(s), or null if no value is present.")]
+		[Browsable(false)]
+		[Description("A string containing the lyrics or script of the media represented by the selected item(s), or an empty string if no value is present.")]
 		public string Lyrics
 		{
 			get { return GetString(p => p.Lyrics, ref _lyrics); }
@@ -619,16 +797,18 @@ namespace TagScanner
 		}
 
 		private string _mimeType;
+		[Browsable(false)]
 		[Category("Format")]
-		[Description("A string containing the MimeType of the media represented by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the MimeType of the media represented by the selected item(s), or an empty string if no value is present.")]
 		public string MimeType
 		{
 			get { return GetString(p => p.MimeType, ref _mimeType); }
 		}
 
 		private string _musicBrainzArtistId;
+		[Browsable(false)]
 		[Category("MusicBrainz")]
-		[Description("A string containing the MusicBrainz Artist ID for the media described by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the MusicBrainz Artist ID for the media described by the selected item(s), or an empty string if no value is present.")]
 		public string MusicBrainzArtistId
 		{
 			get { return GetString(p => p.MusicBrainzArtistId, ref _musicBrainzArtistId); }
@@ -640,8 +820,9 @@ namespace TagScanner
 		}
 
 		private string _musicBrainzDiscId;
+		[Browsable(false)]
 		[Category("MusicBrainz")]
-		[Description("A string containing the MusicBrainz Disc ID for the media described by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the MusicBrainz Disc ID for the media described by the selected item(s), or an empty string if no value is present.")]
 		public string MusicBrainzDiscId
 		{
 			get { return GetString(p => p.MusicBrainzDiscId, ref _musicBrainzDiscId); }
@@ -653,8 +834,9 @@ namespace TagScanner
 		}
 
 		private string _musicBrainzReleaseArtistId;
+		[Browsable(false)]
 		[Category("MusicBrainz")]
-		[Description("A string containing the MusicBrainz Release Artist ID for the media described by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the MusicBrainz Release Artist ID for the media described by the selected item(s), or an empty string if no value is present.")]
 		public string MusicBrainzReleaseArtistId
 		{
 			get { return GetString(p => p.MusicBrainzReleaseArtistId, ref _musicBrainzReleaseArtistId); }
@@ -666,8 +848,9 @@ namespace TagScanner
 		}
 
 		private string _musicBrainzReleaseCountry;
+		[Browsable(false)]
 		[Category("MusicBrainz")]
-		[Description("A string containing the MusicBrainz Release Country for the media described by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the MusicBrainz Release Country for the media described by the selected item(s), or an empty string if no value is present.")]
 		public string MusicBrainzReleaseCountry
 		{
 			get { return GetString(p => p.MusicBrainzReleaseCountry, ref _musicBrainzReleaseCountry); }
@@ -679,8 +862,9 @@ namespace TagScanner
 		}
 
 		private string _musicBrainzReleaseId;
+		[Browsable(false)]
 		[Category("MusicBrainz")]
-		[Description("A string containing the MusicBrainz Release ID for the media described by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the MusicBrainz Release ID for the media described by the selected item(s), or an empty string if no value is present.")]
 		public string MusicBrainzReleaseId
 		{
 			get { return GetString(p => p.MusicBrainzReleaseId, ref _musicBrainzReleaseId); }
@@ -692,8 +876,9 @@ namespace TagScanner
 		}
 
 		private string _musicBrainzReleaseStatus;
+		[Browsable(false)]
 		[Category("MusicBrainz")]
-		[Description("A string containing the MusicBrainz Release Status for the media described by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the MusicBrainz Release Status for the media described by the selected item(s), or an empty string if no value is present.")]
 		public string MusicBrainzReleaseStatus
 		{
 			get { return GetString(p => p.MusicBrainzReleaseStatus, ref _musicBrainzReleaseStatus); }
@@ -705,8 +890,9 @@ namespace TagScanner
 		}
 
 		private string _musicBrainzReleaseType;
+		[Browsable(false)]
 		[Category("MusicBrainz")]
-		[Description("A string containing the MusicBrainz Release Type for the media described by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the MusicBrainz Release Type for the media described by the selected item(s), or an empty string if no value is present.")]
 		public string MusicBrainzReleaseType
 		{
 			get { return GetString(p => p.MusicBrainzReleaseType, ref _musicBrainzReleaseType); }
@@ -718,8 +904,9 @@ namespace TagScanner
 		}
 
 		private string _musicBrainzTrackId;
+		[Browsable(false)]
 		[Category("MusicBrainz")]
-		[Description("A string containing the MusicBrainz Track ID for the media described by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the MusicBrainz Track ID for the media described by the selected item(s), or an empty string if no value is present.")]
 		public string MusicBrainzTrackId
 		{
 			get { return GetString(p => p.MusicBrainzTrackId, ref _musicBrainzTrackId); }
@@ -731,8 +918,9 @@ namespace TagScanner
 		}
 
 		private string _musicIpId;
+		[Browsable(false)]
 		[Category("MusicBrainz")]
-		[Description("A string containing the MusicIP Puid for the media described by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the MusicIP Puid for the media described by the selected item(s), or an empty string if no value is present.")]
 		public string MusicIpId
 		{
 			get { return GetString(p => p.MusicIpId, ref _musicIpId); }
@@ -744,6 +932,7 @@ namespace TagScanner
 		}
 
 		private string[] _performers;
+		[Browsable(true)]
 		[Category("Personnel")]
 		[Description("A string array containing the performers or artists who performed in the media described by the selected item(s), or an empty array if no value is present.")]
 		public string[] Performers
@@ -758,7 +947,19 @@ namespace TagScanner
 			}
 		}
 
+		[Browsable(false)]
+		[Category("Personnel")]
+		[DefaultValue(0)]
+		public int PerformersCount
+		{
+			get
+			{
+				return Performers.Length;
+			}
+		}
+
 		private string[] _performersSort;
+		[Browsable(false)]
 		[Category("Personnel")]
 		[Description("A string array containing the sort names for the performers or artists who performed in the media described by the selected item(s), or an empty array if no value is present.")]
 		public string[] PerformersSort
@@ -773,7 +974,19 @@ namespace TagScanner
 			}
 		}
 
+		[Browsable(false)]
+		[Category("Personnel")]
+		[DefaultValue(0)]
+		public int PerformersSortCount
+		{
+			get
+			{
+				return PerformersSort.Length;
+			}
+		}
+
 		private int _photoHeight = int.MaxValue;
+		[Browsable(false)]
 		[Category("Media")]
 		[DefaultValue(0)]
 		[Description("An integer value containing the height of the photo represented by the selected item(s).")]
@@ -783,6 +996,7 @@ namespace TagScanner
 		}
 
 		private int _photoQuality = int.MaxValue;
+		[Browsable(false)]
 		[Category("Media")]
 		[DefaultValue(0)]
 		[Description("An integer containing the (format specific) quality indicator of the photo represented by the selected item(s). A value of 0 means that there was no quality indicator for the format or the file.")]
@@ -792,6 +1006,7 @@ namespace TagScanner
 		}
 
 		private int _photoWidth = int.MaxValue;
+		[Browsable(false)]
 		[Category("Media")]
 		[DefaultValue(0)]
 		[Description("An integer value containing the width of the photo represented by the selected item(s).")]
@@ -800,15 +1015,8 @@ namespace TagScanner
 			get { return GetInt(p => p.PhotoWidth, ref _photoWidth); }
 		}
 
-		private int _pictureCount = int.MaxValue;
-		[Category("Media")]
-		[Description("An integer containing the number of embedded pictures in the selected item(s).")]
-		public int PictureCount
-		{
-			get { return GetInt(p => p.PictureCount, ref _pictureCount); }
-		}
-
 		private Picture[] _pictures;
+		[Browsable(true)]
 		[Category("Media")]
 		[Description("A Picture array containing the embedded pictures in the selected item(s).")]
 		public Picture[] Pictures
@@ -816,7 +1024,17 @@ namespace TagScanner
 			get { return GetPictures(p => p.Pictures, ref _pictures); }
 		}
 
+		private int _picturesCount = int.MaxValue;
+		[Browsable(false)]
+		[Category("Media")]
+		[DefaultValue(0)]
+		public int PicturesCount
+		{
+			get { return GetInt(p => p.PicturesCount, ref _picturesCount); }
+		}
+
 		private Logical _possiblyCorrupt;
+		[Browsable(false)]
 		[Category("Format")]
 		[Description("A bool indicating whether the selected item(s) contains any tag values.")]
 		public Logical PossiblyCorrupt
@@ -825,6 +1043,7 @@ namespace TagScanner
 		}
 
 		private TagLib.TagTypes _tagTypes = TagLib.TagTypes.AllTags;
+		[Browsable(false)]
 		[Category("Format")]
 		[Description("Gets the tag types contained in the selected item(s).")]
 		public TagLib.TagTypes TagTypes
@@ -833,6 +1052,7 @@ namespace TagScanner
 		}
 
 		private TagLib.TagTypes _tagTypesOnDisk = TagLib.TagTypes.AllTags;
+		[Browsable(false)]
 		[Category("Format")]
 		[Description("Gets the tag types contained in the physical file represented by the selected item(s).")]
 		public TagLib.TagTypes TagTypesOnDisk
@@ -841,8 +1061,9 @@ namespace TagScanner
 		}
 
 		private string _title;
+		[Browsable(true)]
 		[Category("Details")]
-		[Description("A string containing the title for the media described by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the title for the media described by the selected item(s), or an empty string if no value is present.")]
 		public string Title
 		{
 			get { return GetString(p => p.Title, ref _title); }
@@ -854,14 +1075,16 @@ namespace TagScanner
 		}
 
 		[Browsable(false)]
+		[Category("Details")]
 		public string TitleIndex
 		{
 			get { return TitleSort.Coalesce(Title).GetIndex(); }
 		}
 
 		private string _titleSort;
+		[Browsable(false)]
 		[Category("Details")]
-		[Description("A string containing the sort name for the Track Title in the media described by the selected item(s), or null if no value is present.")]
+		[Description("A string containing the sort name for the Track Title in the media described by the selected item(s), or an empty string if no value is present.")]
 		public string TitleSort
 		{
 			get { return GetString(p => p.TitleSort, ref _titleSort); }
@@ -873,6 +1096,7 @@ namespace TagScanner
 		}
 
 		private int _trackCount = int.MaxValue;
+		[Browsable(true)]
 		[Category("Media")]
 		[DefaultValue(0)]
 		[Description("An unsigned integer containing the number of tracks in the album containing the media represented by the selected item(s), or zero if not specified.")]
@@ -887,6 +1111,7 @@ namespace TagScanner
 		}
 
 		private int _trackNumber = int.MaxValue;
+		[Browsable(true)]
 		[Category("Media")]
 		[DefaultValue(0)]
 		[Description("An unsigned integer containing the position of the media represented by the selected item(s) in its containing album, or zero if not specified.")]
@@ -910,6 +1135,7 @@ namespace TagScanner
 		}
 
 		private TrackStatus _trackStatus;
+		[Browsable(true)]
 		[Category("Selection")]
 		[Description("An enumeration value containing the combined TrackStatus values of all items in the selection. Possible values are:\n\n"
 			+ "Unknown - the item has no recognised TrackStatus value.\n"
@@ -926,6 +1152,7 @@ namespace TagScanner
 		}
 
 		private int _videoHeight = int.MaxValue;
+		[Browsable(false)]
 		[Category("Media")]
 		[DefaultValue(0)]
 		[Description("An integer containing the height of the video represented by the selected item(s).")]
@@ -935,6 +1162,7 @@ namespace TagScanner
 		}
 
 		private int _videoWidth = int.MaxValue;
+		[Browsable(false)]
 		[Category("Media")]
 		[DefaultValue(0)]
 		[Description("An integer containing the width of the video represented by the selected item(s).")]
@@ -944,6 +1172,7 @@ namespace TagScanner
 		}
 
 		private int _year = int.MaxValue;
+		[Browsable(true)]
 		[Category("Details")]
 		[DefaultValue(0)]
 		[Description("An unsigned intreger containing the year that the media represented by the selected item(s) was created, or zero if no value is present.")]
@@ -972,6 +1201,58 @@ namespace TagScanner
 		#endregion
 
 		#region Getters & Setters
+
+		private DateTime GetDateTime(Func<ITrack, DateTime> getDateTime, ref DateTime result)
+		{
+			if (result == DateTime.MaxValue)
+			{
+				result = DateTime.MinValue;
+				if (Tracks != null)
+				{
+					var first = true;
+					foreach (var value in Tracks.Select(getDateTime))
+					{
+						if (first)
+						{
+							result = value;
+							first = false;
+						}
+						else if (result != value)
+						{
+							result = DateTime.MinValue;
+							break;
+						}
+					}
+				}
+			}
+			return result;
+		}
+
+		private FileAttributes GetFileAttributes(Func<ITrack, FileAttributes> getFileAttributes, ref FileAttributes result)
+		{
+			if (result == (FileAttributes)(-1))
+			{
+				result = 0;
+				if (Tracks != null)
+				{
+					var first = true;
+					foreach (var value in Tracks.Select(getFileAttributes))
+					{
+						if (first)
+						{
+							result = value;
+							first = false;
+						}
+						else if (result != value)
+						{
+							result = 0;
+							break;
+						}
+					}
+				}
+			}
+			return result;
+		}
 
 		private string GetFileOrCommonFolderPath(Func<ITrack, string> getString, ref string result)
 		{
@@ -1154,6 +1435,46 @@ namespace TagScanner
 		{
 			foreach (var file in Tracks)
 				setValue(file);
+		}
+
+		#endregion
+
+		#region Tag Visibility
+
+		public static readonly PropertyInfo[] TrackPropertyInfos = typeof(Selection).GetProperties();
+
+		public static readonly IEnumerable<string> TrackTags = TrackPropertyInfos.Select(p => p.Name);
+
+		public static List<string> GetTrackVisibleTags()
+		{
+			return TrackTags.Where(t => GetTagVisibility(t)).ToList();
+		}
+
+		public static void SetTrackVisibleTags(IEnumerable<string> trackVisibleTags)
+		{
+			foreach (var t in TrackTags)
+				SetTagVisibility(t, trackVisibleTags.Contains(t));
+		}
+
+		private static bool GetTagVisibility(string propertyName)
+		{
+			return UseTagVisibility(propertyName, null);
+		}
+
+		private static void SetTagVisibility(string propertyName, bool isBrowsable)
+		{
+			UseTagVisibility(propertyName, isBrowsable);
+		}
+
+		private static bool UseTagVisibility(string propertyName, bool? isBrowsable)
+		{
+			var descriptor = TypeDescriptor.GetProperties(typeof(Selection))[propertyName];
+			var attribute = (BrowsableAttribute)descriptor.Attributes[typeof(BrowsableAttribute)];
+			var fieldInfo = attribute.GetType().GetField("browsable", BindingFlags.NonPublic | BindingFlags.Instance);
+			if (!isBrowsable.HasValue)
+				return (bool)fieldInfo.GetValue(attribute);
+			fieldInfo.SetValue(attribute, isBrowsable);
+			return isBrowsable.Value;
 		}
 
 		#endregion

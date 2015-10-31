@@ -74,42 +74,45 @@
   <ItemGroup>
     <Compile Include="Controllers\GridFormController.cs" />
     <Compile Include="Controllers\PlayerController.cs" />
+    <Compile Include="Controllers\ReplaceDialogController.cs" />
     <Compile Include="Controllers\SdiController.cs" />
+    <Compile Include="Controllers\TagSelectorController.cs" />
     <Compile Include="Models\IObserveTracks.cs" />
+    <Compile Include="Models\Metadata.cs" />
     <Compile Include="Models\TrackStatus.cs" />
+    <Compile Include="ValueConverters\DateTimeConverter.cs" />
     <Compile Include="ValueConverters\FileSizeConverter.cs" />
     <Compile Include="Controllers\FilterEditController.cs" />
     <Compile Include="Controllers\SimpleFilterEditController.cs" />
+    <Compile Include="ValueConverters\StringsConverter.cs" />
     <Compile Include="ValueConverters\TimeSpanConverter.cs" />
     <Compile Include="Models\CompoundCondition.cs" />
     <Compile Include="ValueConverters\GroupSummary.cs" />
     <Compile Include="Models\SimpleCondition.cs" />
     <Compile Include="Models\Operator.cs" />
-    <Compile Include="Controllers\SelectController.cs" />
     <Compile Include="Controllers\CursorController.cs" />
-    <Compile Include="Controllers\FilterController.cs" />
+    <Compile Include="Controllers\FilterDialogController.cs" />
     <Compile Include="Controllers\GridController.cs" />
     <Compile Include="ValueConverters\LogicalConverter.cs" />
     <Compile Include="Controllers\MediaController.cs" />
-    <Compile Include="Controllers\OptionsDialogController.cs" />
     <Compile Include="Controllers\PersistenceController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Models\Logical.cs" />
     <Compile Include="Models\Reader.cs" />
     <Compile Include="Models\ITrack.cs" />
-    <Compile Include="Views\ColumnChooser.cs">
+    <Compile Include="Views\FilterDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\FilterDialog.Designer.cs">
+      <DependentUpon>FilterDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TagChooser.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Views\ColumnChooser.Designer.cs">
-      <DependentUpon>ColumnChooser.cs</DependentUpon>
+    <Compile Include="Views\TagChooser.Designer.cs">
+      <DependentUpon>TagChooser.cs</DependentUpon>
     </Compile>
     <Compile Include="Controllers\CompoundFilterEditController.cs" />
-    <Compile Include="Views\FilterEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\FilterEditor.Designer.cs">
-      <DependentUpon>FilterEditor.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\GridElement.xaml.cs">
       <DependentUpon>GridElement.xaml</DependentUpon>
     </Compile>
@@ -131,17 +134,23 @@
     <Compile Include="Models\TrackExtensions.cs" />
     <Compile Include="Models\Model.cs" />
     <Compile Include="Models\Selection.cs" />
-    <Compile Include="Views\OptionsDialog.cs">
+    <Compile Include="Views\ReplaceDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\OptionsDialog.Designer.cs">
-      <DependentUpon>OptionsDialog.cs</DependentUpon>
+    <Compile Include="Views\ReplaceDialog.Designer.cs">
+      <DependentUpon>ReplaceDialog.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Views\ColumnChooser.resx">
-      <DependentUpon>ColumnChooser.cs</DependentUpon>
+    <Compile Include="Views\TagSelectorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\TagSelectorDialog.Designer.cs">
+      <DependentUpon>TagSelectorDialog.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Views\FilterDialog.resx">
+      <DependentUpon>FilterDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\FilterEditor.resx">
-      <DependentUpon>FilterEditor.cs</DependentUpon>
+    <EmbeddedResource Include="Views\TagChooser.resx">
+      <DependentUpon>TagChooser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\GridForm.resx">
       <DependentUpon>GridForm.cs</DependentUpon>
@@ -156,8 +165,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Views\OptionsDialog.resx">
-      <DependentUpon>OptionsDialog.cs</DependentUpon>
+    <EmbeddedResource Include="Views\ReplaceDialog.resx">
+      <DependentUpon>ReplaceDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\TagSelectorDialog.resx">
+      <DependentUpon>TagSelectorDialog.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

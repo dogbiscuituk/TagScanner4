@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
 using System.Linq;
 
 namespace TagScanner.Models
@@ -62,24 +60,6 @@ namespace TagScanner.Models
 		public int AddFolder(string folderPath, string filter, IProgress<ProgressEventArgs> progress)
 		{
 			return ReadTracks(p => p.AddFolder(folderPath, filter.Split(';')), progress);
-		}
-
-		public void Clear()
-		{
-			_tracks.Clear();
-			OnTracksChanged();
-		}
-
-		public void ToggleOrder(string propertyName)
-		{
-			var newOrder = new Order(propertyName);
-			if (Orders.Length == 1)
-			{
-				var oldOrder = Orders[0];
-				if (oldOrder.PropertyName == propertyName)
-					newOrder.Descending = !oldOrder.Descending;
-			}
-			Orders = new[] { newOrder };
 		}
 
 		public event EventHandler ModifiedChanged;

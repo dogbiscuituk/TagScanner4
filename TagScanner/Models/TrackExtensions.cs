@@ -81,9 +81,7 @@ namespace TagScanner.Models
 			{
 				case "Duration":
 					return ((TimeSpan) value).AsString(exact);
-				case "FileLength":
 				case "FileSize":
-				case "Length":
                     var fileSize = (long) value;
 					return exact ? string.Format("{0:n0}", fileSize) : fileSize.AsString(true);
 				case "Year":

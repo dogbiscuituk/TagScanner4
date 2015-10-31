@@ -93,7 +93,7 @@ namespace TagScanner.Controllers
 
 		protected abstract void ClearDocument();
 
-		protected abstract bool LoadFromStream(Stream stream);
+		protected abstract bool LoadFromStream(Stream stream, string format);
 
 		protected virtual void OnFilePathChanged()
 		{
@@ -143,7 +143,7 @@ namespace TagScanner.Controllers
 				RemoveItem(filePath);
 		}
 
-		protected abstract bool SaveToStream(Stream stream);
+		protected abstract bool SaveToStream(Stream stream, string format);
 
 		protected bool UseStream(Action action)
 		{
@@ -173,7 +173,7 @@ namespace TagScanner.Controllers
 			if (OnFileLoading())
 			{
 				using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-					result = LoadFromStream(stream);
+					result = LoadFromStream(stream, Path.GetExtension(filePath));
 				if (result)
 				{
 					FilePath = filePath;
@@ -189,7 +189,7 @@ namespace TagScanner.Controllers
 			if (OnFileSaving())
 				using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
 				{
-					result = SaveToStream(stream);
+					result = SaveToStream(stream, Path.GetExtension(filePath));
 					if (result)
 					{
 						stream.Flush();

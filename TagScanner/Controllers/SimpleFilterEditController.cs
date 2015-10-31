@@ -10,13 +10,13 @@ namespace TagScanner.Controllers
 	{
 		#region Lifetime Management
 
-		public SimpleFilterEditController(FilterEditor view) : base(view) { }
+		public SimpleFilterEditController(FilterDialog view) : base(view) { }
 
 		#endregion
 
 		#region View
 
-		protected override FilterEditor View
+		protected override FilterDialog View
 		{
 			get
 			{
@@ -24,20 +24,12 @@ namespace TagScanner.Controllers
 			}
 			set
 			{
-				if (View != null)
-				{
-					PropertyBox.SelectedValueChanged -= PropertyBox_ValueChanged;
-					OperatorBox.SelectedValueChanged -= OperatorBox_ValueChanged;
-				}
 				base.View = value;
-				if (View != null)
-				{
-					var items = PropertyBox.Items;
-					items.Clear();
-					items.AddRange(SimpleCondition.SortableColumnNames);
-					PropertyBox.SelectedValueChanged += PropertyBox_ValueChanged;
-					OperatorBox.SelectedValueChanged += OperatorBox_ValueChanged;
-				}
+				var items = PropertyBox.Items;
+				items.Clear();
+				items.AddRange(Metadata.TrackSortableTags);
+				PropertyBox.SelectedValueChanged += PropertyBox_ValueChanged;
+				OperatorBox.SelectedValueChanged += OperatorBox_ValueChanged;
 			}
 		}
 
@@ -47,7 +39,15 @@ namespace TagScanner.Controllers
 
 		private Control ValueBox { get { return View.ValueBox; } }
 
-		private Control.ControlCollection ValueEdit { get { return ValueBox.Controls; } }
+		private Control.ControlCollection ValueControls { get { return ValueBox.Controls; } }
+
+		private Control ValueEdit
+		{
+			get
+			{
+				return ValueControls[0];
+			}
+		}
 
 		public override bool Visible
 		{
@@ -67,6 +67,8 @@ namespace TagScanner.Controllers
 		{
 			switch (propertyTypeName)
 			{
+				case "DateTime":
+					return ValueEditDateTime;
 				case "String":
 					return ValueEditText;
 				case "Int32":
@@ -98,6 +100,27 @@ namespace TagScanner.Controllers
 					_valueEditBool.SelectedValueChanged += ValueBox_ValueChanged;
 				}
 				return _valueEditBool;
+			}
+		}
+
+		private DateTimePicker _valueEditDateTime;
+		private DateTimePicker ValueEditDateTime
+		{
+			get
+			{
+				if (_valueEditDateTime == null)
+				{
+					_valueEditDateTime = new DateTimePicker
+					{
+						Dock = DockStyle.Bottom,
+						Format = DateTimePickerFormat.Custom,
+						CustomFormat = "dd/MM/yyyy HH:mm",
+						ShowUpDown = true,
+						Value = DateTime.Now
+					};
+					_valueEditDateTime.ValueChanged += ValueBox_ValueChanged;
+				}
+				return _valueEditDateTime;
 			}
 		}
 
@@ -186,14 +209,14 @@ namespace TagScanner.Controllers
 		{
 			get
 			{
-				var valueBox = ValueEdit[0];
+				var valueEdit = ValueEdit;
 				return string.Format(
 					"{0} {1} {2}",
 					PropertyBox.Text,
 					OperatorBox.Text,
-					valueBox is NumericUpDown
-						? ((NumericUpDown)valueBox).Value.ToString()
-						: valueBox.Text);
+					valueEdit is NumericUpDown
+						? ((NumericUpDown)valueEdit).Value.ToString()
+						: valueEdit.Text);
 			}
 			set
 			{
@@ -202,14 +225,14 @@ namespace TagScanner.Controllers
 				InitPropertyBox(simpleCondition.PropertyName);
 				PropertyBox.SelectedItem = simpleCondition.PropertyName;
 				OperatorBox.SelectedItem = simpleCondition.Operation;
-				ValueEdit[0].Text = simpleCondition.ValueString;
+				ValueEdit.Text = simpleCondition.ValueString;
 				Updating = false;
 			}
 		}
 
 		private void InitPropertyBox(string propertyName)
 		{
-			PropertyTypeName = SimpleCondition.GetPropertyTypeName(propertyName);
+			PropertyTypeName = Metadata.GetPropertyTypeName(propertyName);
         }
 
 		private string _propertyTypeName;
@@ -235,8 +258,8 @@ namespace TagScanner.Controllers
 					else
 						OperatorBox.SelectedIndex = 0;
                 }
-				ValueEdit.Clear();
-				ValueEdit.Add(GetValueEdit(value));
+				ValueControls.Clear();
+				ValueControls.Add(GetValueEdit(value));
 				_propertyTypeName = value;
 			}
 		}

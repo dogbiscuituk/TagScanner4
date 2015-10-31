@@ -57,23 +57,16 @@ namespace TagScanner.Controllers
         private PropertyGrid _propertyGrid;
         private PropertyGrid PropertyGrid
         {
-            get { return _propertyGrid; }
+            get
+			{
+				return _propertyGrid;
+			}
             set
-            {
-                if (PropertyGrid == value)
-                    return;
-                if (PropertyGrid != null)
-                {
-                    PropertyGrid.SelectedGridItemChanged -= PropertyGrid_SelectedGridItemChanged;
-                    PropertyGrid.SelectedObjectsChanged -= PropertyGrid_SelectedObjectsChanged;
-                }
-                _propertyGrid = value;
-                if (PropertyGrid != null)
-                {
-                    PropertyGrid.SelectedGridItemChanged += PropertyGrid_SelectedGridItemChanged;
-                    PropertyGrid.SelectedObjectsChanged += PropertyGrid_SelectedObjectsChanged;
-                }
-            }
+			{
+				_propertyGrid = value;
+				PropertyGrid.SelectedGridItemChanged += PropertyGrid_SelectedGridItemChanged;
+				PropertyGrid.SelectedObjectsChanged += PropertyGrid_SelectedObjectsChanged;
+			}
         }
 
         #endregion
@@ -113,8 +106,8 @@ namespace TagScanner.Controllers
                     return;
                 }
             }
-            // If no Picture is selected in the PropertyGrid,
-            // then display the first Picture in the selection, if any.
+			// If no Picture is selected in the PropertyGrid,
+			// then display the first Picture in the selection, if any.
             var tagFile = PropertyGrid.SelectedObject as Selection;
             var result = tagFile != null && tagFile.Pictures.Any();
             Picture = result ? tagFile.Pictures[0] : null;

@@ -7,7 +7,7 @@ namespace TagScanner.Controllers
 	{
 		#region Lifetime Management
 
-		protected FilterEditController(FilterEditor view)
+		protected FilterEditController(FilterDialog view)
 		{
 			View = view;
 			Visible = false;
@@ -17,8 +17,8 @@ namespace TagScanner.Controllers
 
 		#region View
 
-		protected FilterEditor _view;
-		protected virtual FilterEditor View
+		protected FilterDialog _view;
+		protected virtual FilterDialog View
 		{
 			get { return _view; }
 			set { _view = value; }

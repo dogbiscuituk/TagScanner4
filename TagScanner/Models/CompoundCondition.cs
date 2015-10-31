@@ -21,14 +21,6 @@ namespace TagScanner.Models
 
 		public string Quantifier { get; private set; }
 
-		public static readonly string[] Quantifiers = new[]
-		{
-			"All of these are true:",
-			"At least one of these is true:",
-			"At least one of these is false:",
-			"All of these are false:"
-		};
-
 		#endregion
 	}
 }

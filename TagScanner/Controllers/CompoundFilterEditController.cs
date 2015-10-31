@@ -9,13 +9,13 @@ namespace TagScanner.Controllers
 	{
 		#region Lifetime Management
 
-		public CompoundFilterEditController(FilterEditor view) : base(view) { }
+		public CompoundFilterEditController(FilterDialog view) : base(view) { }
 
 		#endregion
 
 		#region View
 
-		protected override FilterEditor View
+		protected override FilterDialog View
 		{
 			get
 			{
@@ -23,18 +23,11 @@ namespace TagScanner.Controllers
 			}
 			set
 			{
-				if (View != null)
-				{
-					QuantifierBox.SelectedValueChanged -= QuantifierBox_ValueChanged;
-				}
 				base.View = value;
-				if (View != null)
-				{
-					var items = QuantifierBox.Items;
-					items.Clear();
-					items.AddRange(CompoundCondition.Quantifiers);
-					QuantifierBox.SelectedValueChanged += QuantifierBox_ValueChanged;
-				}
+				var items = QuantifierBox.Items;
+				items.Clear();
+				items.AddRange(Metadata.QuantifierStrings);
+				QuantifierBox.SelectedValueChanged += QuantifierBox_ValueChanged;
 			}
 		}
 

@@ -1,26 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Data;
 
 namespace TagScanner.ValueConverters
 {
-	public class LogicalConverter : IValueConverter
+	public class StringsConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			switch (value.ToString())
+			if (value is IEnumerable<string>)
 			{
-				case "Yes":
-					return true;
-				case "No":
-					return false;
-			};
+				var strings = (IEnumerable<string>)value;
+				return strings.Any() ? strings.Aggregate((x, y) => string.Concat(x, "; ", y)) : string.Empty;
+			}
 			return value;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			throw new NotImplementedException();
+			return value;
 		}
 	}
 }

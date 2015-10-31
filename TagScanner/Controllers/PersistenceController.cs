@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 using TagScanner.Models;
 
 namespace TagScanner.Controllers
@@ -31,27 +33,47 @@ namespace TagScanner.Controllers
 			}
 		}
 
+		public void TrackPropertyChanged(Track sender, string propertyName)
+		{
+			Model.Modified = true;
+		}
+
 		protected override void ClearDocument()
 		{
 			Model.Tracks = new List<Track>();
 		}
 
-		protected override bool LoadFromStream(Stream stream)
+		protected override bool LoadFromStream(Stream stream, string format)
 		{
-			var result = UseStream(() => Model.Tracks = (List<Track>)new BinaryFormatter().Deserialize(stream));
+			var result =
+				IsXml(format)
+					? UseStream(() => Model.Tracks = (List<Track>)GetXmlSerializer().Deserialize(stream))
+					: UseStream(() => Model.Tracks = (List<Track>)GetBinaryFormatter().Deserialize(stream));
 			foreach (var track in Model.Tracks)
 				track.Observers.Add(this);
 			return result;
 		}
 
-		protected override bool SaveToStream(Stream stream)
+		protected override bool SaveToStream(Stream stream, string format)
 		{
-			return UseStream(() => new BinaryFormatter().Serialize(stream, Model.Tracks));
+			if (IsXml(format))
+				return UseStream(() => GetXmlSerializer().Serialize(stream, Model.Tracks));
+			return UseStream(() => GetBinaryFormatter().Serialize(stream, Model.Tracks));
 		}
 
-		public void TrackPropertyChanged(Track sender, string propertyName)
+		private static BinaryFormatter GetBinaryFormatter()
 		{
-			Model.Modified = true;
+			return new BinaryFormatter();
+        }
+
+		private static XmlSerializer GetXmlSerializer()
+		{
+			return new XmlSerializer(typeof(List<Track>), new[] { typeof(TimeSpan) });
 		}
+
+		private static bool IsXml(string format)
+		{
+			return format.EndsWith("x");
+        }
 	}
 }

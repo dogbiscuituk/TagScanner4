@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
-using TagScanner.ValueConverters;
 
 namespace TagScanner.Models
 {
@@ -48,7 +46,7 @@ namespace TagScanner.Models
 		{
 			get
 			{
-				return GetPropertyInfo(PropertyName).PropertyType;
+				return Metadata.GetPropertyInfo(PropertyName).PropertyType;
             }
 		}
 
@@ -68,16 +66,18 @@ namespace TagScanner.Models
 			{
 				switch (PropertyTypeName)
 				{
-					case "String":
-						return ValueString;
+					case "DateTime":
+						return DateTime.Parse(ValueString);
 					case "Int32":
 						return Convert.ToInt32(ValueString);
 					case "Int64":
 						return Convert.ToInt64(ValueString);
-					case "TimeSpan":
-						return TimeSpan.Parse(ValueString);
 					case "Logical":
 						return ValueString == "true" ? Logical.Yes : Logical.No;
+					case "String":
+						return ValueString;
+					case "TimeSpan":
+						return TimeSpan.Parse(ValueString);
 				}
 				return null;
 			}
@@ -166,37 +166,7 @@ namespace TagScanner.Models
 			return Expression.MakeBinary(op, leftOperand, rightOperand);
 		}
 
-		public override string ToString()
-		{
-			return string.Format("{0} {1} {2}", PropertyName, Operation, ValueString);
-		}
-
 		#endregion
-
-		private static readonly PropertyInfo[] PropertyInfos = typeof(ITrack).GetProperties();
-
-		public static readonly IEnumerable<PropertyInfo> SortablePropertyInfos =
-			PropertyInfos.Where(
-				p => !p.PropertyType.IsArray
-				&& p.PropertyType.Name != "TagTypes"
-				&& p.PropertyType.Name != "TrackStatus");
-
-		public static readonly string[] SortableColumnNames = SortablePropertyInfos.Select(p => p.Name).ToArray();
-
-		public static PropertyInfo GetPropertyInfo(string propertyName)
-		{
-			return PropertyInfos.FirstOrDefault(p => p.Name == propertyName);
-		}
-
-		public static Type GetPropertyType(string propertyName)
-		{
-			return GetPropertyInfo(propertyName).PropertyType;
-        }
-
-		public static string GetPropertyTypeName(string propertyName)
-		{
-			return GetPropertyType(propertyName).Name;
-        }
 
 		#endregion
 
@@ -204,9 +174,10 @@ namespace TagScanner.Models
 
 		private static string[] ComparableTypes = new[]
 		{
-			"String",
+			"DateTime",
 			"Int32",
 			"Int64",
+			"String",
 			"TimeSpan"
 		};
 

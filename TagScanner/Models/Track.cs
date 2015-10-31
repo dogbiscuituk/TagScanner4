@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace TagScanner.Models
 {
@@ -11,9 +13,11 @@ namespace TagScanner.Models
 	{
 		#region Public Interface
 
-		#region Constructor
+		#region Constructors
 
-		public Track(string filePath)
+		public Track() { }
+
+		public Track(string filePath) : this()
 		{
 			FilePath = filePath;
 			Load();
@@ -33,6 +37,7 @@ namespace TagScanner.Models
 
 		[NonSerialized]
 		private bool _isModified;
+		[XmlIgnore]
 		public bool IsModified
 		{
 			get
@@ -85,11 +90,19 @@ namespace TagScanner.Models
 			}
 			set
 			{
-				if (!Enumerable.SequenceEqual(AlbumArtists, value))
+				if (!SequenceEqual(AlbumArtists, value))
 				{
 					_albumArtists = value;
 					OnPropertyChanged("AlbumArtists");
 				}
+			}
+		}
+
+		public int AlbumArtistsCount
+		{
+			get
+			{
+				return AlbumArtists.Length;
 			}
 		}
 
@@ -102,11 +115,19 @@ namespace TagScanner.Models
 			}
 			set
 			{
-				if (!Enumerable.SequenceEqual(AlbumArtistsSort, value))
+				if (!SequenceEqual(AlbumArtistsSort, value))
 				{
 					_albumArtistsSort = value;
 					OnPropertyChanged("AlbumArtistsSort");
 				}
+			}
+		}
+
+		public int AlbumArtistsSortCount
+		{
+			get
+			{
+				return AlbumArtistsSort.Length;
 			}
 		}
 
@@ -161,7 +182,7 @@ namespace TagScanner.Models
 			}
 			set
 			{
-				if (!Enumerable.SequenceEqual(Artists, value))
+				if (!SequenceEqual(Artists, value))
 				{
 					_artists = value;
 					OnPropertyChanged("Artists");
@@ -169,34 +190,20 @@ namespace TagScanner.Models
 			}
 		}
 
-		private int _audioBitrate;
-		public int AudioBitrate
+		public int ArtistsCount
 		{
 			get
 			{
-				return _audioBitrate;
+				return Artists.Length;
 			}
 		}
 
-		private int _audioChannels;
-		public int AudioChannels
-		{
-			get
-			{
-				return _audioChannels;
-			}
-		}
-
-		private int _audioSampleRate;
-		public int AudioSampleRate
-		{
-			get
-			{
-				return _audioSampleRate;
-			}
-		}
+		public int AudioBitrate { get; set; }
+		public int AudioChannels { get; set; }
+		public int AudioSampleRate { get; set; }
 
 		private int _beatsPerMinute;
+		[DefaultValue(0)]
 		public int BeatsPerMinute
 		{
 			get
@@ -213,14 +220,7 @@ namespace TagScanner.Models
 			}
 		}
 
-		private int _bitsPerSample;
-		public int BitsPerSample
-		{
-			get
-			{
-				return _bitsPerSample;
-			}
-		}
+		public int BitsPerSample { get; set; }
 
 		public string Century
 		{
@@ -230,7 +230,7 @@ namespace TagScanner.Models
 			}
 		}
 
-		public string Codecs { get; private set; }
+		public string Codecs { get; set; }
 
 		private string _comment;
 		public string Comment
@@ -258,11 +258,19 @@ namespace TagScanner.Models
 			}
 			set
 			{
-				if (!Enumerable.SequenceEqual(Composers, value))
+				if (!SequenceEqual(Composers, value))
 				{
 					_composers = value;
 					OnPropertyChanged("Composers");
 				}
+			}
+		}
+
+		public int ComposersCount
+		{
+			get
+			{
+				return Composers.Length;
 			}
 		}
 
@@ -275,11 +283,19 @@ namespace TagScanner.Models
 			}
 			set
 			{
-				if (!Enumerable.SequenceEqual(ComposersSort, value))
+				if (!SequenceEqual(ComposersSort, value))
 				{
 					_composersSort = value;
 					OnPropertyChanged("ComposersSort");
 				}
+			}
+		}
+
+		public int ComposersSortCount
+		{
+			get
+			{
+				return ComposersSort.Length;
 			}
 		}
 
@@ -325,14 +341,7 @@ namespace TagScanner.Models
 			}
 		}
 
-		private string _description;
-		public string Description
-		{
-			get
-			{
-				return _description;
-			}
-		}
+		public string Description { get; set; }
 
 		private int _discCount;
 		public int DiscCount
@@ -390,16 +399,25 @@ namespace TagScanner.Models
 			}
 		}
 
-		private TimeSpan _duration;
-		public TimeSpan Duration
+		[XmlIgnore]
+		public TimeSpan Duration { get; set; }
+
+		[Browsable(false)]
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		[XmlElement(DataType ="duration", ElementName ="Duration")]
+		public string DurationString
 		{
 			get
 			{
-				return _duration;
+				return XmlConvert.ToString(Duration);
+			}
+			set
+			{
+				Duration = string.IsNullOrWhiteSpace(value) ? TimeSpan.Zero : XmlConvert.ToTimeSpan(value);
 			}
 		}
 
-		public FileAttributes FileAttributes { get; private set; }
+		public FileAttributes FileAttributes { get; set; }
 
 		private DateTime _fileCreationTime;
 		public DateTime FileCreationTime
@@ -463,15 +481,6 @@ namespace TagScanner.Models
 			}
 		}
 
-		private long _fileLength;
-		public long FileLength
-		{
-			get
-			{
-				return _fileLength;
-			}
-		}
-
 		public string FileName
 		{
 			get
@@ -488,25 +497,16 @@ namespace TagScanner.Models
 			}
 		}
 
-		public string FilePath { get; private set; }
-
-		private long _fileSize;
-		public long FileSize
-		{
-			get
-			{
-				return _fileSize;
-			}
-		}
-
-		public string FirstAlbumArtist { get; private set; }
-		public string FirstAlbumArtistSort { get; private set; }
-		public string FirstArtist { get; private set; }
-		public string FirstComposer { get; private set; }
-		public string FirstComposerSort { get; private set; }
-		public string FirstGenre { get; private set; }
-		public string FirstPerformer { get; private set; }
-		public string FirstPerformerSort { get; private set; }
+		public string FilePath { get; set; }
+		public long FileSize { get; set; }
+		public string FirstAlbumArtist { get; set; }
+		public string FirstAlbumArtistSort { get; set; }
+		public string FirstArtist { get; set; }
+		public string FirstComposer { get; set; }
+		public string FirstComposerSort { get; set; }
+		public string FirstGenre { get; set; }
+		public string FirstPerformer { get; set; }
+		public string FirstPerformerSort { get; set; }
 
 		private string[] _genres;
 		public string[] Genres
@@ -517,11 +517,19 @@ namespace TagScanner.Models
 			}
 			set
 			{
-				if (!Enumerable.SequenceEqual(Genres, value))
+				if (!SequenceEqual(Genres, value))
 				{
 					_genres = value;
 					OnPropertyChanged("Genres");
 				}
+			}
+		}
+
+		public int GenresCount
+		{
+			get
+			{
+				return Genres.Length;
 			}
 		}
 
@@ -577,11 +585,11 @@ namespace TagScanner.Models
 			}
 		}
 
-		public string JoinedAlbumArtists { get; private set; }
-		public string JoinedArtists { get; private set; }
-		public string JoinedComposers { get; private set; }
-		public string JoinedGenres { get; private set; }
-		public string JoinedPerformers { get; private set; }
+		public string JoinedAlbumArtists { get; set; }
+		public string JoinedArtists { get; set; }
+		public string JoinedComposers { get; set; }
+		public string JoinedGenres { get; set; }
+		public string JoinedPerformers { get; set; }
 
 		public string JoinedPerformersIndex
 		{
@@ -591,16 +599,7 @@ namespace TagScanner.Models
 			}
 		}
 
-		public string JoinedPerformersSort { get; private set; }
-
-		private long _length;
-		public long Length
-		{
-			get
-			{
-				return _length;
-			}
-		}
+		public string JoinedPerformersSort { get; set; }
 
 		private string _lyrics;
 		public string Lyrics
@@ -619,14 +618,7 @@ namespace TagScanner.Models
 			}
 		}
 
-		private TagLib.MediaTypes _mediaTypes;
-		public TagLib.MediaTypes MediaTypes
-		{
-			get
-			{
-				return _mediaTypes;
-			}
-		}
+		public TagLib.MediaTypes MediaTypes { get; set; }
 
 		public string Millennium
 		{
@@ -636,7 +628,7 @@ namespace TagScanner.Models
 			}
 		}
 
-		public string MimeType { get; private set; }
+		public string MimeType { get; set; }
 
 		private string _musicBrainzArtistId;
 		public string MusicBrainzArtistId
@@ -791,7 +783,7 @@ namespace TagScanner.Models
 			}
 		}
 
-		public string Name { get; private set; }
+		public string Name { get; set; }
 
 		private string[] _performers;
 		public string[] Performers
@@ -802,11 +794,19 @@ namespace TagScanner.Models
 			}
 			set
 			{
-				if (!Enumerable.SequenceEqual(Performers, value))
+				if (!SequenceEqual(Performers, value))
 				{
 					_performers = value;
 					OnPropertyChanged("Performers");
 				}
+			}
+		}
+
+		public int PerformersCount
+		{
+			get
+			{
+				return Performers.Length;
 			}
 		}
 
@@ -819,7 +819,7 @@ namespace TagScanner.Models
 			}
 			set
 			{
-				if (!Enumerable.SequenceEqual(PerformersSort, value))
+				if (!SequenceEqual(PerformersSort, value))
 				{
 					_performersSort = value;
 					OnPropertyChanged("PerformersSort");
@@ -827,48 +827,37 @@ namespace TagScanner.Models
 			}
 		}
 
-		private int _photoHeight;
-		public int PhotoHeight
+		public int PerformersSortCount
 		{
 			get
 			{
-				return _photoHeight;
+				return PerformersSort.Length;
 			}
 		}
 
-		private int _photoQuality;
-		public int PhotoQuality
-		{
-			get
-			{
-				return _photoQuality;
-			}
-		}
-
-		private int _photoWidth;
-		public int PhotoWidth
-		{
-			get
-			{
-				return _photoWidth;
-			}
-		}
-
-		private int _pictureCount;
-		public int PictureCount
-		{
-			get
-			{
-				return _pictureCount;
-			}
-		}
+		[DefaultValue(0)]
+		public int PhotoHeight { get; set; }
+		[DefaultValue(0)]
+		public int PhotoQuality { get; set; }
+		[DefaultValue(0)]
+		public int PhotoWidth { get; set; }
 
 		private Picture[] _pictures;
+		[XmlIgnore]
 		public Picture[] Pictures
 		{
 			get
 			{
 				return _pictures;
+			}
+		}
+
+		private int _picturesCount;
+		public int PicturesCount
+		{
+			get
+			{
+				return _picturesCount;
 			}
 		}
 
@@ -1003,26 +992,13 @@ namespace TagScanner.Models
 			}
 		}
 
-		private int _videoHeight;
-		public int VideoHeight
-		{
-			get
-			{
-				return _videoHeight;
-			}
-		}
-
-		private int _videoWidth;
-		public int VideoWidth
-		{
-			get
-			{
-				return _videoWidth;
-			}
-		}
+		[DefaultValue(0)]
+		public int VideoHeight { get; set; }
+		[DefaultValue(0)]
+		public int VideoWidth { get; set; }
 
 		private int _year;
-
+		[DefaultValue(0)]
 		public int Year
 		{
 			get
@@ -1092,12 +1068,6 @@ namespace TagScanner.Models
 			return TagLib.File.Create(FilePath);
 		}
 
-		private static string NumberOfTotal(string format, int number, int total)
-		{
-			number = Math.Max(number, 1);
-			return string.Format(format, number, Math.Max(total, number));
-		}
-
 		private void OnPropertyChanged(string propertyName)
 		{
 			IsModified = true;
@@ -1110,10 +1080,8 @@ namespace TagScanner.Models
 		{
 			if (file == null)
 				return;
-			_fileLength = file.Length;
 			_invariantEndPosition = file.InvariantEndPosition;
 			_invariantStartPosition = file.InvariantStartPosition;
-			_length = file.Length;
 			MimeType = file.MimeType;
 			Name = file.Name;
 			_possiblyCorrupt = file.PossiblyCorrupt;
@@ -1125,7 +1093,7 @@ namespace TagScanner.Models
 
 		private void ReadMetadata()
 		{
-			_fileSize = new FileInfo(FilePath).Length;
+			FileSize = new FileInfo(FilePath).Length;
 			FileAttributes = File.GetAttributes(FilePath);
 			_fileCreationTime = File.GetCreationTimeUtc(FilePath);
 			_fileLastWriteTime = File.GetLastWriteTimeUtc(FilePath);
@@ -1139,19 +1107,22 @@ namespace TagScanner.Models
 		{
 			if (properties == null)
 				return;
-			_audioBitrate = properties.AudioBitrate;
-			_audioChannels = properties.AudioChannels;
-			_audioSampleRate = properties.AudioSampleRate;
-			_bitsPerSample = properties.BitsPerSample;
-			Codecs = properties.Codecs.ToString();
-			_description = properties.Description;
-			_duration = properties.Duration;
-			_mediaTypes = properties.MediaTypes;
-			_photoHeight = properties.PhotoHeight;
-			_photoQuality = properties.PhotoQuality;
-			_photoWidth = properties.PhotoWidth;
-			_videoHeight = properties.VideoHeight;
-			_videoWidth = properties.VideoWidth;
+			AudioBitrate = properties.AudioBitrate;
+			AudioChannels = properties.AudioChannels;
+			AudioSampleRate = properties.AudioSampleRate;
+			BitsPerSample = properties.BitsPerSample;
+			Codecs = properties.Codecs
+				.Where(c => c != null)
+				.Select(c => string.Format("{0} ({1} - {2:g})", c.MediaTypes, c.Description, c.Duration))
+				.Aggregate((s, t) => s + "; " + t);
+			Description = properties.Description;
+			Duration = properties.Duration;
+			MediaTypes = properties.MediaTypes;
+			PhotoHeight = properties.PhotoHeight;
+			PhotoQuality = properties.PhotoQuality;
+			PhotoWidth = properties.PhotoWidth;
+			VideoHeight = properties.VideoHeight;
+			VideoWidth = properties.VideoWidth;
 		}
 
 		private void ReadTag(TagLib.Tag tag)
@@ -1207,7 +1178,7 @@ namespace TagScanner.Models
 			_musicIpId = tag.MusicIpId;
 			_performers = tag.Performers;
 			_performersSort = tag.PerformersSort;
-			_pictureCount = tag.Pictures.Length;
+			_picturesCount = tag.Pictures.Length;
 			var pictureIndex = 0;
 			_pictures = tag.Pictures.Select(q => new Picture(FilePath, pictureIndex++, q)).ToArray();
 			_title = tag.Title;
@@ -1256,6 +1227,17 @@ namespace TagScanner.Models
 			tag.Track = (uint)_trackNumber;
 			tag.TrackCount = (uint)_trackCount;
 			tag.Year = (uint)_year;
+		}
+
+		private static string NumberOfTotal(string format, int number, int total)
+		{
+			number = Math.Max(number, 1);
+			return string.Format(format, number, Math.Max(total, number));
+		}
+
+		private static bool SequenceEqual(IEnumerable<string> x, IEnumerable<string> y)
+		{
+			return x == null ? y == null : y != null && Enumerable.SequenceEqual(x, y);
 		}
 
 		#endregion

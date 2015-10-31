@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -46,53 +45,29 @@ namespace TagScanner.Controllers
 			}
 			set
 			{
-				if (View != null)
-				{
-					View.FileMenu.DropDownOpening -= FileMenu_DropDownOpening;
-					View.FileNew.Click -= FileNew_Click;
-					View.FileOpen.Click -= FileOpen_Click;
-					View.FileSave.Click -= FileSave_Click;
-					View.FileSaveAs.Click -= FileSaveAs_Click;
-					View.FileExit.Click -= FileExit_Click;
-					View.EditSelectAll.Click -= EditSelectAll_Click;
-					View.EditInvertSelection.Click -= EditInvertSelection_Click;
-					View.ViewByArtist.Click -= ViewByArtist_Click;
-					View.ViewByGenre.Click -= ViewByGenre_Click;
-					View.ViewByYear.Click -= ViewByYear_Click;
-					View.ViewByAlbumTitle.Click -= ViewByAlbumTitle_Click;
-					View.ViewBySongTitle.Click -= ViewBySongTitle_Click;
-					View.AddMedia.Click -= AddMedia_Click;
-					View.AddFolder.Click -= AddFolder_Click;
-					View.HelpAbout.Click -= HelpAbout_Click;
-					View.PopupColumns.Click -= PopupColumns_Click;
-					View.PopupFilters.Click -= PopupFilters_Click;
-					View.PopupGroups.Click -= PopupGroups_Click;
-					View.FormClosing -= FormClosing;
-				}
 				_view = value;
-				if (View != null)
-				{
-					View.FileMenu.DropDownOpening += FileMenu_DropDownOpening;
-					View.FileNew.Click += FileNew_Click;
-					View.FileOpen.Click += FileOpen_Click;
-					View.FileSave.Click += FileSave_Click;
-					View.FileSaveAs.Click += FileSaveAs_Click;
-					View.FileExit.Click += FileExit_Click;
-					View.EditSelectAll.Click += EditSelectAll_Click;
-					View.EditInvertSelection.Click += EditInvertSelection_Click;
-					View.ViewByArtist.Click += ViewByArtist_Click;
-					View.ViewByGenre.Click += ViewByGenre_Click;
-					View.ViewByYear.Click += ViewByYear_Click;
-					View.ViewByAlbumTitle.Click += ViewByAlbumTitle_Click;
-					View.ViewBySongTitle.Click += ViewBySongTitle_Click;
-					View.AddMedia.Click += AddMedia_Click;
-					View.AddFolder.Click += AddFolder_Click;
-					View.HelpAbout.Click += HelpAbout_Click;
-					View.PopupColumns.Click += PopupColumns_Click;
-					View.PopupFilters.Click += PopupFilters_Click;
-					View.PopupGroups.Click += PopupGroups_Click;
-					View.FormClosing += FormClosing;
-				}
+				View.FileMenu.DropDownOpening += FileMenu_DropDownOpening;
+				View.FileNew.Click += FileNew_Click;
+				View.FileOpen.Click += FileOpen_Click;
+				View.FileSave.Click += FileSave_Click;
+				View.FileSaveAs.Click += FileSaveAs_Click;
+				View.FileExit.Click += FileExit_Click;
+				View.EditSelectAll.Click += EditSelectAll_Click;
+				View.EditInvertSelection.Click += EditInvertSelection_Click;
+				View.EditFind.Click += EditFind_Click;
+				View.EditReplace.Click += EditReplace_Click;
+				View.ViewByArtist.Click += ViewByArtist_Click;
+				View.ViewByGenre.Click += ViewByGenre_Click;
+				View.ViewByYear.Click += ViewByYear_Click;
+				View.ViewByAlbumTitle.Click += ViewByAlbumTitle_Click;
+				View.ViewBySongTitle.Click += ViewBySongTitle_Click;
+				View.AddMedia.Click += AddMedia_Click;
+				View.AddFolder.Click += AddFolder_Click;
+				View.HelpAbout.Click += HelpAbout_Click;
+				View.GridPopupTags.Click += PopupTags_Click;
+				View.GridPopupFilters.Click += PopupFilters_Click;
+				View.PropertyGridPopupTagVisibility.Click += PropertyGridPopupTagVisibility_Click;
+				View.FormClosing += FormClosing;
 			}
 		}
 
@@ -150,6 +125,16 @@ namespace TagScanner.Controllers
 			GridController.InvertSelection();
 		}
 
+		private void EditFind_Click(object sender, EventArgs e)
+		{
+			EditQuery();
+		}
+
+		private void EditReplace_Click(object sender, EventArgs e)
+		{
+			ReplaceDialogController.ShowDialog(View);
+		}
+
 		private void ViewByArtist_Click(object sender, EventArgs e)
 		{
 			GridController.ViewByArtist();
@@ -194,21 +179,28 @@ namespace TagScanner.Controllers
 
 		#endregion
 
-		#region Popup Menu
+		#region Popup Menus
 
-		private void PopupColumns_Click(object sender, EventArgs e)
+		private void PopupTags_Click(object sender, EventArgs e)
 		{
-			EditQuery(0);
+			//EditQuery(0);
+			GridController.EditTagVisibility();
 		}
 
 		private void PopupFilters_Click(object sender, EventArgs e)
 		{
-			EditQuery(1);
+			EditQuery();
 		}
 
-		private void PopupGroups_Click(object sender, EventArgs e)
+		private void PropertyGridPopupTagVisibility_Click(object sender, EventArgs e)
 		{
-			EditQuery(2);
+			var trackVisibleTags = Selection.GetTrackVisibleTags();
+			var ok = new TagSelectorController(Selection.TrackPropertyInfos).Execute(trackVisibleTags);
+			if (ok)
+			{
+				Selection.SetTrackVisibleTags(trackVisibleTags);
+				UpdatePropertyGrid();
+			}
 		}
 
 		#endregion
@@ -228,7 +220,7 @@ namespace TagScanner.Controllers
 
 		private void GridViewController_SelectionChanged(object sender, EventArgs e)
 		{
-			View.PropertyGrid.SelectedObject = GridController.Selection;
+			UpdatePropertyGrid();
 		}
 
 		private void PersistenceController_FileSaving(object sender, CancelEventArgs e)
@@ -279,19 +271,35 @@ namespace TagScanner.Controllers
 
 		#endregion
 
-		private void EditQuery(int page)
+		private void EditQuery()
 		{
-			OptionsDialogController.ShowDialog(View, page);
+			FilterDialogController.ShowDialog(View);
 		}
 
-		private OptionsDialogController _optionsDialogController;
-		private OptionsDialogController OptionsDialogController
+		private void UpdatePropertyGrid()
+		{
+			View.PropertyGrid.SelectedObject = GridController.Selection;
+		}
+
+		private FilterDialogController _filterDialogController;
+		private FilterDialogController FilterDialogController
 		{
 			get
 			{
 				return
-					_optionsDialogController
-					?? (_optionsDialogController = new OptionsDialogController(GridController));
+					_filterDialogController
+					?? (_filterDialogController = new FilterDialogController(GridController, null));
+			}
+		}
+
+		private ReplaceDialogController _replaceDialogController;
+		private ReplaceDialogController ReplaceDialogController
+		{
+			get
+			{
+				return
+					_replaceDialogController
+					?? (_replaceDialogController = new ReplaceDialogController());
 			}
 		}
 	}

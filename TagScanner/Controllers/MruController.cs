@@ -174,7 +174,7 @@ namespace TagScanner.Controllers
 			var length = result.IndexOf((char)0);
 			if (length >= 0)
 				result = result.Substring(0, length);
-			return result.Replace("&", "&&");
+			return result.AmpersandEscape();
 		}
 
 		private Win32.RegistryKey CreateSubKey()
