@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 
 namespace TagScanner.Models
 {
@@ -36,7 +35,7 @@ namespace TagScanner.Models
 		string DiscOf { get; }
 		string DiscTrack { get; }
 		TimeSpan Duration { get; }
-		FileAttributes FileAttributes { get; }
+		string FileAttributes { get; }
 		DateTime FileCreationTime { get; }
 		DateTime FileCreationTimeUtc { get; }
 		string FileExtension { get; }

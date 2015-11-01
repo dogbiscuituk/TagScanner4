@@ -27,7 +27,7 @@ namespace TagScanner.Controllers
 				base.View = value;
 				var items = PropertyBox.Items;
 				items.Clear();
-				items.AddRange(Metadata.TrackSortableTags);
+				items.AddRange(Metadata.SortableTags);
 				PropertyBox.SelectedValueChanged += PropertyBox_ValueChanged;
 				OperatorBox.SelectedValueChanged += OperatorBox_ValueChanged;
 			}
@@ -173,7 +173,8 @@ namespace TagScanner.Controllers
 					{
 						Dock = DockStyle.Bottom
 					};
-					_valueEditText.TextChanged += ValueBox_ValueChanged;
+					_valueEditText.Items.AddRange(Metadata.StringTags);
+                    _valueEditText.TextChanged += ValueBox_ValueChanged;
 				}
 				return _valueEditText;
 			}

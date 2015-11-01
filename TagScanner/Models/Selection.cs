@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using TagScanner.Models;
@@ -442,12 +441,12 @@ namespace TagScanner
 			get { return GetTimeSpan(p => p.Duration, ref _duration); }
 		}
 
-		private FileAttributes _fileAttributes = (FileAttributes)(-1);
-		public FileAttributes FileAttributes
+		private string _fileAttributes;
+		public string FileAttributes
 		{
 			get
 			{
-				return GetFileAttributes(p => p.FileAttributes, ref _fileAttributes);
+				return GetString(p => p.FileAttributes, ref _fileAttributes);
 			}
 		}
 
@@ -1220,32 +1219,6 @@ namespace TagScanner
 						else if (result != value)
 						{
 							result = DateTime.MinValue;
-							break;
-						}
-					}
-				}
-			}
-			return result;
-		}
-
-		private FileAttributes GetFileAttributes(Func<ITrack, FileAttributes> getFileAttributes, ref FileAttributes result)
-		{
-			if (result == (FileAttributes)(-1))
-			{
-				result = 0;
-				if (Tracks != null)
-				{
-					var first = true;
-					foreach (var value in Tracks.Select(getFileAttributes))
-					{
-						if (first)
-						{
-							result = value;
-							first = false;
-						}
-						else if (result != value)
-						{
-							result = 0;
 							break;
 						}
 					}

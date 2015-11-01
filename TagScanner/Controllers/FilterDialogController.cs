@@ -111,12 +111,14 @@ namespace TagScanner.Controllers
 			}
 			set
 			{
-				SelectedNode.Text = value;
+				var selectedNode = SelectedNode;
+				if (selectedNode != null)
+					selectedNode.Text = value;
 			}
 		}
 
 		private string
-			_defaultFilterText = string.Concat(Metadata.TrackSortableTags[0], " contains"),
+			_defaultFilterText = string.Concat(Metadata.SortableTags[0], " contains"),
 			_defaultGroupText = Metadata.QuantifierStrings[0];
 
 		#endregion
@@ -358,16 +360,16 @@ namespace TagScanner.Controllers
 				(quantifier & Metadata.Quantifiers.And) != 0
 				? ExpressionType.AndAlso
 				: ExpressionType.OrElse;
-            Expression result = null;
+            Expression expression = null;
 			var first = true;
 			foreach (var subCondition in nodes.Cast<TreeNode>().Select(GetExpression))
 			{
-				result = first ? subCondition : Expression.MakeBinary(binaryType, result, subCondition);
+				expression = first ? subCondition : Expression.MakeBinary(binaryType, expression, subCondition);
 				first = false;
 			}
 			if ((quantifier & Metadata.Quantifiers.Not) != 0)
-				result = Expression.IsFalse(result);
-			return result;
+				expression = Expression.IsFalse(expression);
+			return expression;
 		}
 
 		private Expression GetExpression(TreeNode node)

@@ -417,7 +417,7 @@ namespace TagScanner.Models
 			}
 		}
 
-		public FileAttributes FileAttributes { get; set; }
+		public string FileAttributes { get; set; }
 
 		private DateTime _fileCreationTime;
 		public DateTime FileCreationTime
@@ -1094,7 +1094,7 @@ namespace TagScanner.Models
 		private void ReadMetadata()
 		{
 			FileSize = new FileInfo(FilePath).Length;
-			FileAttributes = File.GetAttributes(FilePath);
+			FileAttributes = File.GetAttributes(FilePath).ToString();
 			_fileCreationTime = File.GetCreationTimeUtc(FilePath);
 			_fileLastWriteTime = File.GetLastWriteTimeUtc(FilePath);
 			_fileLastAccessTime = File.GetLastAccessTimeUtc(FilePath);

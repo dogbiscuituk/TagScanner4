@@ -14,10 +14,10 @@ namespace TagScanner.Controllers
 		{
 			View = new ReplaceDialog();
 			View.cbSourceTag.Items.Add("(any)");
-            View.cbSourceTag.Items.AddRange(Metadata.TrackWritableStringTags);
+            View.cbSourceTag.Items.AddRange(Metadata.WritableTextTags);
 			View.cbSourceTag.SelectedIndex = 0;
 			View.cbDestinationTag.Items.Add("(same as source)");
-			View.cbDestinationTag.Items.AddRange(Metadata.TrackWritableStringTags);
+			View.cbDestinationTag.Items.AddRange(Metadata.WritableTextTags);
 			View.cbDestinationTag.SelectedIndex = 0;
 			View.btnExpressionBuilderFind.Click += BtnExpressionBuilderFind_Click;
 			CaptureClicks(View.popupFindMenu, ExpressionBuilderFindItem_Click);

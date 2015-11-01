@@ -7,26 +7,31 @@ namespace TagScanner.Models
 {
 	public static class Metadata
 	{
-		public static readonly PropertyInfo[] TrackPropertyInfos = typeof(ITrack).GetProperties();
+		public static readonly PropertyInfo[] PropertyInfos = typeof(ITrack).GetProperties();
 
-		public static readonly string[] TrackTags = TrackPropertyInfos.Select(p => p.Name).ToArray();
-
-		public static readonly IEnumerable<PropertyInfo> TrackSortablePropertyInfos =
-			from prop in TrackPropertyInfos
+		private static readonly IEnumerable<PropertyInfo> SortablePropertyInfos =
+			from prop in PropertyInfos
 			let type = prop.PropertyType
 			let name = type.Name
 			where !type.IsArray && name != "TagTypes" && name != "TrackStatus"
 			select prop;
 
-		public static readonly string[] TrackSortableTags = TrackSortablePropertyInfos.Select(p => p.Name).ToArray();
+		public static readonly string[] SortableTags = SortablePropertyInfos.Select(p => p.Name).ToArray();
 
-		public static readonly IEnumerable<PropertyInfo> TrackWritableStringPropertyInfos =
-			from prop in TrackPropertyInfos
+		private static readonly IEnumerable<PropertyInfo> StringPropertyInfos =
+			from prop in PropertyInfos
+			where prop.PropertyType.Name == "String"
+			select prop;
+
+		public static readonly string[] StringTags = StringPropertyInfos.Select(p => p.Name).ToArray();
+
+		private static readonly IEnumerable<PropertyInfo> WritableTextPropertyInfos =
+			from prop in PropertyInfos
 			let type = prop.PropertyType.Name
 			where prop.CanWrite && type.StartsWith("String")
 			select prop;
 
-		public static readonly string[] TrackWritableStringTags = TrackWritableStringPropertyInfos.Select(p => p.Name).ToArray();
+		public static readonly string[] WritableTextTags = WritableTextPropertyInfos.Select(p => p.Name).ToArray();
 
 		public static string AmpersandEscape(this string s)
 		{
@@ -40,7 +45,7 @@ namespace TagScanner.Models
 
 		public static PropertyInfo GetPropertyInfo(string propertyName)
 		{
-			return TrackPropertyInfos.FirstOrDefault(p => p.Name == propertyName);
+			return PropertyInfos.FirstOrDefault(p => p.Name == propertyName);
 		}
 
 		public static Type GetPropertyType(string propertyName)

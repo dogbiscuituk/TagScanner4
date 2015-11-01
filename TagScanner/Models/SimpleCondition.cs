@@ -87,6 +87,11 @@ namespace TagScanner.Models
 
 		#region Methods
 
+		private static BinaryExpression NullCheck(Expression expression)
+		{
+			return Expression.Coalesce(expression, Expression.Constant(string.Empty));
+		}
+
 		private static ExpressionType OperatorToExpressionType(string op)
 		{
 			switch (op)
@@ -142,11 +147,14 @@ namespace TagScanner.Models
 			Expression
 				property = Expression.Property(parameter, PropertyName),
 				leftOperand = Expression.Convert(property, PropertyType),
-				rightOperand = Expression.Constant(Value);
+				rightOperand = Metadata.SortableTags.Contains(ValueString)
+				? Expression.Convert(Expression.Property(parameter, ValueString), PropertyType)
+				: (Expression)Expression.Constant(Value);
 			var op = OperatorToExpressionType(Operation);
 			if (PropertyTypeName == "String")
 			{
-				leftOperand = Expression.Coalesce(leftOperand, Expression.Constant(string.Empty));
+				leftOperand = NullCheck(leftOperand);
+				rightOperand = NullCheck(rightOperand);
 				var methodName = OperatorToMethodName(Operation);
 				var methodInfo = typeof(string).GetMethod(methodName, new[] { typeof(string) });
 				leftOperand = Expression.Call(leftOperand, methodInfo, rightOperand);

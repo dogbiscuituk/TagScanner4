@@ -100,7 +100,7 @@ namespace TagScanner.Controllers
 		public void EditTagVisibility()
 		{
 			var trackVisibleTags = VisibleTags.ToList();
-			var ok = new TagSelectorController(Metadata.TrackPropertyInfos).Execute(trackVisibleTags);
+			var ok = new TagSelectorController(Metadata.PropertyInfos).Execute(trackVisibleTags);
 			if (ok)
 				VisibleTags = VisibleTags.Intersect(trackVisibleTags).Union(trackVisibleTags);
 		}
@@ -176,7 +176,7 @@ namespace TagScanner.Controllers
 
 		private static IEnumerable<DataGridBoundColumn> GetColumns()
 		{
-			return Metadata.TrackPropertyInfos.Select(GetColumn);
+			return Metadata.PropertyInfos.Select(GetColumn);
 		}
 
 		private static Style GetColumnStyle(PropertyInfo propertyInfo)
