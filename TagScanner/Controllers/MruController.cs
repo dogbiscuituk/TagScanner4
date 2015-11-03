@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using TagScanner.Models;
 using Win32 = Microsoft.Win32;
@@ -14,7 +15,11 @@ namespace TagScanner.Controllers
 			Model = model;
 			if (string.IsNullOrWhiteSpace(subKeyName))
 				throw new ArgumentNullException("subKeyName");
-			SubKeyName = string.Concat(@"Software\", Application.ProductName, @"\", subKeyName);
+			SubKeyName = string.Format(
+				@"Software\{0}\{1}\{2}",
+				Application.CompanyName,
+				Application.ProductName,
+				subKeyName);
 			RecentMenu = recentMenu;
 			RefreshRecentMenu();
 		}
@@ -31,18 +36,8 @@ namespace TagScanner.Controllers
 					return;
 				try
 				{
-					for (int index = 0; ; index++)
-					{
-						var name = index.ToString();
-						var value = key.GetValue(name, null) as string;
-						if (value == null)
-						{
-							key.SetValue(name, item);
-							break;
-						}
-						if (value == item)
-							break;
-					}
+					DeleteItem(key, item);
+					key.SetValue(string.Format("{0:yyyyMMddHHmmssFF}", DateTime.Now), item);
 				}
 				finally
 				{
@@ -65,12 +60,7 @@ namespace TagScanner.Controllers
 					return;
 				try
 				{
-					foreach (var name in key.GetValueNames())
-						if ((key.GetValue(name, null) as string) == item)
-						{
-							key.DeleteValue(name, true);
-							break;
-						}
+					DeleteItem(key, item);
 				}
 				finally
 				{
@@ -82,6 +72,15 @@ namespace TagScanner.Controllers
 				Console.WriteLine(ex.ToString());
 			}
 			RefreshRecentMenu();
+		}
+
+		private void DeleteItem(Win32.RegistryKey key, string item)
+		{
+			var name = key.GetValueNames()
+				.Where(n => key.GetValue(n, null) as string == item)
+				.FirstOrDefault();
+			if (name != null)
+				key.DeleteValue(name);
 		}
 
 		protected virtual void Reopen(ToolStripItem menuItem)
@@ -136,7 +135,7 @@ namespace TagScanner.Controllers
 			bool ok = key != null;
 			if (ok)
 			{
-				foreach (var name in key.GetValueNames())
+				foreach (var name in key.GetValueNames().OrderByDescending(n => n))
 				{
 					var value = key.GetValue(name, null) as string;
 					if (value == null)
@@ -163,6 +162,16 @@ namespace TagScanner.Controllers
 			RecentMenu.Enabled = ok;
 		}
 
+		private Win32.RegistryKey CreateSubKey()
+		{
+			return Win32.Registry.CurrentUser.CreateSubKey(SubKeyName, Win32.RegistryKeyPermissionCheck.ReadWriteSubTree);
+		}
+
+		private Win32.RegistryKey OpenSubKey(bool writable)
+		{
+			return Win32.Registry.CurrentUser.OpenSubKey(SubKeyName, writable);
+		}
+
 		private static string CompactMenuText(string text)
 		{
 			var result = Path.ChangeExtension(text, string.Empty).TrimEnd('.');
@@ -175,16 +184,6 @@ namespace TagScanner.Controllers
 			if (length >= 0)
 				result = result.Substring(0, length);
 			return result.AmpersandEscape();
-		}
-
-		private Win32.RegistryKey CreateSubKey()
-		{
-			return Win32.Registry.CurrentUser.CreateSubKey(SubKeyName, Win32.RegistryKeyPermissionCheck.ReadWriteSubTree);
-		}
-
-		private Win32.RegistryKey OpenSubKey(bool writable)
-		{
-			return Win32.Registry.CurrentUser.OpenSubKey(SubKeyName, writable);
 		}
 	}
 }

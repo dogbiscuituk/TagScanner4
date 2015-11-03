@@ -27,6 +27,16 @@ namespace TagScanner.Models
 
 		#region Properties
 
+		public string Operation { get; private set; }
+
+		public string PropertyName { get; private set; }
+
+		public string ValueString { get; private set; }
+
+		#endregion
+
+		#region Methods
+
 		public static IEnumerable<string> GetOperatorsForType(string propertyTypeName)
 		{
 			var result = new List<string>();
@@ -38,19 +48,54 @@ namespace TagScanner.Models
 			return result;
 		}
 
-		public string Operation { get; private set; }
+		public Expression ToExpression(ParameterExpression parameter)
+		{
+			Expression
+				leftOperand = Expression.Convert(Expression.Property(parameter, PropertyName), PropertyType),
+				rightOperand = Metadata.StringTags.Contains(ValueString)
+				? Expression.Convert(Expression.Property(parameter, ValueString), PropertyType)
+				: (Expression)Expression.Constant(Value);
+			var op = OperatorToExpressionType(Operation);
+			if (PropertyTypeName == "String")
+			{
+				leftOperand = NullCheck(leftOperand);
+				rightOperand = NullCheck(rightOperand);
+				var methodName = OperatorToMethodName(Operation);
+				var methodInfo = typeof(string).GetMethod(methodName, new[] { typeof(string) });
+				leftOperand = Expression.Call(leftOperand, methodInfo, rightOperand);
+				switch (Operation)
+				{
+					case Operator.Containing:
+					case Operator.StartingWith:
+					case Operator.EndingWith:
+						return leftOperand;
+					case Operator.NotContaining:
+					case Operator.NotStartingWith:
+					case Operator.NotEndingWith:
+						return Expression.Not(leftOperand);
+				}
+				rightOperand = Expression.Constant(0);
+			}
+			return Expression.MakeBinary(op, leftOperand, rightOperand);
+		}
 
-		public string PropertyName { get; private set; }
+		#endregion
 
-		public Type PropertyType
+		#endregion
+
+		#region Private Implementation
+
+		#region Properties
+
+		private Type PropertyType
 		{
 			get
 			{
 				return Metadata.GetPropertyInfo(PropertyName).PropertyType;
-            }
+			}
 		}
 
-		public string PropertyTypeName
+		private string PropertyTypeName
 		{
 			get
 			{
@@ -58,9 +103,7 @@ namespace TagScanner.Models
 			}
 		}
 
-		public string ValueString { get; private set; }
-
-		public object Value
+		private object Value
 		{
 			get
 			{
@@ -85,7 +128,54 @@ namespace TagScanner.Models
 
 		#endregion
 
-		#region Methods
+		#region Static Properties
+
+		private static string[] ComparableTypes = new[]
+		{
+			"DateTime",
+			"Int32",
+			"Int64",
+			"String",
+			"TimeSpan"
+		};
+
+		private static string[] ComparisonOperators = new[]
+		{
+			Operator.LessThan,
+			Operator.NotGreaterThan,
+			Operator.NotLessThan,
+			Operator.GreaterThan
+		};
+
+		private static string[] EqualityOperators = new[]
+		{
+			Operator.Equal,
+			Operator.NotEqual
+		};
+
+		private static string[] StringTypes = new[]
+		{
+			"String"
+		};
+
+		private static string[] StringOperators = new[]
+		{
+			Operator.Containing,
+			Operator.StartingWith,
+			Operator.EndingWith,
+			Operator.NotContaining,
+			Operator.NotStartingWith,
+			Operator.NotEndingWith
+		};
+
+		private static IEnumerable<string> AllOperators =
+			StringOperators
+			.Union(EqualityOperators)
+			.Union(ComparisonOperators);
+
+		#endregion
+
+		#region Static Methods
 
 		private static BinaryExpression NullCheck(Expression expression)
 		{
@@ -130,7 +220,7 @@ namespace TagScanner.Models
 			}
 		}
 
-		public static string TakeWord(ref string text)
+		private static string TakeWord(ref string text)
 		{
 			if (string.IsNullOrWhiteSpace(text))
 				return string.Empty;
@@ -142,86 +232,7 @@ namespace TagScanner.Models
 			return word;
 		}
 
-		public Expression ToExpression(ParameterExpression parameter)
-		{
-			Expression
-				property = Expression.Property(parameter, PropertyName),
-				leftOperand = Expression.Convert(property, PropertyType),
-				rightOperand = Metadata.SortableTags.Contains(ValueString)
-				? Expression.Convert(Expression.Property(parameter, ValueString), PropertyType)
-				: (Expression)Expression.Constant(Value);
-			var op = OperatorToExpressionType(Operation);
-			if (PropertyTypeName == "String")
-			{
-				leftOperand = NullCheck(leftOperand);
-				rightOperand = NullCheck(rightOperand);
-				var methodName = OperatorToMethodName(Operation);
-				var methodInfo = typeof(string).GetMethod(methodName, new[] { typeof(string) });
-				leftOperand = Expression.Call(leftOperand, methodInfo, rightOperand);
-				switch (Operation)
-				{
-					case Operator.Containing:
-					case Operator.StartingWith:
-					case Operator.EndingWith:
-						return leftOperand;
-					case Operator.NotContaining:
-					case Operator.NotStartingWith:
-					case Operator.NotEndingWith:
-						return Expression.Not(leftOperand);
-				}
-				rightOperand = Expression.Constant(0);
-			}
-			return Expression.MakeBinary(op, leftOperand, rightOperand);
-		}
-
 		#endregion
-
-		#endregion
-
-		#region Private Implementation
-
-		private static string[] ComparableTypes = new[]
-		{
-			"DateTime",
-			"Int32",
-			"Int64",
-			"String",
-			"TimeSpan"
-		};
-
-		private static string[] ComparisonOperators = new[]
-		{
-			Operator.LessThan,
-			Operator.NotGreaterThan,
-			Operator.NotLessThan,
-			Operator.GreaterThan
-		};
-
-		private static string[] EqualityOperators = new[]
-		{
-			Operator.Equal,
-			Operator.NotEqual
-		};
-
-		private static string[] StringTypes = new[]
-		{
-			"String"
-		};
-
-		private static string[] StringOperators = new[]
-		{
-			Operator.Containing,
-			Operator.StartingWith,
-			Operator.EndingWith,
-			Operator.NotContaining,
-			Operator.NotStartingWith,
-			Operator.NotEndingWith
-		};
-
-		private static IEnumerable<string> AllOperators =
-			StringOperators
-			.Union(EqualityOperators)
-			.Union(ComparisonOperators);
 
 		#endregion
 	}

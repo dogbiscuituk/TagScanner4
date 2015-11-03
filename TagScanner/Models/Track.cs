@@ -419,23 +419,8 @@ namespace TagScanner.Models
 
 		public string FileAttributes { get; set; }
 
-		private DateTime _fileCreationTime;
-		public DateTime FileCreationTime
-		{
-			get
-			{
-				return _fileCreationTime;
-			}
-		}
-
-		private DateTime _fileCreationTimeUtc;
-		public DateTime FileCreationTimeUtc
-		{
-			get
-			{
-				return _fileCreationTimeUtc;
-			}
-		}
+		public DateTime FileCreationTime { get; set; }
+		public DateTime FileCreationTimeUtc { get; set; }
 
 		public string FileExtension
 		{
@@ -445,41 +430,10 @@ namespace TagScanner.Models
 			}
 		}
 
-		private DateTime _fileLastAccessTime;
-		public DateTime FileLastAccessTime
-		{
-			get
-			{
-				return _fileLastAccessTime;
-			}
-		}
-
-		private DateTime _fileLastAccessTimeUtc;
-		public DateTime FileLastAccessTimeUtc
-		{
-			get
-			{
-				return _fileLastAccessTimeUtc;
-			}
-		}
-
-		private DateTime _fileLastWriteTime;
-		public DateTime FileLastWriteTime
-		{
-			get
-			{
-				return _fileLastWriteTime;
-			}
-		}
-
-		private DateTime _fileLastWriteTimeUtc;
-		public DateTime FileLastWriteTimeUtc
-		{
-			get
-			{
-				return _fileLastWriteTimeUtc;
-			}
-		}
+		public DateTime FileLastAccessTime { get; set; }
+		public DateTime FileLastAccessTimeUtc { get; set; }
+		public DateTime FileLastWriteTime { get; set; }
+		public DateTime FileLastWriteTimeUtc { get; set; }
 
 		public string FileName
 		{
@@ -550,23 +504,8 @@ namespace TagScanner.Models
 			}
 		}
 
-		private long _invariantEndPosition;
-		public long InvariantEndPosition
-		{
-			get
-			{
-				return _invariantEndPosition;
-			}
-		}
-
-		private long _invariantStartPosition;
-		public long InvariantStartPosition
-		{
-			get
-			{
-				return _invariantStartPosition;
-			}
-		}
+		public long InvariantEndPosition { get; set; }
+		public long InvariantStartPosition { get; set; }
 
 		public Logical IsClassical
 		{
@@ -890,23 +829,8 @@ namespace TagScanner.Models
 			}
 		}
 
-		private TagLib.TagTypes _tagTypes;
-		public TagLib.TagTypes TagTypes
-		{
-			get
-			{
-				return _tagTypes;
-			}
-		}
-
-		private TagLib.TagTypes _tagTypesOnDisk;
-		public TagLib.TagTypes TagTypesOnDisk
-		{
-			get
-			{
-				return _tagTypesOnDisk;
-			}
-		}
+		public TagLib.TagTypes TagTypes { get; set; }
+		public TagLib.TagTypes TagTypesOnDisk { get; set; }
 
 		private string _title;
 		public string Title
@@ -1032,6 +956,7 @@ namespace TagScanner.Models
 			ReadMetadata();
 			using (var file = GetTagLibFile())
 				ReadFile(file);
+			IsModified = false;
 		}
 
 		public void Save()
@@ -1042,7 +967,6 @@ namespace TagScanner.Models
 				file.Save();
 			}
 			Load();
-			IsModified = false;
 		}
 
 		public override string ToString()
@@ -1070,23 +994,25 @@ namespace TagScanner.Models
 
 		private void OnPropertyChanged(string propertyName)
 		{
-			IsModified = true;
 			if (_observers != null)
+			{
+				IsModified = true;
 				foreach (var observer in Observers)
 					observer.TrackPropertyChanged(this, propertyName);
+			}
 		}
 
 		private void ReadFile(TagLib.File file)
 		{
 			if (file == null)
 				return;
-			_invariantEndPosition = file.InvariantEndPosition;
-			_invariantStartPosition = file.InvariantStartPosition;
+			InvariantEndPosition = file.InvariantEndPosition;
+			InvariantStartPosition = file.InvariantStartPosition;
 			MimeType = file.MimeType;
 			Name = file.Name;
 			_possiblyCorrupt = file.PossiblyCorrupt;
-			_tagTypes = file.TagTypes;
-			_tagTypesOnDisk = file.TagTypesOnDisk;
+			TagTypes = file.TagTypes;
+			TagTypesOnDisk = file.TagTypesOnDisk;
 			ReadProperties(file.Properties);
 			ReadTag(file.Tag);
 		}
@@ -1095,12 +1021,12 @@ namespace TagScanner.Models
 		{
 			FileSize = new FileInfo(FilePath).Length;
 			FileAttributes = File.GetAttributes(FilePath).ToString();
-			_fileCreationTime = File.GetCreationTimeUtc(FilePath);
-			_fileLastWriteTime = File.GetLastWriteTimeUtc(FilePath);
-			_fileLastAccessTime = File.GetLastAccessTimeUtc(FilePath);
-			_fileCreationTimeUtc = File.GetCreationTimeUtc(FilePath);
-			_fileLastWriteTimeUtc = File.GetLastWriteTimeUtc(FilePath);
-			_fileLastAccessTimeUtc = File.GetLastAccessTimeUtc(FilePath);
+			FileCreationTime = File.GetCreationTimeUtc(FilePath);
+			FileLastWriteTime = File.GetLastWriteTimeUtc(FilePath);
+			FileLastAccessTime = File.GetLastAccessTimeUtc(FilePath);
+			FileCreationTimeUtc = File.GetCreationTimeUtc(FilePath);
+			FileLastWriteTimeUtc = File.GetLastWriteTimeUtc(FilePath);
+			FileLastAccessTimeUtc = File.GetLastAccessTimeUtc(FilePath);
 		}
 
 		private void ReadProperties(TagLib.Properties properties)

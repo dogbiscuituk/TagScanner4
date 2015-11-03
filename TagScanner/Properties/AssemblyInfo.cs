@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("TagScanner")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("JMK Software")]
 [assembly: AssemblyProduct("ID3 Media Library Manager")]
 [assembly: AssemblyCopyright("Copyright © John M Kerr 2015")]
 [assembly: AssemblyTrademark("")]

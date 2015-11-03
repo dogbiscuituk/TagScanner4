@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using TagScanner.Models;
@@ -173,7 +174,10 @@ namespace TagScanner.Controllers
 		private void HelpAbout_Click(object sender, EventArgs e)
 		{
 			MessageBox.Show(
-				string.Concat("Version ", Application.ProductVersion),
+				string.Format("{0}\n{1}\nVersion {2}", 
+					Application.CompanyName,
+					Application.ProductName,
+					Application.ProductVersion),
 				string.Concat("About ", Application.ProductName));
 		}
 
