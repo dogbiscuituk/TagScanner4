@@ -12,7 +12,7 @@ namespace TagScanner
 	{
 		#region Lifetime Management
 
-		public Selection(IEnumerable<ITrack> files)
+		public Selection(IEnumerable<Track> files)
 		{
 			Tracks = files;
 		}
@@ -21,7 +21,7 @@ namespace TagScanner
 
 		#region Properties
 
-		public readonly IEnumerable<ITrack> Tracks;
+		public readonly IEnumerable<Track> Tracks;
 
 		[Browsable(true)]
 		[Category("Selection")]

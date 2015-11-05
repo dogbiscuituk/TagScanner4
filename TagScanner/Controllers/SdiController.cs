@@ -165,6 +165,7 @@ namespace TagScanner.Controllers
 			return result;
 		}
 
+		private readonly OpenFileDialog OpenFileDialog;
 		private readonly SaveFileDialog SaveFileDialog;
 
 		private bool LoadFromFile(string filePath)

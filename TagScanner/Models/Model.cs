@@ -46,12 +46,6 @@ namespace TagScanner.Models
 				modifiedChanged(this, EventArgs.Empty);
         }
 
-		public Order[] Orders
-		{
-			get { return _orders; }
-			set { _orders = value; Sort(); }
-		}
-
 		public int AddFiles(string[] filePaths, IProgress<ProgressEventArgs> progress)
 		{
 			return ReadTracks(p => p.AddTracks(filePaths), progress);
@@ -71,13 +65,6 @@ namespace TagScanner.Models
 
 		private List<Track> _tracks = new List<Track>();
 
-		private Order[] _orders = new[]
-		{
-			new Order("YearAlbum"),
-			new Order("DiscNumber"),
-			new Order("TrackNumber")
-		};
-
 		protected virtual void OnTracksChanged()
 		{
 			var tracksChanged = TracksChanged;
@@ -91,20 +78,8 @@ namespace TagScanner.Models
 			run(reader);
 			var tracks = reader.Tracks;
 			_tracks.AddRange(tracks);
-			Sort();
-			return tracks.Count;
-		}
-
-		private void Sort()
-		{
-			if (_tracks.Any() && Orders != null && Orders.Any())
-			{
-				var tracks = Orders[0].ApplyFirst(_tracks);
-				for (var index = 1; index < Orders.Length; index++)
-					tracks = Orders[index].ApplyNext(tracks);
-				_tracks = tracks.ToList();
-			}
 			OnTracksChanged();
+			return tracks.Count;
 		}
 
 		#endregion

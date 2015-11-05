@@ -12,25 +12,26 @@ namespace TagScanner.Models
 		private static readonly IEnumerable<PropertyInfo> SortablePropertyInfos =
 			from prop in PropertyInfos
 			let type = prop.PropertyType
-			let name = type.Name
-			where !type.IsArray && name != "TagTypes" && name != "TrackStatus"
+			let typeName = type.Name
+			where !type.IsArray && typeName != "TagTypes" && typeName != "TrackStatus"
 			select prop;
-
-		public static readonly string[] SortableTags = SortablePropertyInfos.Select(p => p.Name).ToArray();
 
 		private static readonly IEnumerable<PropertyInfo> StringPropertyInfos =
-			from prop in PropertyInfos
-			where prop.PropertyType.Name == "String"
-			select prop;
+			PropertyInfos.Where(p => p.PropertyType.Name == "String");
 
-		public static readonly string[] StringTags = StringPropertyInfos.Select(p => p.Name).ToArray();
+		private static readonly IEnumerable<PropertyInfo> TextPropertyInfos =
+			PropertyInfos.Where(p => p.PropertyType.Name.StartsWith("String"));
+
+		private static readonly IEnumerable<PropertyInfo> WritableStringPropertyInfos =
+			StringPropertyInfos.Where(p => p.CanWrite);
 
 		private static readonly IEnumerable<PropertyInfo> WritableTextPropertyInfos =
-			from prop in PropertyInfos
-			let type = prop.PropertyType.Name
-			where prop.CanWrite && type.StartsWith("String")
-			select prop;
+			TextPropertyInfos.Where(p => p.CanWrite);
 
+		public static readonly string[] SortableTags = SortablePropertyInfos.Select(p => p.Name).ToArray();
+		public static readonly string[] StringTags = StringPropertyInfos.Select(p => p.Name).ToArray();
+		public static readonly string[] TextTags = TextPropertyInfos.Select(p => p.Name).ToArray();
+		public static readonly string[] WritableStringTags = WritableStringPropertyInfos.Select(p => p.Name).ToArray();
 		public static readonly string[] WritableTextTags = WritableTextPropertyInfos.Select(p => p.Name).ToArray();
 
 		public static string AmpersandEscape(this string s)

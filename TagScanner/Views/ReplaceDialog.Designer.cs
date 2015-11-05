@@ -36,7 +36,6 @@
 			this.label3 = new System.Windows.Forms.Label();
 			this.cbReplaceWith = new System.Windows.Forms.ComboBox();
 			this.label4 = new System.Windows.Forms.Label();
-			this.cbLookIn = new System.Windows.Forms.ComboBox();
 			this.btnExpressionBuilderFind = new System.Windows.Forms.Button();
 			this.btnExpressionBuilderReplace = new System.Windows.Forms.Button();
 			this.popupFindMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -81,9 +80,14 @@
 			this.btnReplaceAll = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.label5 = new System.Windows.Forms.Label();
-			this.cbDestinationTag = new System.Windows.Forms.ComboBox();
+			this.cbTargetTag = new System.Windows.Forms.ComboBox();
+			this.rbCurrentSelection = new System.Windows.Forms.RadioButton();
+			this.rbAllTracks = new System.Windows.Forms.RadioButton();
+			this.label6 = new System.Windows.Forms.Label();
+			this.ErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
 			this.popupFindMenu.SuspendLayout();
 			this.popupReplaceMenu.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.ErrorProvider)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -141,24 +145,11 @@
 			// label4
 			// 
 			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(12, 169);
+			this.label4.Location = new System.Drawing.Point(221, 181);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(45, 13);
 			this.label4.TabIndex = 6;
 			this.label4.Text = "&Look in:";
-			// 
-			// cbLookIn
-			// 
-			this.cbLookIn.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbLookIn.FormattingEnabled = true;
-			this.cbLookIn.Items.AddRange(new object[] {
-            "Currently selected tracks",
-            "Current group of tracks",
-            "All tracks"});
-			this.cbLookIn.Location = new System.Drawing.Point(15, 185);
-			this.cbLookIn.Name = "cbLookIn";
-			this.cbLookIn.Size = new System.Drawing.Size(320, 21);
-			this.cbLookIn.TabIndex = 7;
 			// 
 			// btnExpressionBuilderFind
 			// 
@@ -449,7 +440,7 @@
 			// cbMatchCase
 			// 
 			this.cbMatchCase.AutoSize = true;
-			this.cbMatchCase.Location = new System.Drawing.Point(15, 225);
+			this.cbMatchCase.Location = new System.Drawing.Point(15, 201);
 			this.cbMatchCase.Name = "cbMatchCase";
 			this.cbMatchCase.Size = new System.Drawing.Size(82, 17);
 			this.cbMatchCase.TabIndex = 11;
@@ -459,7 +450,7 @@
 			// cbMatchWholeWord
 			// 
 			this.cbMatchWholeWord.AutoSize = true;
-			this.cbMatchWholeWord.Location = new System.Drawing.Point(15, 248);
+			this.cbMatchWholeWord.Location = new System.Drawing.Point(15, 224);
 			this.cbMatchWholeWord.Name = "cbMatchWholeWord";
 			this.cbMatchWholeWord.Size = new System.Drawing.Size(113, 17);
 			this.cbMatchWholeWord.TabIndex = 12;
@@ -469,7 +460,7 @@
 			// cbUseRegex
 			// 
 			this.cbUseRegex.AutoSize = true;
-			this.cbUseRegex.Location = new System.Drawing.Point(15, 271);
+			this.cbUseRegex.Location = new System.Drawing.Point(15, 247);
 			this.cbUseRegex.Name = "cbUseRegex";
 			this.cbUseRegex.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.cbUseRegex.Size = new System.Drawing.Size(144, 17);
@@ -506,14 +497,51 @@
 			this.label5.TabIndex = 16;
 			this.label5.Text = "&Destination Tag:";
 			// 
-			// cbDestinationTag
+			// cbTargetTag
 			// 
-			this.cbDestinationTag.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbDestinationTag.FormattingEnabled = true;
-			this.cbDestinationTag.Location = new System.Drawing.Point(15, 65);
-			this.cbDestinationTag.Name = "cbDestinationTag";
-			this.cbDestinationTag.Size = new System.Drawing.Size(320, 21);
-			this.cbDestinationTag.TabIndex = 17;
+			this.cbTargetTag.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cbTargetTag.FormattingEnabled = true;
+			this.cbTargetTag.Location = new System.Drawing.Point(15, 65);
+			this.cbTargetTag.Name = "cbTargetTag";
+			this.cbTargetTag.Size = new System.Drawing.Size(320, 21);
+			this.cbTargetTag.TabIndex = 17;
+			// 
+			// rbCurrentSelection
+			// 
+			this.rbCurrentSelection.AutoSize = true;
+			this.rbCurrentSelection.Checked = true;
+			this.rbCurrentSelection.Location = new System.Drawing.Point(224, 201);
+			this.rbCurrentSelection.Name = "rbCurrentSelection";
+			this.rbCurrentSelection.Size = new System.Drawing.Size(104, 17);
+			this.rbCurrentSelection.TabIndex = 18;
+			this.rbCurrentSelection.TabStop = true;
+			this.rbCurrentSelection.Text = "C&urrent selection";
+			this.rbCurrentSelection.UseVisualStyleBackColor = true;
+			// 
+			// rbAllTracks
+			// 
+			this.rbAllTracks.AutoSize = true;
+			this.rbAllTracks.Location = new System.Drawing.Point(224, 224);
+			this.rbAllTracks.Name = "rbAllTracks";
+			this.rbAllTracks.Size = new System.Drawing.Size(68, 17);
+			this.rbAllTracks.TabIndex = 19;
+			this.rbAllTracks.TabStop = true;
+			this.rbAllTracks.Text = "&All tracks";
+			this.rbAllTracks.UseVisualStyleBackColor = true;
+			// 
+			// label6
+			// 
+			this.label6.AutoSize = true;
+			this.label6.Location = new System.Drawing.Point(12, 181);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(43, 13);
+			this.label6.TabIndex = 20;
+			this.label6.Text = "&Options";
+			// 
+			// ErrorProvider
+			// 
+			this.ErrorProvider.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
+			this.ErrorProvider.ContainerControl = this;
 			// 
 			// ReplaceDialog
 			// 
@@ -522,7 +550,10 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(389, 326);
-			this.Controls.Add(this.cbDestinationTag);
+			this.Controls.Add(this.label6);
+			this.Controls.Add(this.rbAllTracks);
+			this.Controls.Add(this.rbCurrentSelection);
+			this.Controls.Add(this.cbTargetTag);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.btnReplaceAll);
@@ -531,7 +562,6 @@
 			this.Controls.Add(this.cbMatchCase);
 			this.Controls.Add(this.btnExpressionBuilderReplace);
 			this.Controls.Add(this.btnExpressionBuilderFind);
-			this.Controls.Add(this.cbLookIn);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.cbReplaceWith);
 			this.Controls.Add(this.label3);
@@ -545,6 +575,7 @@
 			this.Text = "Replace";
 			this.popupFindMenu.ResumeLayout(false);
 			this.popupReplaceMenu.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.ErrorProvider)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -591,7 +622,6 @@
 		public System.Windows.Forms.ComboBox cbSourceTag;
 		public System.Windows.Forms.ComboBox cbFindWhat;
 		public System.Windows.Forms.ComboBox cbReplaceWith;
-		public System.Windows.Forms.ComboBox cbLookIn;
 		public System.Windows.Forms.Button btnExpressionBuilderFind;
 		public System.Windows.Forms.Button btnExpressionBuilderReplace;
 		public System.Windows.Forms.ContextMenuStrip popupFindMenu;
@@ -601,9 +631,13 @@
 		public System.Windows.Forms.CheckBox cbMatchCase;
 		public System.Windows.Forms.CheckBox cbMatchWholeWord;
 		public System.Windows.Forms.CheckBox cbUseRegex;
-		private System.Windows.Forms.Button btnReplaceAll;
-		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.Label label5;
-		public System.Windows.Forms.ComboBox cbDestinationTag;
+		public System.Windows.Forms.ComboBox cbTargetTag;
+		public System.Windows.Forms.RadioButton rbCurrentSelection;
+		public System.Windows.Forms.RadioButton rbAllTracks;
+		private System.Windows.Forms.Label label6;
+		public System.Windows.Forms.ErrorProvider ErrorProvider;
+		public System.Windows.Forms.Button btnReplaceAll;
+		public System.Windows.Forms.Button btnCancel;
 	}
 }

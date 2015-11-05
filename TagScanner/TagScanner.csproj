@@ -106,12 +106,6 @@
     <Compile Include="Views\FilterDialog.Designer.cs">
       <DependentUpon>FilterDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\TagChooser.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\TagChooser.Designer.cs">
-      <DependentUpon>TagChooser.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controllers\CompoundFilterEditController.cs" />
     <Compile Include="Views\GridElement.xaml.cs">
       <DependentUpon>GridElement.xaml</DependentUpon>
@@ -126,8 +120,6 @@
     <Compile Include="Models\Picture.cs" />
     <Compile Include="Controllers\PictureController.cs" />
     <Compile Include="Models\ProgressEventArgs.cs" />
-    <Compile Include="Models\Order.cs" />
-    <Compile Include="Models\OrderExtensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Track.cs" />
@@ -148,9 +140,6 @@
     </Compile>
     <EmbeddedResource Include="Views\FilterDialog.resx">
       <DependentUpon>FilterDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\TagChooser.resx">
-      <DependentUpon>TagChooser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\GridForm.resx">
       <DependentUpon>GridForm.cs</DependentUpon>

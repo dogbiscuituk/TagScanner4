@@ -95,7 +95,7 @@ namespace TagScanner.Controllers
         private void InitPicture()
         {
             // If a Picture is selected in the PropertyGrid,
-            // then display that particular Picture.
+            // then use that particular Picture.
             var gridItem = PropertyGrid.SelectedGridItem;
             if (gridItem != null)
             {
@@ -107,10 +107,10 @@ namespace TagScanner.Controllers
                 }
             }
 			// If no Picture is selected in the PropertyGrid,
-			// then display the first Picture in the selection, if any.
-            var tagFile = PropertyGrid.SelectedObject as Selection;
-            var result = tagFile != null && tagFile.Pictures.Any();
-            Picture = result ? tagFile.Pictures[0] : null;
+			// then use the first Picture in the selection, if any.
+            var selection = PropertyGrid.SelectedObject as Selection;
+            var result = selection != null && selection.Pictures.Any();
+            Picture = result ? selection.Pictures[0] : null;
         }
 
         private void InitSizeMode()

@@ -15,7 +15,7 @@ namespace TagScanner.ValueConverters
 			var group = value as ReadOnlyObservableCollection<object>;
 			if (group == null)
 				return string.Empty;
-			var tracks = new List<ITrack>();
+			var tracks = new List<Track>();
 			AddTracks(tracks, group);
 			var summary = new Selection(tracks);
 			var trackCount = tracks.Count;
@@ -32,11 +32,11 @@ namespace TagScanner.ValueConverters
 			return value;
 		}
 
-		private void AddTracks(List<ITrack> tracks, ReadOnlyObservableCollection<object> group)
+		private void AddTracks(List<Track> tracks, ReadOnlyObservableCollection<object> group)
 		{
 			if (group.Any())
-				if (group[0] is ITrack)
-					tracks.AddRange(group.Cast<ITrack>());
+				if (group[0] is Track)
+					tracks.AddRange(group.Cast<Track>());
 				else
 					foreach (CollectionViewGroup item in group)
 						AddTracks(tracks, item.Items);

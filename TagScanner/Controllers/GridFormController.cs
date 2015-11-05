@@ -303,7 +303,7 @@ namespace TagScanner.Controllers
 			{
 				return
 					_replaceDialogController
-					?? (_replaceDialogController = new ReplaceDialogController());
+					?? (_replaceDialogController = new ReplaceDialogController(GridController));
 			}
 		}
 	}

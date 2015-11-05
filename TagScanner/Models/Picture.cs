@@ -8,25 +8,30 @@ namespace TagScanner.Models
 	[Serializable]
     public class Picture
     {
-        #region Lifetime Management
+		#region Constructors
+
+		public Picture() { }
 
 		public Picture(string filePath, int index, TagLib.IPicture picture)
 		{
-			_description = picture.Description;
-			_filePath = filePath;
-			_index = index;
-			_mimeType = picture.MimeType;
-			_type = picture.Type;
+			Description = picture.Description;
+			FilePath = filePath;
+			Index = index;
+			MimeType = picture.MimeType;
+			Type = picture.Type.ToString();
 		}
 
-        #endregion
+		#endregion
 
-        #region Properties
+		#region Properties
 
-	    private readonly string _filePath;
-	    private readonly int _index;
+		public string Description { get; set; }
+		public string FilePath { get; set; }
+		public int Index { get; set; }
+		public string MimeType { get; set; }
+		public string Type { get; set; }
 
-	    private long _dataSize = long.MaxValue;
+		private long _dataSize = long.MaxValue;
 	    public long DataSize
 	    {
 		    get
@@ -37,33 +42,15 @@ namespace TagScanner.Models
 		    }
 	    }
 
-	    private readonly string _description;
-		public string Description
-		{
-            get { return _description; }
-        }
-
-	    private readonly string _mimeType;
-        public string MimeType
-        {
-            get { return _mimeType; }
-        }
-
-        private PixelFormat _pixelFormat = 0;
+		private PixelFormat _pixelFormat = PixelFormat.Undefined;
         public PixelFormat PixelFormat
         {
             get
             {
-                if (_pixelFormat == 0)
+                if (_pixelFormat == PixelFormat.Undefined)
                     Init();
                 return _pixelFormat;
             }
-        }
-
-	    private readonly TagLib.PictureType _type;
-        public TagLib.PictureType Type
-        {
-            get { return _type; }
         }
 
         private Size _size;
@@ -85,8 +72,8 @@ namespace TagScanner.Models
 		{
 			try
 			{
-				using (var file = TagLib.File.Create(_filePath))
-					return GetImage(file.Tag.Pictures[_index]);
+				using (var file = TagLib.File.Create(FilePath))
+					return GetImage(file.Tag.Pictures[Index]);
 			}
 			catch (FileNotFoundException)
 			{

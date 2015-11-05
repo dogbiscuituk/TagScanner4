@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -781,15 +782,7 @@ namespace TagScanner.Models
 		[DefaultValue(0)]
 		public int PhotoWidth { get; set; }
 
-		private Picture[] _pictures;
-		[XmlIgnore]
-		public Picture[] Pictures
-		{
-			get
-			{
-				return _pictures;
-			}
-		}
+		public Picture[] Pictures { get; set; }
 
 		private int _picturesCount;
 		public int PicturesCount
@@ -951,6 +944,11 @@ namespace TagScanner.Models
 
 		#region Methods
 
+		public object GetPropertyValue(string propertyName)
+		{
+			return GetPropertyInfo(propertyName).GetValue(this);
+		}
+
 		public void Load()
 		{
 			ReadMetadata();
@@ -967,6 +965,18 @@ namespace TagScanner.Models
 				file.Save();
 			}
 			Load();
+		}
+
+		public bool SetPropertyValue(string propertyName, object value)
+		{
+			var propertyInfo = GetPropertyInfo(propertyName);
+			var result = propertyInfo.GetValue(this) != value;
+			if (result)
+			{
+				propertyInfo.SetValue(this, value);
+				OnPropertyChanged(propertyName);
+			}
+			return result;
 		}
 
 		public override string ToString()
@@ -986,6 +996,11 @@ namespace TagScanner.Models
 		#endregion
 
 		#region Private Implementation
+
+		private static PropertyInfo GetPropertyInfo(string propertyName)
+		{
+			return typeof(Track).GetProperty(propertyName);
+		}
 
 		private TagLib.File GetTagLibFile()
 		{
@@ -1106,7 +1121,7 @@ namespace TagScanner.Models
 			_performersSort = tag.PerformersSort;
 			_picturesCount = tag.Pictures.Length;
 			var pictureIndex = 0;
-			_pictures = tag.Pictures.Select(q => new Picture(FilePath, pictureIndex++, q)).ToArray();
+			Pictures = tag.Pictures.Select(p => new Picture(FilePath, pictureIndex++, p)).ToArray();
 			_title = tag.Title;
 			_titleSort = tag.TitleSort;
 			_trackNumber = (int)tag.Track;

@@ -12,9 +12,9 @@ namespace TagScanner.Controllers
 	{
 		protected MruController(Model model, string subKeyName, ToolStripDropDownItem recentMenu)
 		{
-			Model = model;
 			if (string.IsNullOrWhiteSpace(subKeyName))
 				throw new ArgumentNullException("subKeyName");
+			Model = model;
 			SubKeyName = string.Format(
 				@"Software\{0}\{1}\{2}",
 				Application.CompanyName,
@@ -25,7 +25,6 @@ namespace TagScanner.Controllers
 		}
 
 		protected readonly Model Model;
-		protected OpenFileDialog OpenFileDialog;
 
 		protected void AddItem(string item)
 		{

@@ -53,8 +53,8 @@ namespace TagScanner.Models
 			Expression
 				leftOperand = Expression.Convert(Expression.Property(parameter, PropertyName), PropertyType),
 				rightOperand = Metadata.StringTags.Contains(ValueString)
-				? Expression.Convert(Expression.Property(parameter, ValueString), PropertyType)
-				: (Expression)Expression.Constant(Value);
+					? Expression.Convert(Expression.Property(parameter, ValueString), PropertyType)
+					: (Expression)Expression.Constant(Value);
 			var op = OperatorToExpressionType(Operation);
 			if (PropertyTypeName == "String")
 			{

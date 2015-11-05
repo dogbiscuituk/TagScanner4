@@ -364,7 +364,7 @@ namespace TagScanner.Controllers
 
 		private Selection GetSelection()
 		{
-            return new Selection(Grid.SelectedItems.Cast<ITrack>());
+            return new Selection(Grid.SelectedItems.Cast<Track>());
 		}
 
 		#endregion

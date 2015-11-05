@@ -10,7 +10,6 @@ namespace TagScanner.Controllers
 		public MediaController(Model model, StatusController statusController, ToolStripDropDownItem recentMenu)
 			: base(model, "MediaMRU", recentMenu)
 		{
-			StatusController = statusController;
             var filter = Properties.Settings.Default.MediaFilter;
 			OpenFileDialog = new OpenFileDialog
 			{
@@ -22,6 +21,7 @@ namespace TagScanner.Controllers
 			{
 				Description = "Select the media folder to add"
 			};
+			StatusController = statusController;
 		}
 
 		public void AddFiles()
@@ -58,8 +58,9 @@ namespace TagScanner.Controllers
 				RemoveItem(item);
 		}
 
-		private readonly StatusController StatusController;
 		private readonly FolderBrowserDialog FolderBrowserDialog;
+		private readonly OpenFileDialog OpenFileDialog;
+		private readonly StatusController StatusController;
 
 		private void AddFiles(string[] filePaths)
 		{
