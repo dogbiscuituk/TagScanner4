@@ -32,12 +32,12 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.cbSourceTag = new System.Windows.Forms.ComboBox();
 			this.label2 = new System.Windows.Forms.Label();
-			this.cbFindWhat = new System.Windows.Forms.ComboBox();
+			this.cbSourcePattern = new System.Windows.Forms.ComboBox();
 			this.label3 = new System.Windows.Forms.Label();
-			this.cbReplaceWith = new System.Windows.Forms.ComboBox();
+			this.cbTargetPattern = new System.Windows.Forms.ComboBox();
 			this.label4 = new System.Windows.Forms.Label();
-			this.btnExpressionBuilderFind = new System.Windows.Forms.Button();
-			this.btnExpressionBuilderReplace = new System.Windows.Forms.Button();
+			this.btnSourceRegex = new System.Windows.Forms.Button();
+			this.btnTargetRegex = new System.Windows.Forms.Button();
 			this.popupFindMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.tMatchAnyCharacterOneTimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tMatchAnyCharacterZeroOrMoreTimesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,7 +75,6 @@
 			this.popupReplaceRegularExpressionHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.cbMatchCase = new System.Windows.Forms.CheckBox();
-			this.cbMatchWholeWord = new System.Windows.Forms.CheckBox();
 			this.cbUseRegex = new System.Windows.Forms.CheckBox();
 			this.btnReplaceAll = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
@@ -117,13 +116,13 @@
 			this.label2.TabIndex = 2;
 			this.label2.Text = "&Find what:";
 			// 
-			// cbFindWhat
+			// cbSourcePattern
 			// 
-			this.cbFindWhat.FormattingEnabled = true;
-			this.cbFindWhat.Location = new System.Drawing.Point(15, 105);
-			this.cbFindWhat.Name = "cbFindWhat";
-			this.cbFindWhat.Size = new System.Drawing.Size(320, 21);
-			this.cbFindWhat.TabIndex = 3;
+			this.cbSourcePattern.FormattingEnabled = true;
+			this.cbSourcePattern.Location = new System.Drawing.Point(15, 105);
+			this.cbSourcePattern.Name = "cbSourcePattern";
+			this.cbSourcePattern.Size = new System.Drawing.Size(320, 21);
+			this.cbSourcePattern.TabIndex = 3;
 			// 
 			// label3
 			// 
@@ -134,44 +133,44 @@
 			this.label3.TabIndex = 4;
 			this.label3.Text = "&Replace with:";
 			// 
-			// cbReplaceWith
+			// cbTargetPattern
 			// 
-			this.cbReplaceWith.FormattingEnabled = true;
-			this.cbReplaceWith.Location = new System.Drawing.Point(15, 145);
-			this.cbReplaceWith.Name = "cbReplaceWith";
-			this.cbReplaceWith.Size = new System.Drawing.Size(320, 21);
-			this.cbReplaceWith.TabIndex = 5;
+			this.cbTargetPattern.FormattingEnabled = true;
+			this.cbTargetPattern.Location = new System.Drawing.Point(15, 145);
+			this.cbTargetPattern.Name = "cbTargetPattern";
+			this.cbTargetPattern.Size = new System.Drawing.Size(320, 21);
+			this.cbTargetPattern.TabIndex = 5;
 			// 
 			// label4
 			// 
 			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(221, 181);
+			this.label4.Location = new System.Drawing.Point(202, 181);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(45, 13);
 			this.label4.TabIndex = 6;
 			this.label4.Text = "&Look in:";
 			// 
-			// btnExpressionBuilderFind
+			// btnSourceRegex
 			// 
-			this.btnExpressionBuilderFind.Location = new System.Drawing.Point(345, 103);
-			this.btnExpressionBuilderFind.Margin = new System.Windows.Forms.Padding(0);
-			this.btnExpressionBuilderFind.Name = "btnExpressionBuilderFind";
-			this.btnExpressionBuilderFind.Size = new System.Drawing.Size(35, 23);
-			this.btnExpressionBuilderFind.TabIndex = 9;
-			this.btnExpressionBuilderFind.Text = "(a)+";
-			this.ToolTip.SetToolTip(this.btnExpressionBuilderFind, "Expression Builder");
-			this.btnExpressionBuilderFind.UseVisualStyleBackColor = true;
+			this.btnSourceRegex.Location = new System.Drawing.Point(338, 104);
+			this.btnSourceRegex.Margin = new System.Windows.Forms.Padding(0);
+			this.btnSourceRegex.Name = "btnSourceRegex";
+			this.btnSourceRegex.Size = new System.Drawing.Size(33, 23);
+			this.btnSourceRegex.TabIndex = 9;
+			this.btnSourceRegex.Text = "(a)+";
+			this.ToolTip.SetToolTip(this.btnSourceRegex, "Regular Expression Builder");
+			this.btnSourceRegex.UseVisualStyleBackColor = true;
 			// 
-			// btnExpressionBuilderReplace
+			// btnTargetRegex
 			// 
-			this.btnExpressionBuilderReplace.Location = new System.Drawing.Point(345, 143);
-			this.btnExpressionBuilderReplace.Margin = new System.Windows.Forms.Padding(0);
-			this.btnExpressionBuilderReplace.Name = "btnExpressionBuilderReplace";
-			this.btnExpressionBuilderReplace.Size = new System.Drawing.Size(35, 23);
-			this.btnExpressionBuilderReplace.TabIndex = 10;
-			this.btnExpressionBuilderReplace.Text = "(a)+";
-			this.ToolTip.SetToolTip(this.btnExpressionBuilderReplace, "Expression Builder");
-			this.btnExpressionBuilderReplace.UseVisualStyleBackColor = true;
+			this.btnTargetRegex.Location = new System.Drawing.Point(338, 144);
+			this.btnTargetRegex.Margin = new System.Windows.Forms.Padding(0);
+			this.btnTargetRegex.Name = "btnTargetRegex";
+			this.btnTargetRegex.Size = new System.Drawing.Size(33, 23);
+			this.btnTargetRegex.TabIndex = 10;
+			this.btnTargetRegex.Text = "(a)+";
+			this.ToolTip.SetToolTip(this.btnTargetRegex, "Regular Expression Builder");
+			this.btnTargetRegex.UseVisualStyleBackColor = true;
 			// 
 			// popupFindMenu
 			// 
@@ -447,20 +446,10 @@
 			this.cbMatchCase.Text = "Match &case";
 			this.cbMatchCase.UseVisualStyleBackColor = true;
 			// 
-			// cbMatchWholeWord
-			// 
-			this.cbMatchWholeWord.AutoSize = true;
-			this.cbMatchWholeWord.Location = new System.Drawing.Point(15, 224);
-			this.cbMatchWholeWord.Name = "cbMatchWholeWord";
-			this.cbMatchWholeWord.Size = new System.Drawing.Size(113, 17);
-			this.cbMatchWholeWord.TabIndex = 12;
-			this.cbMatchWholeWord.Text = "Match &whole word";
-			this.cbMatchWholeWord.UseVisualStyleBackColor = true;
-			// 
 			// cbUseRegex
 			// 
 			this.cbUseRegex.AutoSize = true;
-			this.cbUseRegex.Location = new System.Drawing.Point(15, 247);
+			this.cbUseRegex.Location = new System.Drawing.Point(15, 224);
 			this.cbUseRegex.Name = "cbUseRegex";
 			this.cbUseRegex.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.cbUseRegex.Size = new System.Drawing.Size(144, 17);
@@ -470,8 +459,9 @@
 			// 
 			// btnReplaceAll
 			// 
+			this.btnReplaceAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnReplaceAll.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btnReplaceAll.Location = new System.Drawing.Point(224, 294);
+			this.btnReplaceAll.Location = new System.Drawing.Point(221, 255);
 			this.btnReplaceAll.Name = "btnReplaceAll";
 			this.btnReplaceAll.Size = new System.Drawing.Size(75, 23);
 			this.btnReplaceAll.TabIndex = 14;
@@ -480,8 +470,9 @@
 			// 
 			// btnCancel
 			// 
+			this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Location = new System.Drawing.Point(305, 294);
+			this.btnCancel.Location = new System.Drawing.Point(302, 255);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(75, 23);
 			this.btnCancel.TabIndex = 15;
@@ -510,7 +501,7 @@
 			// 
 			this.rbCurrentSelection.AutoSize = true;
 			this.rbCurrentSelection.Checked = true;
-			this.rbCurrentSelection.Location = new System.Drawing.Point(224, 201);
+			this.rbCurrentSelection.Location = new System.Drawing.Point(202, 201);
 			this.rbCurrentSelection.Name = "rbCurrentSelection";
 			this.rbCurrentSelection.Size = new System.Drawing.Size(104, 17);
 			this.rbCurrentSelection.TabIndex = 18;
@@ -521,7 +512,7 @@
 			// rbAllTracks
 			// 
 			this.rbAllTracks.AutoSize = true;
-			this.rbAllTracks.Location = new System.Drawing.Point(224, 224);
+			this.rbAllTracks.Location = new System.Drawing.Point(202, 224);
 			this.rbAllTracks.Name = "rbAllTracks";
 			this.rbAllTracks.Size = new System.Drawing.Size(68, 17);
 			this.rbAllTracks.TabIndex = 19;
@@ -549,7 +540,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(389, 326);
+			this.ClientSize = new System.Drawing.Size(389, 290);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.rbAllTracks);
 			this.Controls.Add(this.rbCurrentSelection);
@@ -558,14 +549,13 @@
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.btnReplaceAll);
 			this.Controls.Add(this.cbUseRegex);
-			this.Controls.Add(this.cbMatchWholeWord);
 			this.Controls.Add(this.cbMatchCase);
-			this.Controls.Add(this.btnExpressionBuilderReplace);
-			this.Controls.Add(this.btnExpressionBuilderFind);
+			this.Controls.Add(this.btnTargetRegex);
+			this.Controls.Add(this.btnSourceRegex);
 			this.Controls.Add(this.label4);
-			this.Controls.Add(this.cbReplaceWith);
+			this.Controls.Add(this.cbTargetPattern);
 			this.Controls.Add(this.label3);
-			this.Controls.Add(this.cbFindWhat);
+			this.Controls.Add(this.cbSourcePattern);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.cbSourceTag);
 			this.Controls.Add(this.label1);
@@ -620,16 +610,15 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
 		private System.Windows.Forms.ToolTip ToolTip;
 		public System.Windows.Forms.ComboBox cbSourceTag;
-		public System.Windows.Forms.ComboBox cbFindWhat;
-		public System.Windows.Forms.ComboBox cbReplaceWith;
-		public System.Windows.Forms.Button btnExpressionBuilderFind;
-		public System.Windows.Forms.Button btnExpressionBuilderReplace;
+		public System.Windows.Forms.ComboBox cbSourcePattern;
+		public System.Windows.Forms.ComboBox cbTargetPattern;
+		public System.Windows.Forms.Button btnSourceRegex;
+		public System.Windows.Forms.Button btnTargetRegex;
 		public System.Windows.Forms.ContextMenuStrip popupFindMenu;
 		public System.Windows.Forms.ContextMenuStrip popupReplaceMenu;
 		public System.Windows.Forms.ToolStripMenuItem popupFindRegularExpressionHelp;
 		public System.Windows.Forms.ToolStripMenuItem popupReplaceRegularExpressionHelp;
 		public System.Windows.Forms.CheckBox cbMatchCase;
-		public System.Windows.Forms.CheckBox cbMatchWholeWord;
 		public System.Windows.Forms.CheckBox cbUseRegex;
 		private System.Windows.Forms.Label label5;
 		public System.Windows.Forms.ComboBox cbTargetTag;

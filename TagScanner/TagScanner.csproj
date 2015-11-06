@@ -74,7 +74,7 @@
   <ItemGroup>
     <Compile Include="Controllers\GridFormController.cs" />
     <Compile Include="Controllers\PlayerController.cs" />
-    <Compile Include="Controllers\ReplaceDialogController.cs" />
+    <Compile Include="Controllers\ReplaceController.cs" />
     <Compile Include="Controllers\SdiController.cs" />
     <Compile Include="Controllers\TagSelectorController.cs" />
     <Compile Include="Models\IObserveTracks.cs" />
@@ -82,15 +82,14 @@
     <Compile Include="Models\TrackStatus.cs" />
     <Compile Include="ValueConverters\DateTimeConverter.cs" />
     <Compile Include="ValueConverters\FileSizeConverter.cs" />
-    <Compile Include="Controllers\FilterEditController.cs" />
-    <Compile Include="Controllers\SimpleFilterEditController.cs" />
+    <Compile Include="Controllers\FilterController.cs" />
+    <Compile Include="Controllers\SimpleFilterController.cs" />
     <Compile Include="ValueConverters\StringsConverter.cs" />
     <Compile Include="ValueConverters\TimeSpanConverter.cs" />
     <Compile Include="Models\CompoundCondition.cs" />
     <Compile Include="ValueConverters\GroupSummary.cs" />
     <Compile Include="Models\SimpleCondition.cs" />
     <Compile Include="Models\Operator.cs" />
-    <Compile Include="Controllers\CursorController.cs" />
     <Compile Include="Controllers\FilterDialogController.cs" />
     <Compile Include="Controllers\GridController.cs" />
     <Compile Include="ValueConverters\LogicalConverter.cs" />

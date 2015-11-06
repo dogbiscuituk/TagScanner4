@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using TagScanner.Models;
@@ -296,14 +295,14 @@ namespace TagScanner.Controllers
 			}
 		}
 
-		private ReplaceDialogController _replaceDialogController;
-		private ReplaceDialogController ReplaceDialogController
+		private ReplaceController _replaceDialogController;
+		private ReplaceController ReplaceDialogController
 		{
 			get
 			{
 				return
 					_replaceDialogController
-					?? (_replaceDialogController = new ReplaceDialogController(GridController));
+					?? (_replaceDialogController = new ReplaceController(GridController));
 			}
 		}
 	}

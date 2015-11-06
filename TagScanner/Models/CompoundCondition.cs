@@ -12,10 +12,7 @@ namespace TagScanner.Models
 
 		#region Lifetime Management
 
-		public CompoundCondition(string text)
-		{
-
-		}
+		public CompoundCondition(string text) { }
 
 		#endregion
 

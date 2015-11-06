@@ -5,7 +5,7 @@ using TagScanner.Views;
 
 namespace TagScanner.Controllers
 {
-	public class CompoundFilterEditController : FilterEditController
+	public class CompoundFilterEditController : FilterController
 	{
 		#region Lifetime Management
 

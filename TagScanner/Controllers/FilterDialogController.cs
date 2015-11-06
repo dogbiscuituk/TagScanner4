@@ -17,7 +17,7 @@ namespace TagScanner.Controllers
 			: base(gridController.Model, Properties.Settings.Default.SearchFilter, "FilterMRU", recentMenu)
 		{
 			_gridController = gridController;
-			_simpleFilterEditController = new SimpleFilterEditController(View);
+			_simpleFilterEditController = new SimpleFilterController(View);
 			_simpleFilterEditController.ValueChanged += FilterController_ValueChanged;
 			_compoundFilterEditController = new CompoundFilterEditController(View);
 			_compoundFilterEditController.ValueChanged += FilterController_ValueChanged;
@@ -26,12 +26,12 @@ namespace TagScanner.Controllers
 
 		private void FilterController_ValueChanged(object sender, EventArgs e)
 		{
-			SelectedNodeText = ((FilterEditController)sender).Text;
+			SelectedNodeText = ((FilterController)sender).Text;
 			InvalidateFilter();
 		}
 
 		private GridController _gridController;
-		private SimpleFilterEditController _simpleFilterEditController;
+		private SimpleFilterController _simpleFilterEditController;
 		private CompoundFilterEditController _compoundFilterEditController;
 
 		#endregion
