@@ -15,10 +15,10 @@ namespace TagScanner.Controllers
 	{
 		#region Constructors
 
-		public ReplaceController(GridController gridController)
+		public ReplaceController(LibraryGridController libraryGridController)
 		{
 			View = new ReplaceDialog();
-			GridController = gridController;
+			LibraryGridController = libraryGridController;
 			InitTags(SourceTagBox, "(any)", Metadata.TextTags);
 			SourceTagBox.SelectedIndexChanged += SourceTagBox_SelectedIndexChanged;
 			InitTags(TargetTagBox, "(same as source)", Metadata.WritableTextTags);
@@ -40,11 +40,22 @@ namespace TagScanner.Controllers
 		public void ShowDialog(IWin32Window owner)
 		{
 			UpdateControls();
-			if (View.ShowDialog(owner) == DialogResult.OK)
-			{
-				var result = PerformReplace();
-				MessageBox.Show(owner, string.Format("{0} replacements made.", result), "Replace");
-			}
+		retry:
+			if (View.ShowDialog(owner) != DialogResult.OK)
+				return;
+			PerformFind();
+			if (PreviewResults)
+				switch (new ReplacePreviewController(owner).Execute(Results))
+				{
+					case DialogResult.Cancel:
+						return;
+					case DialogResult.Retry:
+						goto retry;
+				}
+			MessageBox.Show(
+				owner,
+				string.Format("{0} replacement(s) made.", PerformReplace()),
+				"Replace");
 		}
 
 		#endregion
@@ -92,17 +103,18 @@ namespace TagScanner.Controllers
 
 		#region Private Properties
 
-		private IEnumerable<Track> AllTracks { get { return GridController.Model.Tracks; } }
+		private IEnumerable<Track> AllTracks { get { return LibraryGridController.Model.Tracks; } }
 		private int ErrorCount { get; set; }
 		private ErrorProvider ErrorProvider { get { return View.ErrorProvider; } }
 		private bool FindInAnyTag { get { return SourceTagBox.SelectedIndex == 0; } }
-		private GridController GridController { get; }
+		private LibraryGridController LibraryGridController { get; }
 		private bool MatchCase { get { return MatchCaseCheckbox.Checked; } }
 		private CheckBox MatchCaseCheckbox { get { return View.cbMatchCase; } }
 		private ContextMenuStrip PopupFindMenu { get { return View.popupFindMenu; } }
 		private ToolStripMenuItem PopupFindRegularExpressionHelp { get { return View.popupFindRegularExpressionHelp; } }
 		private ContextMenuStrip PopupReplaceMenu { get { return View.popupReplaceMenu; } }
 		private ToolStripMenuItem PopupReplaceRegularExpressionHelp { get { return View.popupReplaceRegularExpressionHelp; } }
+		private bool PreviewResults { get { return View.cbPreview.Checked; } }
 		private Regex Regex { get; set; }
 		private Button ReplaceAllButton { get { return View.btnReplaceAll; } }
 		private bool ReplaceInSameTag { get { return TargetTagBox.SelectedIndex == 0; } }
@@ -110,7 +122,7 @@ namespace TagScanner.Controllers
 		private bool ScopeAll { get { return ScopeAllRadioButton.Checked; } }
 		private RadioButton ScopeAllRadioButton { get { return View.rbAllTracks; } }
 		private RadioButton ScopeSelectionRadioButton { get { return View.rbCurrentSelection; } }
-		private IEnumerable<Track> SelectedTracks { get { return GridController.Selection.Tracks; } }
+		private IEnumerable<Track> SelectedTracks { get { return LibraryGridController.Selection.Tracks; } }
 		private string SourcePattern { get { return SourcePatternBox.Text; } }
 		private ComboBox SourcePatternBox { get { return View.cbSourcePattern; } }
 		private Button SourceRegexButton { get { return View.btnSourceRegex; } }
@@ -124,6 +136,12 @@ namespace TagScanner.Controllers
 		private bool UseRegex { get { return UseRegexCheckbox.Checked; } }
 		private CheckBox UseRegexCheckbox { get { return View.cbUseRegex; } }
 		private ReplaceDialog View { get; set; }
+
+		#endregion
+
+		#region Fields
+
+		private List<FindReplaceResult> Results = new List<FindReplaceResult>();
 
 		#endregion
 
@@ -167,42 +185,59 @@ namespace TagScanner.Controllers
 			control.Text += ((ToolStripMenuItem)sender).ShortcutKeyDisplayString.AmpersandUnescape();
 		}
 
-		private int PerformReplace()
+		private int PerformFind()
 		{
+			Results.Clear();
 			if (UseRegex)
 				InitRegex(true);
 			var result = 0;
 			foreach (var track in Scope)
-				result += PerformReplace(track);
+				result += PerformFind(track);
 			return result;
 		}
 
-		private int PerformReplace(Track track)
+		private int PerformFind(Track track)
 		{
 			var result = 0;
 			if (FindInAnyTag)
 				foreach (var sourceTag in ReplaceInSameTag ? Metadata.WritableTextTags : Metadata.StringTags)
-					result += PerformReplace(track, sourceTag);
+					result += PerformFind(track, sourceTag);
 			else
-				result += PerformReplace(track, SourceTag);
+				result += PerformFind(track, SourceTag);
 			return result;
 		}
 
-		private int PerformReplace(Track track, string sourceTag)
+		private int PerformFind(Track track, string sourceTag)
 		{
 			var targetTag = ReplaceInSameTag ? sourceTag : TargetTag;
-			var source = track.GetPropertyValue(sourceTag);
-			var target = targetTag == sourceTag ? source : track.GetPropertyValue(targetTag);
+			var source = track.GetPropertyValue(sourceTag) ?? string.Empty;
+			var target = targetTag == sourceTag ? source : track.GetPropertyValue(targetTag) ?? string.Empty;
 			var sources = source is string ? new[] { (string)source } : source as string[];
 			var targets = new string[sources.Length];
+			var changed = false;
 			for (var index = 0; index < sources.Length; index++)
+			{
 				targets[index] = Replace(sources[index]);
-			object targetValue;
-			if (target is string)
-				targetValue = targets.Aggregate((s, t) => s + "; " + t);
-			else
-				targetValue = targets;
-			return track.SetPropertyValue(targetTag, targetValue) ? 1 : 0;
+				if (targets[index] != sources[index])
+					changed = true;
+			}
+			if (changed)
+			{
+				target =
+					target is string
+					? (object)targets.Aggregate((s, t) => s + "; " + t)
+					: targets;
+				Results.Add(new FindReplaceResult(track, targetTag, source, target));
+			}
+			return changed ? 1 : 0;
+		}
+
+		private int PerformReplace()
+		{
+			var replacements = Results.Where(r => r.Replace);
+            foreach (var replacement in replacements)
+				replacement.Track.SetPropertyValue(replacement.Tag, replacement.NewValue);
+			return replacements.Count();
 		}
 
 		private string Replace(string source)

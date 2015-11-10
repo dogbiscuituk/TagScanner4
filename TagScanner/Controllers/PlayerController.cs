@@ -9,14 +9,14 @@ namespace TagScanner.Controllers
 {
 	public class PlayerController : SdiController
 	{
-		public PlayerController(GridFormController gridFormController, ToolStripDropDownItem recentMenu)
+		public PlayerController(LibraryController gridFormController, ToolStripDropDownItem recentMenu)
 			: base(gridFormController.Model, Properties.Settings.Default.PlayerFilter, "PlayerMRU", recentMenu)
 		{
 			GridFormController = gridFormController;
 		}
 
-		private GridFormController _gridFormController;
-		private GridFormController GridFormController
+		private LibraryController _gridFormController;
+		private LibraryController GridFormController
 		{
 			get
 			{
@@ -30,7 +30,7 @@ namespace TagScanner.Controllers
 			}
 		}
 
-		private GridForm View
+		private LibraryForm View
 		{
 			get
 			{
@@ -58,7 +58,7 @@ namespace TagScanner.Controllers
 
 		private void PlaySelection(bool newPlaylist)
 		{
-			var tracks = GridFormController.GridController.Selection.Tracks;
+			var tracks = GridFormController.LibraryGridController.Selection.Tracks;
 			if (!tracks.Any())
 				return;
 			if (newPlaylist)

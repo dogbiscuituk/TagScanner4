@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 namespace TagScanner.Models
 {
 	[Serializable]
-	public class Track : ITrack
+	public class Track : ITrack, INotifyPropertyChanged
 	{
 		#region Public Interface
 
@@ -48,16 +48,6 @@ namespace TagScanner.Models
 			set
 			{
 				_isModified = value;
-			}
-		}
-
-		[NonSerialized]
-		private IList<IObserveTracks> _observers;
-        public IList<IObserveTracks> Observers
-		{
-			get
-			{
-				return _observers ?? (_observers = new List<IObserveTracks>());
 			}
 		}
 
@@ -915,6 +905,7 @@ namespace TagScanner.Models
 		public int VideoWidth { get; set; }
 
 		private int _year;
+
 		[DefaultValue(0)]
 		public int Year
 		{
@@ -939,6 +930,13 @@ namespace TagScanner.Models
 				return string.Format("{0} - {1}", Year, Album);
 			}
 		}
+
+		#endregion
+
+		#region INotifyPropertyChanged
+
+		[field: NonSerialized]
+		public event PropertyChangedEventHandler PropertyChanged;
 
 		#endregion
 
@@ -967,16 +965,10 @@ namespace TagScanner.Models
 			Load();
 		}
 
-		public bool SetPropertyValue(string propertyName, object value)
+		public void SetPropertyValue(string propertyName, object value)
 		{
-			var propertyInfo = GetPropertyInfo(propertyName);
-			var result = propertyInfo.GetValue(this) != value;
-			if (result)
-			{
-				propertyInfo.SetValue(this, value);
-				OnPropertyChanged(propertyName);
-			}
-			return result;
+			GetPropertyInfo(propertyName).SetValue(this, value);
+			OnPropertyChanged(propertyName);
 		}
 
 		public override string ToString()
@@ -1007,14 +999,12 @@ namespace TagScanner.Models
 			return TagLib.File.Create(FilePath);
 		}
 
-		private void OnPropertyChanged(string propertyName)
+		protected virtual void OnPropertyChanged(string propertyName)
 		{
-			if (_observers != null)
-			{
-				IsModified = true;
-				foreach (var observer in Observers)
-					observer.TrackPropertyChanged(this, propertyName);
-			}
+			IsModified = true;
+			var propertyChanged = PropertyChanged;
+			if (propertyChanged != null)
+				propertyChanged(this, new PropertyChangedEventArgs(propertyName));
 		}
 
 		private void ReadFile(TagLib.File file)

@@ -84,6 +84,7 @@
 			this.rbAllTracks = new System.Windows.Forms.RadioButton();
 			this.label6 = new System.Windows.Forms.Label();
 			this.ErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
+			this.cbPreview = new System.Windows.Forms.CheckBox();
 			this.popupFindMenu.SuspendLayout();
 			this.popupReplaceMenu.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.ErrorProvider)).BeginInit();
@@ -94,9 +95,9 @@
 			this.label1.AutoSize = true;
 			this.label1.Location = new System.Drawing.Point(12, 9);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(66, 13);
-			this.label1.TabIndex = 0;
-			this.label1.Text = "&Source Tag:";
+			this.label1.Size = new System.Drawing.Size(62, 13);
+			this.label1.TabIndex = 15;
+			this.label1.Text = "&Source tag:";
 			// 
 			// cbSourceTag
 			// 
@@ -105,7 +106,7 @@
 			this.cbSourceTag.Location = new System.Drawing.Point(15, 25);
 			this.cbSourceTag.Name = "cbSourceTag";
 			this.cbSourceTag.Size = new System.Drawing.Size(320, 21);
-			this.cbSourceTag.TabIndex = 1;
+			this.cbSourceTag.TabIndex = 16;
 			// 
 			// label2
 			// 
@@ -113,7 +114,7 @@
 			this.label2.Location = new System.Drawing.Point(12, 89);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(56, 13);
-			this.label2.TabIndex = 2;
+			this.label2.TabIndex = 0;
 			this.label2.Text = "&Find what:";
 			// 
 			// cbSourcePattern
@@ -122,7 +123,7 @@
 			this.cbSourcePattern.Location = new System.Drawing.Point(15, 105);
 			this.cbSourcePattern.Name = "cbSourcePattern";
 			this.cbSourcePattern.Size = new System.Drawing.Size(320, 21);
-			this.cbSourcePattern.TabIndex = 3;
+			this.cbSourcePattern.TabIndex = 1;
 			// 
 			// label3
 			// 
@@ -130,7 +131,7 @@
 			this.label3.Location = new System.Drawing.Point(12, 129);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(72, 13);
-			this.label3.TabIndex = 4;
+			this.label3.TabIndex = 3;
 			this.label3.Text = "&Replace with:";
 			// 
 			// cbTargetPattern
@@ -139,7 +140,7 @@
 			this.cbTargetPattern.Location = new System.Drawing.Point(15, 145);
 			this.cbTargetPattern.Name = "cbTargetPattern";
 			this.cbTargetPattern.Size = new System.Drawing.Size(320, 21);
-			this.cbTargetPattern.TabIndex = 5;
+			this.cbTargetPattern.TabIndex = 4;
 			// 
 			// label4
 			// 
@@ -147,7 +148,7 @@
 			this.label4.Location = new System.Drawing.Point(202, 181);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(45, 13);
-			this.label4.TabIndex = 6;
+			this.label4.TabIndex = 10;
 			this.label4.Text = "&Look in:";
 			// 
 			// btnSourceRegex
@@ -156,7 +157,7 @@
 			this.btnSourceRegex.Margin = new System.Windows.Forms.Padding(0);
 			this.btnSourceRegex.Name = "btnSourceRegex";
 			this.btnSourceRegex.Size = new System.Drawing.Size(33, 23);
-			this.btnSourceRegex.TabIndex = 9;
+			this.btnSourceRegex.TabIndex = 2;
 			this.btnSourceRegex.Text = "(a)+";
 			this.ToolTip.SetToolTip(this.btnSourceRegex, "Regular Expression Builder");
 			this.btnSourceRegex.UseVisualStyleBackColor = true;
@@ -167,7 +168,7 @@
 			this.btnTargetRegex.Margin = new System.Windows.Forms.Padding(0);
 			this.btnTargetRegex.Name = "btnTargetRegex";
 			this.btnTargetRegex.Size = new System.Drawing.Size(33, 23);
-			this.btnTargetRegex.TabIndex = 10;
+			this.btnTargetRegex.TabIndex = 5;
 			this.btnTargetRegex.Text = "(a)+";
 			this.ToolTip.SetToolTip(this.btnTargetRegex, "Regular Expression Builder");
 			this.btnTargetRegex.UseVisualStyleBackColor = true;
@@ -442,7 +443,7 @@
 			this.cbMatchCase.Location = new System.Drawing.Point(15, 201);
 			this.cbMatchCase.Name = "cbMatchCase";
 			this.cbMatchCase.Size = new System.Drawing.Size(82, 17);
-			this.cbMatchCase.TabIndex = 11;
+			this.cbMatchCase.TabIndex = 7;
 			this.cbMatchCase.Text = "Match &case";
 			this.cbMatchCase.UseVisualStyleBackColor = true;
 			// 
@@ -452,19 +453,19 @@
 			this.cbUseRegex.Location = new System.Drawing.Point(15, 224);
 			this.cbUseRegex.Name = "cbUseRegex";
 			this.cbUseRegex.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this.cbUseRegex.Size = new System.Drawing.Size(144, 17);
-			this.cbUseRegex.TabIndex = 13;
-			this.cbUseRegex.Text = "Use Regular E&xpressions";
+			this.cbUseRegex.Size = new System.Drawing.Size(138, 17);
+			this.cbUseRegex.TabIndex = 8;
+			this.cbUseRegex.Text = "Use regular e&xpressions";
 			this.cbUseRegex.UseVisualStyleBackColor = true;
 			// 
 			// btnReplaceAll
 			// 
 			this.btnReplaceAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnReplaceAll.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btnReplaceAll.Location = new System.Drawing.Point(221, 255);
+			this.btnReplaceAll.Location = new System.Drawing.Point(221, 279);
 			this.btnReplaceAll.Name = "btnReplaceAll";
 			this.btnReplaceAll.Size = new System.Drawing.Size(75, 23);
-			this.btnReplaceAll.TabIndex = 14;
+			this.btnReplaceAll.TabIndex = 13;
 			this.btnReplaceAll.Text = "Replace All";
 			this.btnReplaceAll.UseVisualStyleBackColor = true;
 			// 
@@ -472,10 +473,10 @@
 			// 
 			this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Location = new System.Drawing.Point(302, 255);
+			this.btnCancel.Location = new System.Drawing.Point(302, 279);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(75, 23);
-			this.btnCancel.TabIndex = 15;
+			this.btnCancel.TabIndex = 14;
 			this.btnCancel.Text = "Cancel";
 			this.btnCancel.UseVisualStyleBackColor = true;
 			// 
@@ -484,9 +485,9 @@
 			this.label5.AutoSize = true;
 			this.label5.Location = new System.Drawing.Point(12, 49);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(85, 13);
-			this.label5.TabIndex = 16;
-			this.label5.Text = "&Destination Tag:";
+			this.label5.Size = new System.Drawing.Size(81, 13);
+			this.label5.TabIndex = 17;
+			this.label5.Text = "&Destination tag:";
 			// 
 			// cbTargetTag
 			// 
@@ -495,7 +496,7 @@
 			this.cbTargetTag.Location = new System.Drawing.Point(15, 65);
 			this.cbTargetTag.Name = "cbTargetTag";
 			this.cbTargetTag.Size = new System.Drawing.Size(320, 21);
-			this.cbTargetTag.TabIndex = 17;
+			this.cbTargetTag.TabIndex = 18;
 			// 
 			// rbCurrentSelection
 			// 
@@ -504,7 +505,7 @@
 			this.rbCurrentSelection.Location = new System.Drawing.Point(202, 201);
 			this.rbCurrentSelection.Name = "rbCurrentSelection";
 			this.rbCurrentSelection.Size = new System.Drawing.Size(104, 17);
-			this.rbCurrentSelection.TabIndex = 18;
+			this.rbCurrentSelection.TabIndex = 11;
 			this.rbCurrentSelection.TabStop = true;
 			this.rbCurrentSelection.Text = "C&urrent selection";
 			this.rbCurrentSelection.UseVisualStyleBackColor = true;
@@ -515,7 +516,7 @@
 			this.rbAllTracks.Location = new System.Drawing.Point(202, 224);
 			this.rbAllTracks.Name = "rbAllTracks";
 			this.rbAllTracks.Size = new System.Drawing.Size(68, 17);
-			this.rbAllTracks.TabIndex = 19;
+			this.rbAllTracks.TabIndex = 12;
 			this.rbAllTracks.TabStop = true;
 			this.rbAllTracks.Text = "&All tracks";
 			this.rbAllTracks.UseVisualStyleBackColor = true;
@@ -526,7 +527,7 @@
 			this.label6.Location = new System.Drawing.Point(12, 181);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(43, 13);
-			this.label6.TabIndex = 20;
+			this.label6.TabIndex = 6;
 			this.label6.Text = "&Options";
 			// 
 			// ErrorProvider
@@ -534,13 +535,25 @@
 			this.ErrorProvider.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
 			this.ErrorProvider.ContainerControl = this;
 			// 
+			// cbPreview
+			// 
+			this.cbPreview.AutoSize = true;
+			this.cbPreview.Location = new System.Drawing.Point(15, 247);
+			this.cbPreview.Name = "cbPreview";
+			this.cbPreview.RightToLeft = System.Windows.Forms.RightToLeft.No;
+			this.cbPreview.Size = new System.Drawing.Size(97, 17);
+			this.cbPreview.TabIndex = 9;
+			this.cbPreview.Text = "Preview results";
+			this.cbPreview.UseVisualStyleBackColor = true;
+			// 
 			// ReplaceDialog
 			// 
 			this.AcceptButton = this.btnReplaceAll;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(389, 290);
+			this.ClientSize = new System.Drawing.Size(389, 314);
+			this.Controls.Add(this.cbPreview);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.rbAllTracks);
 			this.Controls.Add(this.rbCurrentSelection);
@@ -628,5 +641,6 @@
 		public System.Windows.Forms.ErrorProvider ErrorProvider;
 		public System.Windows.Forms.Button btnReplaceAll;
 		public System.Windows.Forms.Button btnCancel;
+		public System.Windows.Forms.CheckBox cbPreview;
 	}
 }

@@ -8,7 +8,7 @@ using TagScanner.Models;
 
 namespace TagScanner.Controllers
 {
-	public class PersistenceController : SdiController, IObserveTracks
+	public class PersistenceController : SdiController
 	{
 		public PersistenceController(Model model, Control view, ToolStripDropDownItem recentMenu)
 			: base(model, Properties.Settings.Default.LibraryFilter, "LibraryMRU", recentMenu)
@@ -31,11 +31,6 @@ namespace TagScanner.Controllers
 				text = string.Concat(text, " - ", Application.ProductName);
 				return text;
 			}
-		}
-
-		public void TrackPropertyChanged(Track sender, string propertyName)
-		{
-			Model.Modified = true;
 		}
 
 		protected override void ClearDocument()
@@ -65,8 +60,13 @@ namespace TagScanner.Controllers
 					? UseStream(() => Model.Tracks = (List<Track>)GetXmlSerializer().Deserialize(new XmlTextReader(stream)))
 					: UseStream(() => Model.Tracks = (List<Track>)GetBinaryFormatter().Deserialize(stream));
 			foreach (var track in Model.Tracks)
-				track.Observers.Add(this);
+				track.PropertyChanged += Track_PropertyChanged;
 			return result;
+		}
+
+		private void Track_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			Model.Modified = true;
 		}
 
 		protected override bool SaveToStream(Stream stream, string format)

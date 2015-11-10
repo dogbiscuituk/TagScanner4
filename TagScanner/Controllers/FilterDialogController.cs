@@ -13,10 +13,10 @@ namespace TagScanner.Controllers
 	{
 		#region Lifetime Management
 
-		public FilterDialogController(GridController gridController, ToolStripDropDownItem recentMenu)
-			: base(gridController.Model, Properties.Settings.Default.SearchFilter, "FilterMRU", recentMenu)
+		public FilterDialogController(LibraryGridController libraryGridController, ToolStripDropDownItem recentMenu)
+			: base(libraryGridController.Model, Properties.Settings.Default.SearchFilter, "FilterMRU", recentMenu)
 		{
-			_gridController = gridController;
+			_libraryGridController = libraryGridController;
 			_simpleFilterEditController = new SimpleFilterController(View);
 			_simpleFilterEditController.ValueChanged += FilterController_ValueChanged;
 			_compoundFilterEditController = new CompoundFilterEditController(View);
@@ -30,7 +30,7 @@ namespace TagScanner.Controllers
 			InvalidateFilter();
 		}
 
-		private GridController _gridController;
+		private LibraryGridController _libraryGridController;
 		private SimpleFilterController _simpleFilterEditController;
 		private CompoundFilterEditController _compoundFilterEditController;
 
@@ -46,7 +46,7 @@ namespace TagScanner.Controllers
 
 		private void Apply()
 		{
-			_gridController.Filter = Predicate;
+			_libraryGridController.Filter = Predicate;
 		}
 
 		#region View

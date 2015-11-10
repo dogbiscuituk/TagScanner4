@@ -72,13 +72,15 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\GridFormController.cs" />
+    <Compile Include="Controllers\GridController.cs" />
+    <Compile Include="Controllers\LibraryController.cs" />
     <Compile Include="Controllers\PlayerController.cs" />
     <Compile Include="Controllers\ReplaceController.cs" />
+    <Compile Include="Controllers\ReplacePreviewController.cs" />
     <Compile Include="Controllers\SdiController.cs" />
     <Compile Include="Controllers\TagSelectorController.cs" />
-    <Compile Include="Models\IObserveTracks.cs" />
     <Compile Include="Models\Metadata.cs" />
+    <Compile Include="Models\FindReplaceResult.cs" />
     <Compile Include="Models\TrackStatus.cs" />
     <Compile Include="ValueConverters\DateTimeConverter.cs" />
     <Compile Include="ValueConverters\FileSizeConverter.cs" />
@@ -91,7 +93,7 @@
     <Compile Include="Models\SimpleCondition.cs" />
     <Compile Include="Models\Operator.cs" />
     <Compile Include="Controllers\FilterDialogController.cs" />
-    <Compile Include="Controllers\GridController.cs" />
+    <Compile Include="Controllers\LibraryGridController.cs" />
     <Compile Include="ValueConverters\LogicalConverter.cs" />
     <Compile Include="Controllers\MediaController.cs" />
     <Compile Include="Controllers\PersistenceController.cs" />
@@ -109,11 +111,11 @@
     <Compile Include="Views\GridElement.xaml.cs">
       <DependentUpon>GridElement.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\GridForm.cs">
+    <Compile Include="Views\LibraryForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\GridForm.Designer.cs">
-      <DependentUpon>GridForm.cs</DependentUpon>
+    <Compile Include="Views\LibraryForm.Designer.cs">
+      <DependentUpon>LibraryForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Controllers\MruController.cs" />
     <Compile Include="Models\Picture.cs" />
@@ -131,6 +133,12 @@
     <Compile Include="Views\ReplaceDialog.Designer.cs">
       <DependentUpon>ReplaceDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\ReplacePreview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\ReplacePreview.Designer.cs">
+      <DependentUpon>ReplacePreview.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\TagSelectorDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -140,8 +148,8 @@
     <EmbeddedResource Include="Views\FilterDialog.resx">
       <DependentUpon>FilterDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\GridForm.resx">
-      <DependentUpon>GridForm.cs</DependentUpon>
+    <EmbeddedResource Include="Views\LibraryForm.resx">
+      <DependentUpon>LibraryForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -155,6 +163,9 @@
     </Compile>
     <EmbeddedResource Include="Views\ReplaceDialog.resx">
       <DependentUpon>ReplaceDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\ReplacePreview.resx">
+      <DependentUpon>ReplacePreview.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\TagSelectorDialog.resx">
       <DependentUpon>TagSelectorDialog.cs</DependentUpon>

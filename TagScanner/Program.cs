@@ -14,7 +14,7 @@ namespace TagScanner
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new GridFormController().View);
+			Application.Run(new LibraryController().View);
 		}
 	}
 }
