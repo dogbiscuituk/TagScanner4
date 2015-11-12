@@ -139,13 +139,6 @@ namespace TagScanner
 			}
 		}
 
-		[Browsable(false)]
-		[Category("Details")]
-		public string AlbumIndex
-		{
-			get { return AlbumSort.Coalesce(Album).GetIndex(); }
-		}
-
 		private string _albumSort;
 		[Browsable(false)]
 		[Category("Details")]
@@ -757,13 +750,6 @@ namespace TagScanner
 			get { return GetString(p => p.JoinedPerformers, ref _joinedPerformers); }
 		}
 
-		[Browsable(false)]
-		[Category("Personnel")]
-		public string JoinedPerformersIndex
-		{
-			get { return JoinedPerformersSort.Coalesce(JoinedPerformers).GetIndex(); }
-		}
-
 		private string _joinedPerformersSort;
 		[Browsable(false)]
 		[Category("Personnel")]
@@ -1071,13 +1057,6 @@ namespace TagScanner
 				SetValue(p => p.Title = value);
 				_title = null;
 			}
-		}
-
-		[Browsable(false)]
-		[Category("Details")]
-		public string TitleIndex
-		{
-			get { return TitleSort.Coalesce(Title).GetIndex(); }
 		}
 
 		private string _titleSort;

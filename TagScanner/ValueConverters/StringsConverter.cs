@@ -13,7 +13,7 @@ namespace TagScanner.ValueConverters
 			if (value is IEnumerable<string>)
 			{
 				var strings = (IEnumerable<string>)value;
-				return strings.Any() ? strings.Aggregate((x, y) => string.Concat(x, "; ", y)) : string.Empty;
+				return strings.Any() ? strings.Aggregate((x, y) => string.Concat(x, '\n', y)) : string.Empty;
 			}
 			return value;
 		}

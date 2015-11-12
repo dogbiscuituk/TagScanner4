@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -14,7 +15,7 @@ namespace TagScanner.Controllers
 {
 	public class LibraryGridController : GridController
 	{
-		#region Lifetime Management
+		#region Constructor
 
 		public LibraryGridController(Model model, ElementHost view)
 		{
@@ -78,13 +79,19 @@ namespace TagScanner.Controllers
 
 		protected override DataGrid DataGrid { get { return ((GridElement)View.Child).DataGrid; } }
 
+		private ListCollectionView ListCollectionView
+		{
+			get { return (ListCollectionView)DataGrid.ItemsSource; }
+			set { DataGrid.ItemsSource = value; }
+		}
+
 		private void RefreshDataSource()
 		{
 			if (View.InvokeRequired)
 				View.Invoke(new Action(RefreshDataSource));
 			else
 			{
-				DataGrid.ItemsSource = new ListCollectionView(Model.Tracks);
+				ListCollectionView = new ListCollectionView(Model.Tracks);
 				InitGroups();
 			}
 		}
@@ -116,7 +123,7 @@ namespace TagScanner.Controllers
 		protected override PropertyInfo[] GetPropertyInfos()
 		{
 			return Metadata.PropertyInfos;
-        }
+		}
 
 		private IEnumerable<string> _visibleTags = new[] { "FilePath" };
 		public IEnumerable<string> VisibleTags
@@ -167,9 +174,8 @@ namespace TagScanner.Controllers
 
 		private void InitFilter()
 		{
-			var listCollectionView = (ListCollectionView)DataGrid.ItemsSource;
-			listCollectionView.Filter = Filter;
-        }
+			ListCollectionView.Filter = Filter;
+		}
 
 		#endregion
 
@@ -193,12 +199,11 @@ namespace TagScanner.Controllers
 
 		private void InitGroups()
 		{
-			var listCollectionView = (ListCollectionView)DataGrid.ItemsSource;
-            var groupDescriptions = listCollectionView.GroupDescriptions;
+			var groupDescriptions = ListCollectionView.GroupDescriptions;
 			groupDescriptions.Clear();
 			foreach (var group in Groups)
-                groupDescriptions.Add(new PropertyGroupDescription(group));
-        }
+				groupDescriptions.Add(new PropertyGroupDescription(group));
+		}
 
 		#endregion
 
@@ -243,21 +248,34 @@ namespace TagScanner.Controllers
 
 		public void SelectAll()
 		{
+			BeginUpdateSelection();
 			DataGrid.SelectAll();
+			EndUpdateSelection();
 		}
 
 		public void InvertSelection()
 		{
-        }
-
-		public void Find()
-		{
-
-		}
-
-		public void Replace()
-		{
-
+			var allItems = DataGrid.Items;
+			var selectedItems = DataGrid.SelectedItems;
+			var total = allItems.Count;
+			var selection = selectedItems.Cast<object>().ToList();
+			var oldCount = selection.Count;
+			var newCount = total - oldCount;
+			BeginUpdateSelection();
+			if (newCount < oldCount)
+			{
+				selection = allItems.Cast<object>().Except(selection).ToList();
+				selectedItems.Clear();
+				foreach (var item in selection)
+					selectedItems.Add(item);
+			}
+			else
+			{
+				DataGrid.SelectAll();
+				foreach (var item in selection)
+					selectedItems.Remove(item);
+			}
+			EndUpdateSelection();
 		}
 
 		private void Grid_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -267,45 +285,45 @@ namespace TagScanner.Controllers
 
 		private Selection GetSelection()
 		{
-            return new Selection(DataGrid.SelectedItems.Cast<Track>());
+			return new Selection(DataGrid.SelectedItems.Cast<Track>());
 		}
 
 		#endregion
 
 		#region Presets
 
-		private static string[] VisibleTagsDefault = new[] { "DiscTrack", "Title", "Duration", "FileSize"};
+		private static string[] VisibleTagsDefault = new[] { "DiscTrack", "Title", "Duration", "FileSize" };
 		private static IEnumerable<string> VisibleTagsExtended = VisibleTagsDefault.Union(new[] { "JoinedPerformers", "Album" });
+
+		public void ViewAlbums()
+		{
+			ViewBy(VisibleTagsDefault, new[] { "Album", "JoinedPerformers" });
+		}
+
+		public void ViewArtists()
+		{
+			ViewBy(VisibleTagsDefault, new[] { "JoinedPerformers", "YearAlbum" });
+		}
+
+		public void ViewGenres()
+		{
+			ViewBy(VisibleTagsDefault, new[] { "JoinedGenres", "JoinedPerformers", "YearAlbum" });
+		}
+
+		public void ViewTracks()
+		{
+			ViewBy(VisibleTagsExtended, new string[0]);
+		}
+
+		public void ViewYears()
+		{
+			ViewBy(VisibleTagsExtended, new[] { "Decade", "Year" });
+		}
 
 		private void ViewBy(IEnumerable<string> visibleTags, IEnumerable<string> groups)
 		{
 			VisibleTags = visibleTags.Union(VisibleTags);
 			Groups = groups;
-		}
-
-		public void ViewByAlbumTitle()
-		{
-			ViewBy(VisibleTagsDefault, new[] { "Album", "JoinedPerformers" });
-		}
-
-		public void ViewByArtist()
-		{
-			ViewBy(VisibleTagsDefault, new[] { "JoinedPerformers", "YearAlbum" });
-		}
-
-		public void ViewByGenre()
-		{
-			ViewBy(VisibleTagsDefault, new[] { "JoinedGenres", "JoinedPerformers", "YearAlbum" });
-		}
-
-		public void ViewBySongTitle()
-		{
-			ViewBy(VisibleTagsExtended, new string[0]);
-		}
-
-		public void ViewByYear()
-		{
-			ViewBy(VisibleTagsExtended, new[] { "Decade", "Year" });
 		}
 
 		#endregion

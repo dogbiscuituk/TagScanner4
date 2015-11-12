@@ -73,9 +73,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\GridController.cs" />
-    <Compile Include="Controllers\LibraryController.cs" />
+    <Compile Include="Controllers\LibraryFormController.cs" />
     <Compile Include="Controllers\PlayerController.cs" />
-    <Compile Include="Controllers\ReplaceController.cs" />
+    <Compile Include="Controllers\ReplaceDialogController.cs" />
     <Compile Include="Controllers\ReplacePreviewController.cs" />
     <Compile Include="Controllers\SdiController.cs" />
     <Compile Include="Controllers\TagSelectorController.cs" />
@@ -107,7 +107,7 @@
     <Compile Include="Views\FilterDialog.Designer.cs">
       <DependentUpon>FilterDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\CompoundFilterEditController.cs" />
+    <Compile Include="Controllers\CompoundFilterController.cs" />
     <Compile Include="Views\GridElement.xaml.cs">
       <DependentUpon>GridElement.xaml</DependentUpon>
     </Compile>

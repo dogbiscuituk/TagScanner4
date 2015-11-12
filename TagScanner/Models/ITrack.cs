@@ -9,7 +9,6 @@ namespace TagScanner.Models
 		int AlbumArtistsCount { get; }
 		string[] AlbumArtistsSort { get; set; }
 		int AlbumArtistsSortCount { get; }
-		string AlbumIndex { get; }
 		string AlbumSort { get; set; }
 		string AmazonId { get; set; }
 		string[] Artists { get; set; }
@@ -67,7 +66,6 @@ namespace TagScanner.Models
 		string JoinedComposers { get; }
 		string JoinedGenres { get; }
 		string JoinedPerformers { get; }
-		string JoinedPerformersIndex { get; }
 		string JoinedPerformersSort { get; }
 		string Lyrics { get; set; }
 		string Millennium { get; }
@@ -94,7 +92,6 @@ namespace TagScanner.Models
         TagLib.TagTypes TagTypes { get; }
 		TagLib.TagTypes TagTypesOnDisk { get; }
 		string Title { get; set; }
-		string TitleIndex { get; }
 		string TitleSort { get; set; }
 		int TrackCount { get; set; }
 		int TrackNumber { get; set; }

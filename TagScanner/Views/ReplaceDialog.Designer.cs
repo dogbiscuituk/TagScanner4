@@ -501,18 +501,17 @@
 			// rbCurrentSelection
 			// 
 			this.rbCurrentSelection.AutoSize = true;
-			this.rbCurrentSelection.Checked = true;
 			this.rbCurrentSelection.Location = new System.Drawing.Point(202, 201);
 			this.rbCurrentSelection.Name = "rbCurrentSelection";
 			this.rbCurrentSelection.Size = new System.Drawing.Size(104, 17);
 			this.rbCurrentSelection.TabIndex = 11;
-			this.rbCurrentSelection.TabStop = true;
 			this.rbCurrentSelection.Text = "C&urrent selection";
 			this.rbCurrentSelection.UseVisualStyleBackColor = true;
 			// 
 			// rbAllTracks
 			// 
 			this.rbAllTracks.AutoSize = true;
+			this.rbAllTracks.Checked = true;
 			this.rbAllTracks.Location = new System.Drawing.Point(202, 224);
 			this.rbAllTracks.Name = "rbAllTracks";
 			this.rbAllTracks.Size = new System.Drawing.Size(68, 17);
@@ -538,6 +537,8 @@
 			// cbPreview
 			// 
 			this.cbPreview.AutoSize = true;
+			this.cbPreview.Checked = true;
+			this.cbPreview.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.cbPreview.Location = new System.Drawing.Point(15, 247);
 			this.cbPreview.Name = "cbPreview";
 			this.cbPreview.RightToLeft = System.Windows.Forms.RightToLeft.No;

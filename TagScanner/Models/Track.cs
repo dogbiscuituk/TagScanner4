@@ -122,14 +122,6 @@ namespace TagScanner.Models
 			}
 		}
 
-		public string AlbumIndex
-		{
-			get
-			{
-				return AlbumSort.Coalesce(Album).GetIndex();
-			}
-		}
-
 		private string _albumSort;
 		public string AlbumSort
 		{
@@ -520,15 +512,6 @@ namespace TagScanner.Models
 		public string JoinedComposers { get; set; }
 		public string JoinedGenres { get; set; }
 		public string JoinedPerformers { get; set; }
-
-		public string JoinedPerformersIndex
-		{
-			get
-			{
-				return JoinedPerformersSort.Coalesce(JoinedPerformers).GetIndex();
-			}
-		}
-
 		public string JoinedPerformersSort { get; set; }
 
 		private string _lyrics;
@@ -829,14 +812,6 @@ namespace TagScanner.Models
 					_title = value;
 					OnPropertyChanged("Title");
 				}
-			}
-		}
-
-		public string TitleIndex
-		{
-			get
-			{
-				return TitleSort.Coalesce(Title).GetIndex();
 			}
 		}
 

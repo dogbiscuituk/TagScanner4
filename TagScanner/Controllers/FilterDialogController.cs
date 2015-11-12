@@ -19,7 +19,7 @@ namespace TagScanner.Controllers
 			_libraryGridController = libraryGridController;
 			_simpleFilterEditController = new SimpleFilterController(View);
 			_simpleFilterEditController.ValueChanged += FilterController_ValueChanged;
-			_compoundFilterEditController = new CompoundFilterEditController(View);
+			_compoundFilterEditController = new CompoundFilterController(View);
 			_compoundFilterEditController.ValueChanged += FilterController_ValueChanged;
 			UpdateControls();
 		}
@@ -32,7 +32,7 @@ namespace TagScanner.Controllers
 
 		private LibraryGridController _libraryGridController;
 		private SimpleFilterController _simpleFilterEditController;
-		private CompoundFilterEditController _compoundFilterEditController;
+		private CompoundFilterController _compoundFilterEditController;
 
 		#endregion
 
