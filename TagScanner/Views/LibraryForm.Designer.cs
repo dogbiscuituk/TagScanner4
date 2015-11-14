@@ -33,11 +33,13 @@
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.GridElementHost = new System.Windows.Forms.Integration.ElementHost();
 			this.GridPopupMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.GridPopupPlay = new System.Windows.Forms.ToolStripMenuItem();
+			this.GridPopupPlayAddToQueue = new System.Windows.Forms.ToolStripMenuItem();
+			this.GridPopupPlayNewPlaylist = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
 			this.GridPopupTags = new System.Windows.Forms.ToolStripMenuItem();
 			this.GridPopupFilters = new System.Windows.Forms.ToolStripMenuItem();
 			this.GridPopupGroups = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
-			this.GridPopupPlay = new System.Windows.Forms.ToolStripMenuItem();
 			this.splitContainer2 = new System.Windows.Forms.SplitContainer();
 			this.PictureBox = new System.Windows.Forms.PictureBox();
 			this.TabControl = new System.Windows.Forms.TabControl();
@@ -47,7 +49,7 @@
 			this.PropertyGridPopupTagVisibility = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabPlayer = new System.Windows.Forms.TabPage();
 			this.splitContainer3 = new System.Windows.Forms.SplitContainer();
-			this.PlaylistGrid = new System.Windows.Forms.DataGridView();
+			this.PlaylistElementHost = new System.Windows.Forms.Integration.ElementHost();
 			this.MediaPlayer = new AxWMPLib.AxWindowsMediaPlayer();
 			this.MainMenu = new System.Windows.Forms.MenuStrip();
 			this.FileMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,17 +67,19 @@
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.EditFind = new System.Windows.Forms.ToolStripMenuItem();
 			this.EditReplace = new System.Windows.Forms.ToolStripMenuItem();
-			this.ViewMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.ViewArtists = new System.Windows.Forms.ToolStripMenuItem();
-			this.ViewAlbums = new System.Windows.Forms.ToolStripMenuItem();
-			this.ViewTracks = new System.Windows.Forms.ToolStripMenuItem();
-			this.ViewGenres = new System.Windows.Forms.ToolStripMenuItem();
-			this.ViewYears = new System.Windows.Forms.ToolStripMenuItem();
 			this.AddMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.AddMedia = new System.Windows.Forms.ToolStripMenuItem();
 			this.AddFolder = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
 			this.AddRecentFolders = new System.Windows.Forms.ToolStripMenuItem();
+			this.GroupMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.GroupByArtistAlbum = new System.Windows.Forms.ToolStripMenuItem();
+			this.GroupByArtist = new System.Windows.Forms.ToolStripMenuItem();
+			this.GroupByAlbum = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
+			this.GroupByYear = new System.Windows.Forms.ToolStripMenuItem();
+			this.GroupByGenre = new System.Windows.Forms.ToolStripMenuItem();
+			this.GroupByNone = new System.Windows.Forms.ToolStripMenuItem();
 			this.HelpMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.HelpAbout = new System.Windows.Forms.ToolStripMenuItem();
 			this.AddFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
@@ -100,7 +104,6 @@
 			this.splitContainer3.Panel1.SuspendLayout();
 			this.splitContainer3.Panel2.SuspendLayout();
 			this.splitContainer3.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.PlaylistGrid)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.MediaPlayer)).BeginInit();
 			this.MainMenu.SuspendLayout();
 			this.StatusBar.SuspendLayout();
@@ -138,13 +141,39 @@
 			// GridPopupMenu
 			// 
 			this.GridPopupMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.GridPopupPlay,
+            this.toolStripMenuItem6,
             this.GridPopupTags,
             this.GridPopupFilters,
-            this.GridPopupGroups,
-            this.toolStripMenuItem6,
-            this.GridPopupPlay});
+            this.GridPopupGroups});
 			this.GridPopupMenu.Name = "PopupMenu";
 			this.GridPopupMenu.Size = new System.Drawing.Size(122, 98);
+			// 
+			// GridPopupPlay
+			// 
+			this.GridPopupPlay.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.GridPopupPlayAddToQueue,
+            this.GridPopupPlayNewPlaylist});
+			this.GridPopupPlay.Name = "GridPopupPlay";
+			this.GridPopupPlay.Size = new System.Drawing.Size(121, 22);
+			this.GridPopupPlay.Text = "&Play";
+			// 
+			// GridPopupPlayAddToQueue
+			// 
+			this.GridPopupPlayAddToQueue.Name = "GridPopupPlayAddToQueue";
+			this.GridPopupPlayAddToQueue.Size = new System.Drawing.Size(148, 22);
+			this.GridPopupPlayAddToQueue.Text = "Add to &Queue";
+			// 
+			// GridPopupPlayNewPlaylist
+			// 
+			this.GridPopupPlayNewPlaylist.Name = "GridPopupPlayNewPlaylist";
+			this.GridPopupPlayNewPlaylist.Size = new System.Drawing.Size(148, 22);
+			this.GridPopupPlayNewPlaylist.Text = "&New Playlist";
+			// 
+			// toolStripMenuItem6
+			// 
+			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(118, 6);
 			// 
 			// GridPopupTags
 			// 
@@ -163,17 +192,6 @@
 			this.GridPopupGroups.Name = "GridPopupGroups";
 			this.GridPopupGroups.Size = new System.Drawing.Size(121, 22);
 			this.GridPopupGroups.Text = "&Groups...";
-			// 
-			// toolStripMenuItem6
-			// 
-			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-			this.toolStripMenuItem6.Size = new System.Drawing.Size(118, 6);
-			// 
-			// GridPopupPlay
-			// 
-			this.GridPopupPlay.Name = "GridPopupPlay";
-			this.GridPopupPlay.Size = new System.Drawing.Size(121, 22);
-			this.GridPopupPlay.Text = "&Play";
 			// 
 			// splitContainer2
 			// 
@@ -271,7 +289,7 @@
 			// 
 			// splitContainer3.Panel1
 			// 
-			this.splitContainer3.Panel1.Controls.Add(this.PlaylistGrid);
+			this.splitContainer3.Panel1.Controls.Add(this.PlaylistElementHost);
 			// 
 			// splitContainer3.Panel2
 			// 
@@ -280,25 +298,15 @@
 			this.splitContainer3.SplitterDistance = 96;
 			this.splitContainer3.TabIndex = 1;
 			// 
-			// PlaylistGrid
+			// PlaylistElementHost
 			// 
-			this.PlaylistGrid.AllowUserToAddRows = false;
-			this.PlaylistGrid.AllowUserToDeleteRows = false;
-			this.PlaylistGrid.AllowUserToOrderColumns = true;
-			this.PlaylistGrid.AllowUserToResizeRows = false;
-			this.PlaylistGrid.BackgroundColor = System.Drawing.SystemColors.Window;
-			this.PlaylistGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.PlaylistGrid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleVertical;
-			this.PlaylistGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			this.PlaylistGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.PlaylistGrid.GridColor = System.Drawing.SystemColors.Window;
-			this.PlaylistGrid.Location = new System.Drawing.Point(0, 0);
-			this.PlaylistGrid.MultiSelect = false;
-			this.PlaylistGrid.Name = "PlaylistGrid";
-			this.PlaylistGrid.ReadOnly = true;
-			this.PlaylistGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.PlaylistGrid.Size = new System.Drawing.Size(219, 96);
-			this.PlaylistGrid.TabIndex = 0;
+			this.PlaylistElementHost.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.PlaylistElementHost.Location = new System.Drawing.Point(0, 0);
+			this.PlaylistElementHost.Name = "PlaylistElementHost";
+			this.PlaylistElementHost.Size = new System.Drawing.Size(219, 96);
+			this.PlaylistElementHost.TabIndex = 0;
+			this.PlaylistElementHost.Text = "elementHost1";
+			this.PlaylistElementHost.Child = null;
 			// 
 			// MediaPlayer
 			// 
@@ -315,8 +323,8 @@
 			this.MainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.FileMenu,
             this.EditMenu,
-            this.ViewMenu,
             this.AddMenu,
+            this.GroupMenu,
             this.HelpMenu});
 			this.MainMenu.Location = new System.Drawing.Point(0, 0);
 			this.MainMenu.Name = "MainMenu";
@@ -433,48 +441,6 @@
 			this.EditReplace.Size = new System.Drawing.Size(167, 22);
 			this.EditReplace.Text = "&Replace...";
 			// 
-			// ViewMenu
-			// 
-			this.ViewMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ViewArtists,
-            this.ViewAlbums,
-            this.ViewTracks,
-            this.ViewGenres,
-            this.ViewYears});
-			this.ViewMenu.Name = "ViewMenu";
-			this.ViewMenu.Size = new System.Drawing.Size(44, 20);
-			this.ViewMenu.Text = "&View";
-			// 
-			// ViewArtists
-			// 
-			this.ViewArtists.Name = "ViewArtists";
-			this.ViewArtists.Size = new System.Drawing.Size(115, 22);
-			this.ViewArtists.Text = "&Artists";
-			// 
-			// ViewAlbums
-			// 
-			this.ViewAlbums.Name = "ViewAlbums";
-			this.ViewAlbums.Size = new System.Drawing.Size(115, 22);
-			this.ViewAlbums.Text = "Albu&ms";
-			// 
-			// ViewTracks
-			// 
-			this.ViewTracks.Name = "ViewTracks";
-			this.ViewTracks.Size = new System.Drawing.Size(115, 22);
-			this.ViewTracks.Text = "&Tracks";
-			// 
-			// ViewGenres
-			// 
-			this.ViewGenres.Name = "ViewGenres";
-			this.ViewGenres.Size = new System.Drawing.Size(115, 22);
-			this.ViewGenres.Text = "&Genres";
-			// 
-			// ViewYears
-			// 
-			this.ViewYears.Name = "ViewYears";
-			this.ViewYears.Size = new System.Drawing.Size(115, 22);
-			this.ViewYears.Text = "&Years";
-			// 
 			// AddMenu
 			// 
 			this.AddMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -508,6 +474,61 @@
 			this.AddRecentFolders.Name = "AddRecentFolders";
 			this.AddRecentFolders.Size = new System.Drawing.Size(151, 22);
 			this.AddRecentFolders.Text = "&Recent Folders";
+			// 
+			// GroupMenu
+			// 
+			this.GroupMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.GroupByArtistAlbum,
+            this.GroupByArtist,
+            this.GroupByAlbum,
+            this.toolStripMenuItem4,
+            this.GroupByYear,
+            this.GroupByGenre,
+            this.GroupByNone});
+			this.GroupMenu.Name = "GroupMenu";
+			this.GroupMenu.Size = new System.Drawing.Size(44, 20);
+			this.GroupMenu.Text = "&View";
+			// 
+			// GroupByArtistAlbum
+			// 
+			this.GroupByArtistAlbum.Name = "GroupByArtistAlbum";
+			this.GroupByArtistAlbum.Size = new System.Drawing.Size(159, 22);
+			this.GroupByArtistAlbum.Text = "by &Artist/Album";
+			// 
+			// GroupByArtist
+			// 
+			this.GroupByArtist.Name = "GroupByArtist";
+			this.GroupByArtist.Size = new System.Drawing.Size(159, 22);
+			this.GroupByArtist.Text = "by A&rtist";
+			// 
+			// GroupByAlbum
+			// 
+			this.GroupByAlbum.Name = "GroupByAlbum";
+			this.GroupByAlbum.Size = new System.Drawing.Size(159, 22);
+			this.GroupByAlbum.Text = "by A&lbum";
+			// 
+			// toolStripMenuItem4
+			// 
+			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+			this.toolStripMenuItem4.Size = new System.Drawing.Size(156, 6);
+			// 
+			// GroupByYear
+			// 
+			this.GroupByYear.Name = "GroupByYear";
+			this.GroupByYear.Size = new System.Drawing.Size(159, 22);
+			this.GroupByYear.Text = "by &Year";
+			// 
+			// GroupByGenre
+			// 
+			this.GroupByGenre.Name = "GroupByGenre";
+			this.GroupByGenre.Size = new System.Drawing.Size(159, 22);
+			this.GroupByGenre.Text = "by &Genre";
+			// 
+			// GroupByNone
+			// 
+			this.GroupByNone.Name = "GroupByNone";
+			this.GroupByNone.Size = new System.Drawing.Size(159, 22);
+			this.GroupByNone.Text = "by &Track";
 			// 
 			// HelpMenu
 			// 
@@ -577,7 +598,6 @@
 			this.splitContainer3.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
 			this.splitContainer3.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.PlaylistGrid)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.MediaPlayer)).EndInit();
 			this.MainMenu.ResumeLayout(false);
 			this.MainMenu.PerformLayout();
@@ -599,7 +619,7 @@
 		public System.Windows.Forms.ToolStripMenuItem EditMenu;
 		public System.Windows.Forms.ToolStripMenuItem EditSelectAll;
 		public System.Windows.Forms.ToolStripMenuItem EditInvertSelection;
-		public System.Windows.Forms.ToolStripMenuItem ViewMenu;
+		public System.Windows.Forms.ToolStripMenuItem GroupMenu;
 		public System.Windows.Forms.ToolStripMenuItem HelpMenu;
 		public System.Windows.Forms.ToolStripMenuItem HelpAbout;
 		public System.Windows.Forms.FolderBrowserDialog AddFolderDialog;
@@ -630,18 +650,22 @@
 		public System.Windows.Forms.ToolStripMenuItem GridPopupPlay;
 		public AxWMPLib.AxWindowsMediaPlayer MediaPlayer;
 		public System.Windows.Forms.TabPage tabPlayer;
-		public System.Windows.Forms.ToolStripMenuItem ViewArtists;
-		public System.Windows.Forms.ToolStripMenuItem ViewGenres;
-		public System.Windows.Forms.ToolStripMenuItem ViewYears;
-		public System.Windows.Forms.ToolStripMenuItem ViewAlbums;
-		public System.Windows.Forms.ToolStripMenuItem ViewTracks;
+		public System.Windows.Forms.ToolStripMenuItem GroupByArtist;
+		public System.Windows.Forms.ToolStripMenuItem GroupByGenre;
+		public System.Windows.Forms.ToolStripMenuItem GroupByYear;
+		public System.Windows.Forms.ToolStripMenuItem GroupByAlbum;
+		public System.Windows.Forms.ToolStripMenuItem GroupByNone;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 		public System.Windows.Forms.ToolStripMenuItem EditFind;
 		public System.Windows.Forms.ToolStripMenuItem EditReplace;
 		private System.Windows.Forms.ContextMenuStrip PropertyGridPopupMenu;
 		public System.Windows.Forms.ToolStripMenuItem PropertyGridPopupTagVisibility;
 		private System.Windows.Forms.SplitContainer splitContainer3;
-		public System.Windows.Forms.DataGridView PlaylistGrid;
+		public System.Windows.Forms.ToolStripMenuItem GridPopupPlayAddToQueue;
+		public System.Windows.Forms.ToolStripMenuItem GridPopupPlayNewPlaylist;
+		public System.Windows.Forms.ToolStripMenuItem GroupByArtistAlbum;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
+		public System.Windows.Forms.Integration.ElementHost PlaylistElementHost;
 	}
 }
 

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
@@ -36,15 +36,8 @@ namespace TagScanner.Controllers
 			}
 			set
 			{
-				if (Model != null)
-				{
-					Model.TracksChanged -= Model_TracksChanged;
-				}
 				_model = value;
-				if (Model != null)
-				{
-					Model.TracksChanged += Model_TracksChanged;
-				}
+				Model.TracksChanged += Model_TracksChanged;
 			}
 		}
 
@@ -67,11 +60,8 @@ namespace TagScanner.Controllers
 			set
 			{
 				_view = value;
-				if (View.Child == null)
-				{
-					View.Child = new GridElement();
-					InitColumns();
-				}
+				View.Child = new GridElement();
+				InitColumns();
 				DataGrid.SelectionChanged += Grid_SelectionChanged;
 				RefreshDataSource();
 			}
@@ -179,30 +169,50 @@ namespace TagScanner.Controllers
 
 		#endregion
 
-		#region Groups
+		#region Sorting and Grouping
 
-		private IEnumerable<string> _groups = new string[0];
-		public IEnumerable<string> Groups
+		private IEnumerable<SortDescription> _sortDescriptions = new SortDescription[0];
+		public IEnumerable<SortDescription> SortDescriptions
 		{
 			get
 			{
-				return _groups;
+				return _sortDescriptions;
 			}
 			set
 			{
-				if (Groups.SequenceEqual(value))
+				if (SortDescriptions.SequenceEqual(value))
 					return;
-				_groups = value;
+				_sortDescriptions = value;
+				InitGroups();
+			}
+		}
+
+		private IEnumerable<string> _groupDescriptions = new string[0];
+		public IEnumerable<string> GroupDescriptions
+		{
+			get
+			{
+				return _groupDescriptions;
+			}
+			set
+			{
+				if (GroupDescriptions.SequenceEqual(value))
+					return;
+				_groupDescriptions = value;
 				InitGroups();
 			}
 		}
 
 		private void InitGroups()
 		{
+			//var sortDescriptions = ListCollectionView.SortDescriptions;
+			//sortDescriptions.Clear();
+			//foreach (var sortDescription in SortDescriptions)
+			//	sortDescriptions.Add(sortDescription);
 			var groupDescriptions = ListCollectionView.GroupDescriptions;
 			groupDescriptions.Clear();
-			foreach (var group in Groups)
-				groupDescriptions.Add(new PropertyGroupDescription(group));
+			foreach (var groupDescription in GroupDescriptions)
+				groupDescriptions.Add(new PropertyGroupDescription(groupDescription));
 		}
 
 		#endregion
@@ -295,36 +305,46 @@ namespace TagScanner.Controllers
 		private static string[] VisibleTagsDefault = new[] { "DiscTrack", "Title", "Duration", "FileSize" };
 		private static IEnumerable<string> VisibleTagsExtended = VisibleTagsDefault.Union(new[] { "JoinedPerformers", "Album" });
 
-		public void ViewAlbums()
+		public void GroupByAlbum()
 		{
-			ViewBy(VisibleTagsDefault, new[] { "Album", "JoinedPerformers" });
+			SetQuery(VisibleTagsDefault, new[] { "Album" }, new[] { "Disc", "Track" });
 		}
 
-		public void ViewArtists()
+		public void GroupByArtist()
 		{
-			ViewBy(VisibleTagsDefault, new[] { "JoinedPerformers", "YearAlbum" });
+			SetQuery(new[] { "YearAlbum", "DiscTrack", "Title", "Duration", "FileSize" }, new[] { "JoinedPerformers" }, new[] { "Disc", "Track" });
 		}
 
-		public void ViewGenres()
+		public void GroupByArtistAlbum()
 		{
-			ViewBy(VisibleTagsDefault, new[] { "JoinedGenres", "JoinedPerformers", "YearAlbum" });
+			SetQuery(VisibleTagsDefault, new[] { "JoinedPerformers", "YearAlbum" }, new[] { "Disc", "Track" });
 		}
 
-		public void ViewTracks()
+		public void GroupByGenre()
 		{
-			ViewBy(VisibleTagsExtended, new string[0]);
+			SetQuery(VisibleTagsDefault, new[] { "JoinedGenres", "JoinedPerformers", "YearAlbum" }, new[] { "Disc", "Track" });
 		}
 
-		public void ViewYears()
+		public void GroupByNone()
 		{
-			ViewBy(VisibleTagsExtended, new[] { "Decade", "Year" });
+			SetQuery(VisibleTagsExtended, new string[0], new[] { "Disc", "Track" });
 		}
 
-		private void ViewBy(IEnumerable<string> visibleTags, IEnumerable<string> groups)
+		public void GroupByYear()
+		{
+			SetQuery(VisibleTagsExtended, new[] { "Decade", "Year" }, new[] { "Disc", "Track" });
+		}
+
+		private void SetQuery(
+			IEnumerable<string> visibleTags,
+			IEnumerable<string> groupDescriptions,
+			IEnumerable<string> sortDescriptions)
 		{
 			VisibleTags = visibleTags.Union(VisibleTags);
-			Groups = groups;
-		}
+			_sortDescriptions = sortDescriptions.Select(s => new SortDescription(s, ListSortDirection.Ascending));
+			_groupDescriptions = groupDescriptions;
+			InitGroups();
+        }
 
 		#endregion
 	}

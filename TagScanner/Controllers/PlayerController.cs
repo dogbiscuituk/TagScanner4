@@ -1,21 +1,25 @@
-﻿using AxWMPLib;
-using System;
-using System.IO;
+﻿using System;
 using System.Linq;
+using System.Reflection;
+using System.Windows.Data;
 using System.Windows.Forms;
+using AxWMPLib;
 using WMPLib;
-using TagScanner.Views;
 using TagScanner.Models;
-using System.Collections.Generic;
+using TagScanner.Views;
+using System.Collections.ObjectModel;
 
 namespace TagScanner.Controllers
 {
-	public class PlayerController : SdiController
+	public class PlayerController : GridController
 	{
 		public PlayerController(LibraryFormController gridFormController, ToolStripDropDownItem recentMenu)
-			: base(gridFormController.Model, Properties.Settings.Default.PlayerFilter, "PlayerMRU", recentMenu)
 		{
 			GridFormController = gridFormController;
+			View.PlaylistElementHost.Child = new GridElement();
+			DataGrid.AutoGenerateColumns = false;
+			InitColumns();
+			DataGrid.ItemsSource = new ListCollectionView(CurrentPlaylist);
 			Player.CurrentItemChange += Player_CurrentItemChange;
 		}
 
@@ -29,7 +33,8 @@ namespace TagScanner.Controllers
 			set
 			{
 				_gridFormController = value;
-				View.GridPopupPlay.Click += PlaylistAddToCurrent_Click;
+				View.GridPopupPlayAddToQueue.Click += PlaylistAddToQueue_Click;
+				View.GridPopupPlayNewPlaylist.Click += PlaylistCreateNew_Click;
 			}
 		}
 
@@ -49,24 +54,24 @@ namespace TagScanner.Controllers
 			}
 		}
 
-		private DataGridView PlaylistGrid
+		protected override System.Windows.Controls.DataGrid DataGrid
 		{
 			get
 			{
-				return View.PlaylistGrid;
+				return ((GridElement)View.PlaylistElementHost.Child).DataGrid;
 			}
 		}
 
-		private List<Track> CurrentPlaylist = new List<Track>();
+		private ObservableCollection<Track> CurrentPlaylist = new ObservableCollection<Track>();
+
+		private void PlaylistAddToQueue_Click(object sender, EventArgs e)
+		{
+			PlaySelection(newPlaylist: false);
+		}
 
 		private void PlaylistCreateNew_Click(object sender, EventArgs e)
 		{
 			PlaySelection(newPlaylist: true);
-		}
-
-		private void PlaylistAddToCurrent_Click(object sender, EventArgs e)
-		{
-			PlaySelection(newPlaylist: false);
 		}
 
 		private void PlaySelection(bool newPlaylist)
@@ -76,13 +81,14 @@ namespace TagScanner.Controllers
 				return;
 			if (newPlaylist)
 			{
-				CurrentPlaylist = new List<Track>();
+				CurrentPlaylist.Clear();
 				Player.currentPlaylist = Player.newPlaylist(string.Empty, string.Empty);
 			}
-			CurrentPlaylist.AddRange(tracks);
-			PlaylistGrid.DataSource = CurrentPlaylist;
-            foreach (var track in tracks)
+			foreach (var track in tracks)
+			{
+				CurrentPlaylist.Add(track);
 				Player.currentPlaylist.appendItem(Player.newMedia(track.FilePath));
+			}
 			Player.Ctlcontrols.play();
 			View.TabControl.SelectedTab = View.tabPlayer;
 		}
@@ -92,29 +98,28 @@ namespace TagScanner.Controllers
 			UpdatePlaylist(e.pdispMedia as IWMPMedia);
 		}
 
-		protected override bool LoadFromStream(Stream stream, string format)
-		{
-			return true;
-		}
-
-		protected override bool SaveToStream(Stream stream, string format)
-		{
-			return true;
-		}
-
-		protected override void ClearDocument()
-		{
-		}
-
 		private void UpdatePlaylist(IWMPMedia currentItem)
 		{
 			for (var index = 0; index < CurrentPlaylist.Count; index++)
 				if (CurrentPlaylist[index].FilePath == currentItem.sourceURL)
 				{
-					PlaylistGrid.ClearSelection();
-                    PlaylistGrid.Rows[index].Selected = true;
+					DataGrid.SelectedItems.Clear();
+					DataGrid.SelectedItems.Add(CurrentPlaylist[index]);
 					break;
 				}
+		}
+
+		protected override PropertyInfo[] GetPropertyInfos()
+		{
+			return
+				new[]
+				{
+					"Title",
+					"JoinedPerformers",
+					"Album"
+				}
+				.Select(name => Metadata.PropertyInfos.First(p => p.Name == name))
+				.ToArray();
 		}
 	}
 }

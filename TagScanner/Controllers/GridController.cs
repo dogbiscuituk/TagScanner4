@@ -75,10 +75,7 @@ namespace TagScanner.Controllers
 
 		private IEnumerable<DataGridBoundColumn> GetColumns()
 		{
-			return
-				GetPropertyInfos()
-					.Select(GetColumn)
-					.Where(c => c != null);
+			return GetPropertyInfos().Select(GetColumn).Where(c => c != null);
 		}
 
 		private static Style _rightAlignStyle;

@@ -27,7 +27,7 @@ namespace TagScanner.Controllers
 			MediaController = new MediaController(Model, statusController, View.AddRecentFolders);
 			PlayerController = new PlayerController(this, null);
 			Model_ModifiedChanged(Model, EventArgs.Empty);
-			LibraryGridController.ViewArtists();
+			LibraryGridController.GroupByArtist();
 			LibraryGridController_SelectionChanged(this, EventArgs.Empty);
         }
 
@@ -55,11 +55,12 @@ namespace TagScanner.Controllers
 				View.EditInvertSelection.Click += EditInvertSelection_Click;
 				View.EditFind.Click += EditFind_Click;
 				View.EditReplace.Click += EditReplace_Click;
-				View.ViewArtists.Click += ViewArtists_Click;
-				View.ViewGenres.Click += ViewGenres_Click;
-				View.ViewYears.Click += ViewYears_Click;
-				View.ViewAlbums.Click += ViewAlbums_Click;
-				View.ViewTracks.Click += ViewTracks_Click;
+				View.GroupByArtistAlbum.Click += GroupByArtistAlbum_Click;
+				View.GroupByArtist.Click += GroupByArtist_Click;
+				View.GroupByGenre.Click += GroupByGenre_Click;
+				View.GroupByYear.Click += GroupByYear_Click;
+				View.GroupByAlbum.Click += GroupByAlbum_Click;
+				View.GroupByNone.Click += GroupByNone_Click;
 				View.AddMedia.Click += AddMedia_Click;
 				View.AddFolder.Click += AddFolder_Click;
 				View.HelpAbout.Click += HelpAbout_Click;
@@ -134,29 +135,34 @@ namespace TagScanner.Controllers
 			ReplaceDialogController.ShowDialog(View);
 		}
 
-		private void ViewArtists_Click(object sender, EventArgs e)
+		private void GroupByArtistAlbum_Click(object sender, EventArgs e)
 		{
-			LibraryGridController.ViewArtists();
+			LibraryGridController.GroupByArtistAlbum();
 		}
 
-		private void ViewAlbums_Click(object sender, EventArgs e)
+		private void GroupByArtist_Click(object sender, EventArgs e)
 		{
-			LibraryGridController.ViewAlbums();
+			LibraryGridController.GroupByArtist();
 		}
 
-		private void ViewTracks_Click(object sender, EventArgs e)
+		private void GroupByAlbum_Click(object sender, EventArgs e)
 		{
-			LibraryGridController.ViewTracks();
+			LibraryGridController.GroupByAlbum();
 		}
 
-		private void ViewGenres_Click(object sender, EventArgs e)
+		private void GroupByNone_Click(object sender, EventArgs e)
 		{
-			LibraryGridController.ViewGenres();
+			LibraryGridController.GroupByNone();
 		}
 
-		private void ViewYears_Click(object sender, EventArgs e)
+		private void GroupByGenre_Click(object sender, EventArgs e)
 		{
-			LibraryGridController.ViewYears();
+			LibraryGridController.GroupByGenre();
+		}
+
+		private void GroupByYear_Click(object sender, EventArgs e)
+		{
+			LibraryGridController.GroupByYear();
 		}
 
 		private void AddMedia_Click(object sender, EventArgs e)

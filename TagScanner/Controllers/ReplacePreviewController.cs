@@ -16,6 +16,7 @@ namespace TagScanner.Controllers
 		{
 			Owner = owner;
 			View = new ReplacePreview();
+			View.ElementHost.Child = new GridElement();
 			DataGrid.GridLinesVisibility = DataGridGridLinesVisibility.Vertical;
 			DataGrid.SelectionMode = DataGridSelectionMode.Single;
 			DataGrid.SelectionUnit = DataGridSelectionUnit.Cell;
@@ -32,7 +33,7 @@ namespace TagScanner.Controllers
 		private IWin32Window Owner;
 		private ReplacePreview View;
 
-		protected override System.Windows.Controls.DataGrid DataGrid { get { return View.GridElement.DataGrid; } }
+		protected override System.Windows.Controls.DataGrid DataGrid { get { return ((GridElement)View.ElementHost.Child).DataGrid; } }
 
 		private Brush GetBrush(string propertyName)
 		{

@@ -33,7 +33,6 @@
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.btnOK = new System.Windows.Forms.Button();
 			this.ElementHost = new System.Windows.Forms.Integration.ElementHost();
-			this.GridElement = new TagScanner.Views.GridElement();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -89,7 +88,6 @@
 			this.ElementHost.Size = new System.Drawing.Size(784, 522);
 			this.ElementHost.TabIndex = 5;
 			this.ElementHost.Text = "elementHost1";
-			this.ElementHost.Child = this.GridElement;
 			// 
 			// ReplacePreview
 			// 
@@ -115,7 +113,6 @@
 		public System.Windows.Forms.Button btnCancel;
 		public System.Windows.Forms.Button btnOK;
 		public System.Windows.Forms.Integration.ElementHost ElementHost;
-		public GridElement GridElement;
 		public System.Windows.Forms.Button btnBack;
 	}
 }
