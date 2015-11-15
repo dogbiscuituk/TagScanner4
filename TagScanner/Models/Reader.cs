@@ -27,7 +27,7 @@ namespace TagScanner.Models
 			var filePathLists = new List<IEnumerable<string>>();
 			foreach (var searchPattern in searchPatterns)
 			{
-				var filePathList = Directory.EnumerateFiles(path: folderPath, searchPattern: searchPattern, searchOption: SearchOption.AllDirectories);
+				var filePathList = Directory.EnumerateFiles(folderPath, searchPattern, SearchOption.AllDirectories);
 				TrackCount += filePathList.Count();
 				filePathLists.Add(filePathList);
 			}
@@ -52,25 +52,29 @@ namespace TagScanner.Models
 				TrackIndex++;
 				success = true;
 			}
-			catch (TagLib.CorruptFileException)
+			catch (TagLib.CorruptFileException ex)
 			{
+				LogException(ex, filePath);
 				TrackCount--;
 			}
-			catch (TagLib.UnsupportedFormatException)
+			catch (TagLib.UnsupportedFormatException ex)
 			{
+				LogException(ex, filePath);
 				TrackCount--;
 			}
-			var e = new ProgressEventArgs(index: TrackIndex, count: TrackCount, path: filePath, success: success);
-			Progress.Report(e);
-			return e.Continue;
+			var progressEventArgs = new ProgressEventArgs(TrackIndex, TrackCount, filePath, success);
+			Progress.Report(progressEventArgs);
+			return progressEventArgs.Continue;
 		}
 
 		private bool DoAddTracks(IEnumerable<string> filePathList)
 		{
-			foreach (var filePath in filePathList)
-				if (!AddTrack(filePath))
-					return false;
-			return true;
+			return filePathList.FirstOrDefault(p => !AddTrack(p)) == null;
 		}
+
+		private static void LogException(Exception ex, string filePath)
+		{
+			System.Diagnostics.Debug.WriteLine("{0} - {1} - {2}", ex.GetType(), ex.Message, filePath);
+        }
 	}
 }
