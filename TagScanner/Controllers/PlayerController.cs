@@ -23,6 +23,14 @@ namespace TagScanner.Controllers
 			Player.CurrentItemChange += Player_CurrentItemChange;
 		}
 
+		public System.Windows.Controls.DataGrid PlaylistGrid
+		{
+			get
+			{
+				return DataGrid;
+			}
+		}
+
 		private LibraryFormController _gridFormController;
 		private LibraryFormController GridFormController
 		{

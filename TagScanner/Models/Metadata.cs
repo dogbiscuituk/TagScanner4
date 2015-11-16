@@ -44,6 +44,40 @@ namespace TagScanner.Models
 			return s.Replace("&&", "&");
 		}
 
+		public static IEnumerable<string> GetDependentPropertyNames(string propertyName)
+		{
+			switch (propertyName)
+			{
+				case "Album":
+					return new[] { "YearAlbum" };
+				case "AlbumArtists":
+					return new[] { "AlbumArtistsCount", "FirstAlbumArtist", "JoinedAlbumArtists" };
+				case "AlbumArtistsSort":
+					return new[] { "AlbumArtistsSortCount", "FirstAlbumArtistSort" };
+				case "Artists":
+					return new[] { "ArtistsCount", "FirstArtist", "JoinedArtists" };
+				case "Composers":
+					return new[] { "ComposersCount, FirstComposer", "JoinedComposers" };
+				case "ComposersSort":
+					return new[] { "ComposersSortCount, FirstComposerSort" };
+				case "DiscCount":
+				case "DiscNumber":
+					return new[] { "DiscOf", "DiscTrack" };
+				case "Genres":
+					return new[] { "FirstGenre", "GenresCount", "IsClassical", "JoinedGenres" };
+				case "Performers":
+					return new[] { "PerformersCount", "FirstPerformer", "JoinedPerformers" };
+				case "PerformersSort":
+					return new[] { "PerformersSortCount", "FirstPerformerSort", "JoinedPerformersSort" };
+				case "TrackCount":
+				case "TrackNumber":
+					return new[] { "TrackOf", "DiscTrack" };
+				case "Year":
+					return new[] { "Decade", "Century", "Millennium", "YearAlbum" };
+			}
+			return Enumerable.Empty<string>();
+		}
+
 		public static PropertyInfo GetPropertyInfo(string propertyName)
 		{
 			return PropertyInfos.FirstOrDefault(p => p.Name == propertyName);

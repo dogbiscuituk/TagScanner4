@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -19,16 +21,16 @@ namespace TagScanner.Controllers
 			Model.ModifiedChanged += Model_ModifiedChanged;
 			LibraryGridController = new LibraryGridController(Model, View.GridElementHost);
 			LibraryGridController.SelectionChanged += LibraryGridController_SelectionChanged;
-			new PictureController(View.PictureBox, View.PropertyGrid);
 			var statusController = new StatusController(Model, View.StatusBar);
 			PersistenceController = new PersistenceController(Model, View, View.FileReopen);
             PersistenceController.FilePathChanged += PersistenceController_FilePathChanged;
 			PersistenceController.FileSaving += PersistenceController_FileSaving;
 			MediaController = new MediaController(Model, statusController, View.AddRecentFolders);
 			PlayerController = new PlayerController(this, null);
-			Model_ModifiedChanged(Model, EventArgs.Empty);
+			new PictureController(View.PictureBox, View.PropertyGrid, PlayerController.PlaylistGrid);
+			ModifiedChanged();
 			LibraryGridController.GroupByArtist();
-			LibraryGridController_SelectionChanged(this, EventArgs.Empty);
+			UpdatePropertyGrid();
         }
 
 		#endregion
@@ -226,15 +228,22 @@ namespace TagScanner.Controllers
 
 		private void Model_ModifiedChanged(object sender, EventArgs e)
 		{
+			ModifiedChanged();
+		}
+
+		private void ModifiedChanged()
+		{
 			View.Text = PersistenceController.WindowCaption;
 			View.ModifiedLabel.Visible = Model.Modified;
 		}
 
 		private void PersistenceController_FileSaving(object sender, CancelEventArgs e)
 		{
-			var pendingTracks = Model.Tracks.Where(track => track.Status == TrackStatus.Pending).ToList();
-			var deletedTracks = Model.Tracks.Where(track => track.Status == TrackStatus.Deleted).ToList();
-			if (!pendingTracks.Any() && !deletedTracks.Any())
+			List<Track>
+				pendingTracks = Model.Tracks.Where(track => track.Status == TrackStatus.Pending).ToList(),
+				updatedTracks = Model.Tracks.Where(track => track.Status == TrackStatus.Updated).ToList(),
+				deletedTracks = Model.Tracks.Where(track => track.Status == TrackStatus.Deleted).ToList();
+			if (!(pendingTracks.Any() || updatedTracks.Any() || deletedTracks.Any()))
 				return;
 			var message = new StringBuilder(
 				"You may synchronise the library file with the ID3 track data in your media prior to saving. "
@@ -242,11 +251,15 @@ namespace TagScanner.Controllers
 			if (pendingTracks.Any())
 				message.AppendFormat(
 					"    * {0} track(s) will have embedded ID3 tag data updated to match the content of the library file.\n",
-					pendingTracks.Count());
+					pendingTracks.Count);
+			if (updatedTracks.Any())
+				message.AppendFormat(
+					"    * the contents of the library file will be updated to match the currently embedded ID3 tag data of {0} track(s).\n",
+					updatedTracks.Count);
 			if (deletedTracks.Any())
 				message.AppendFormat(
 					"    * {0} track(s), which cannot be found, will have ID3 tag data removed from the library file.\n",
-					deletedTracks.Count());
+					deletedTracks.Count);
 			message.Append("\nDo you want to perform this synchronisation prior to saving?");
 			var decision = MessageBox.Show(
 				message.ToString(),
@@ -258,12 +271,38 @@ namespace TagScanner.Controllers
 				case DialogResult.Yes:
 					foreach (var track in deletedTracks)
 						Model.Tracks.Remove(track);
+					foreach (var track in updatedTracks)
+						LoadTrack(track);
 					foreach (var track in pendingTracks)
-						track.Save();
+						SaveTrack(track);
 					break;
 				case DialogResult.Cancel:
 					e.Cancel = true;
 					break;
+			}
+		}
+
+		private void LoadTrack(Track track)
+		{
+			try
+			{
+				track.Load();
+			}
+			catch (IOException ex)
+			{
+				MessageBox.Show(View, ex.Message, "Error reading track", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+		}
+
+		private void SaveTrack(Track track)
+		{
+			try
+			{
+				track.Save();
+			}
+			catch (IOException ex)
+			{
+				MessageBox.Show(View, ex.Message, "Error writing track", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 

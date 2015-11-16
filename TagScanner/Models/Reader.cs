@@ -55,12 +55,10 @@ namespace TagScanner.Models
 			catch (TagLib.CorruptFileException ex)
 			{
 				LogException(ex, filePath);
-				TrackCount--;
 			}
 			catch (TagLib.UnsupportedFormatException ex)
 			{
 				LogException(ex, filePath);
-				TrackCount--;
 			}
 			var progressEventArgs = new ProgressEventArgs(TrackIndex, TrackCount, filePath, success);
 			Progress.Report(progressEventArgs);
@@ -72,9 +70,10 @@ namespace TagScanner.Models
 			return filePathList.FirstOrDefault(p => !AddTrack(p)) == null;
 		}
 
-		private static void LogException(Exception ex, string filePath)
+		private void LogException(Exception ex, string filePath)
 		{
 			System.Diagnostics.Debug.WriteLine("{0} - {1} - {2}", ex.GetType(), ex.Message, filePath);
-        }
+			TrackCount--;
+		}
 	}
 }

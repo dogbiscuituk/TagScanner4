@@ -979,7 +979,11 @@ namespace TagScanner.Models
 			IsModified = true;
 			var propertyChanged = PropertyChanged;
 			if (propertyChanged != null)
-				propertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			{
+                propertyChanged(this, new PropertyChangedEventArgs(propertyName));
+				foreach (var dependentPropertyName in Metadata.GetDependentPropertyNames(propertyName))
+					propertyChanged(this, new PropertyChangedEventArgs(dependentPropertyName));
+			}
 		}
 
 		private void ReadFile(TagLib.File file)
