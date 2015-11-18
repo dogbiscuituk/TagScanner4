@@ -225,7 +225,7 @@ namespace TagScanner.Controllers
 				var simpleCondition = new SimpleCondition(value);
 				InitPropertyBox(simpleCondition.PropertyName);
 				PropertyBox.SelectedItem = simpleCondition.PropertyName;
-				OperatorBox.SelectedItem = simpleCondition.Operation;
+				OperatorBox.SelectedItem = simpleCondition.Operator;
 				ValueEdit.Text = simpleCondition.ValueString;
 				Updating = false;
 			}
@@ -247,15 +247,15 @@ namespace TagScanner.Controllers
 			{
 				if (PropertyTypeName == value)
 					return;
-				var ops = SimpleCondition.GetOperatorsForType(value);
+				var operators = SimpleCondition.GetOperatorsForType(value);
 				var items = OperatorBox.Items;
-                if (!items.Cast<string>().SequenceEqual(ops))
+                if (!items.Cast<string>().SequenceEqual(operators))
 				{
-					var op = OperatorBox.SelectedItem;
+					var @operator = OperatorBox.SelectedItem;
 					items.Clear();
-					items.AddRange(ops.ToArray());
-					if (ops.Contains(op))
-						OperatorBox.SelectedItem = op;
+					items.AddRange(operators.ToArray());
+					if (operators.Contains(@operator))
+						OperatorBox.SelectedItem = @operator;
 					else
 						OperatorBox.SelectedIndex = 0;
                 }

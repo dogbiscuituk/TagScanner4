@@ -21,6 +21,8 @@ namespace TagScanner.Models
 		[Description("Pending - the item's library entry contains more recent edits than its media file.")]
 		Pending = 0x08,
 		[Description("Deleted - the item's media file no longer exists; its library entry is orphaned.")]
-		Deleted = 0x10
+		Deleted = 0x10,
+		[Description("Changed - the item's status has beenchanged to either Pending, Updated, or Deleted.")]
+		Changed = Pending | Updated | Deleted
 	}
 }

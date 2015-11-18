@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using TagScanner.Models;
+using TagScanner.Properties;
 using TagScanner.Views;
 
 namespace TagScanner.Controllers
@@ -21,15 +22,15 @@ namespace TagScanner.Controllers
 			Model.ModifiedChanged += Model_ModifiedChanged;
 			LibraryGridController = new LibraryGridController(Model, View.GridElementHost);
 			LibraryGridController.SelectionChanged += LibraryGridController_SelectionChanged;
-			var statusController = new StatusController(Model, View.StatusBar);
+			StatusController = new StatusController(Model, View.StatusBar);
 			PersistenceController = new PersistenceController(Model, View, View.FileReopen);
             PersistenceController.FilePathChanged += PersistenceController_FilePathChanged;
 			PersistenceController.FileSaving += PersistenceController_FileSaving;
-			MediaController = new MediaController(Model, statusController, View.AddRecentFolders);
+			MediaController = new MediaController(this, View.AddRecentFolders);
 			PlayerController = new PlayerController(this, null);
 			new PictureController(View.PictureBox, View.PropertyGrid, PlayerController.PlaylistGrid);
 			ModifiedChanged();
-			LibraryGridController.GroupByArtist();
+			LibraryGridController.ViewByArtist();
 			UpdatePropertyGrid();
         }
 
@@ -57,12 +58,12 @@ namespace TagScanner.Controllers
 				View.EditInvertSelection.Click += EditInvertSelection_Click;
 				View.EditFind.Click += EditFind_Click;
 				View.EditReplace.Click += EditReplace_Click;
-				View.GroupByArtistAlbum.Click += GroupByArtistAlbum_Click;
-				View.GroupByArtist.Click += GroupByArtist_Click;
-				View.GroupByGenre.Click += GroupByGenre_Click;
-				View.GroupByYear.Click += GroupByYear_Click;
-				View.GroupByAlbum.Click += GroupByAlbum_Click;
-				View.GroupByNone.Click += GroupByNone_Click;
+				View.ViewByArtistAlbum.Click += ViewByArtistAlbum_Click;
+				View.ViewByArtist.Click += ViewByArtist_Click;
+				View.ViewByGenre.Click += ViewByGenre_Click;
+				View.ViewByYear.Click += ViewByYear_Click;
+				View.ViewByAlbum.Click += ViewByAlbum_Click;
+				View.ViewByNone.Click += ViewByNone_Click;
 				View.AddMedia.Click += AddMedia_Click;
 				View.AddFolder.Click += AddFolder_Click;
 				View.HelpAbout.Click += HelpAbout_Click;
@@ -82,6 +83,7 @@ namespace TagScanner.Controllers
 		public readonly MediaController MediaController;
 		public readonly PersistenceController PersistenceController;
 		public readonly PlayerController PlayerController;
+		public readonly StatusController StatusController;
 
 		#endregion
 
@@ -94,7 +96,8 @@ namespace TagScanner.Controllers
 
 		private void FileNew_Click(object sender, EventArgs e)
 		{
-			PersistenceController.Clear();
+			if (PersistenceController.Clear())
+				MediaController.AddFolder();
 		}
 
 		private void FileOpen_Click(object sender, EventArgs e)
@@ -137,34 +140,34 @@ namespace TagScanner.Controllers
 			ReplaceDialogController.ShowDialog(View);
 		}
 
-		private void GroupByArtistAlbum_Click(object sender, EventArgs e)
+		private void ViewByArtistAlbum_Click(object sender, EventArgs e)
 		{
-			LibraryGridController.GroupByArtistAlbum();
+			LibraryGridController.ViewByArtistAlbum();
 		}
 
-		private void GroupByArtist_Click(object sender, EventArgs e)
+		private void ViewByArtist_Click(object sender, EventArgs e)
 		{
-			LibraryGridController.GroupByArtist();
+			LibraryGridController.ViewByArtist();
 		}
 
-		private void GroupByAlbum_Click(object sender, EventArgs e)
+		private void ViewByAlbum_Click(object sender, EventArgs e)
 		{
-			LibraryGridController.GroupByAlbum();
+			LibraryGridController.ViewByAlbum();
 		}
 
-		private void GroupByNone_Click(object sender, EventArgs e)
+		private void ViewByNone_Click(object sender, EventArgs e)
 		{
-			LibraryGridController.GroupByNone();
+			LibraryGridController.ViewByNone();
 		}
 
-		private void GroupByGenre_Click(object sender, EventArgs e)
+		private void ViewByGenre_Click(object sender, EventArgs e)
 		{
-			LibraryGridController.GroupByGenre();
+			LibraryGridController.ViewByGenre();
 		}
 
-		private void GroupByYear_Click(object sender, EventArgs e)
+		private void ViewByYear_Click(object sender, EventArgs e)
 		{
-			LibraryGridController.GroupByYear();
+			LibraryGridController.ViewByYear();
 		}
 
 		private void AddMedia_Click(object sender, EventArgs e)
@@ -239,51 +242,71 @@ namespace TagScanner.Controllers
 
 		private void PersistenceController_FileSaving(object sender, CancelEventArgs e)
 		{
-			List<Track>
-				pendingTracks = Model.Tracks.Where(track => track.Status == TrackStatus.Pending).ToList(),
-				updatedTracks = Model.Tracks.Where(track => track.Status == TrackStatus.Updated).ToList(),
-				deletedTracks = Model.Tracks.Where(track => track.Status == TrackStatus.Deleted).ToList();
-			if (!(pendingTracks.Any() || updatedTracks.Any() || deletedTracks.Any()))
-				return;
-			var message = new StringBuilder(
-				"You may synchronise the library file with the ID3 track data in your media prior to saving. "
-				+ "If you choose to do this, the following operations will be performed:\n\n");
-			if (pendingTracks.Any())
-				message.AppendFormat(
-					"    * {0} track(s) will have embedded ID3 tag data updated to match the content of the library file.\n",
-					pendingTracks.Count);
-			if (updatedTracks.Any())
-				message.AppendFormat(
-					"    * the contents of the library file will be updated to match the currently embedded ID3 tag data of {0} track(s).\n",
-					updatedTracks.Count);
-			if (deletedTracks.Any())
-				message.AppendFormat(
-					"    * {0} track(s), which cannot be found, will have ID3 tag data removed from the library file.\n",
-					deletedTracks.Count);
-			message.Append("\nDo you want to perform this synchronisation prior to saving?");
+			e.Cancel = !ContinueSaving();
+		}
+
+		private bool ContinueSaving()
+		{
+            var tracks = Model.Tracks.Where(t => (t.Status & TrackStatus.Changed) != 0).ToList();
+			if (!tracks.Any())
+				return true;
+			var message = new StringBuilder();
+			Say(message, tracks, TrackStatus.Changed, Resources.TracksChanged);
+			Say(message, tracks, TrackStatus.Deleted, Resources.TracksDeleted);
+			Say(message, tracks, TrackStatus.Updated, Resources.TracksUpdated);
+			Say(message, tracks, TrackStatus.Pending, Resources.TracksPending);
+			message.Append(Resources.ConfirmSync);
 			var decision = MessageBox.Show(
 				message.ToString(),
-				"Synchronise library file (optional)",
+				Resources.ConfirmSyncCaption,
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question);
 			switch (decision)
 			{
 				case DialogResult.Yes:
-					foreach (var track in deletedTracks)
-						Model.Tracks.Remove(track);
-					foreach (var track in updatedTracks)
-						LoadTrack(track);
-					foreach (var track in pendingTracks)
-						SaveTrack(track);
+					foreach (var track in tracks)
+						ProcessTrack(track);
 					break;
 				case DialogResult.Cancel:
-					e.Cancel = true;
-					break;
+					return false;
 			}
+			return true;
 		}
 
-		private void LoadTrack(Track track)
+		private bool ProcessTrack(Track track)
 		{
+			switch (track.Status)
+			{
+				case TrackStatus.Deleted:
+					return DropTrack(track);
+				case TrackStatus.Updated:
+					return LoadTrack(track);
+				case TrackStatus.Pending:
+					return SaveTrack(track);
+			}
+			return false;
+		}
+
+		private List<Track> GetTracks(TrackStatus status)
+		{
+			return Model.Tracks.Where(track => track.Status == status).ToList();
+		}
+
+		private void Say(StringBuilder message, List<Track> tracks, TrackStatus status, string format)
+		{
+			var count = tracks.Count(t => t.Status == status);
+			if (count > 0)
+				message.AppendFormat(format, count);
+		}
+
+		private bool DropTrack(Track track)
+		{
+			return Model.Tracks.Remove(track);
+		}
+
+		private bool LoadTrack(Track track)
+		{
+			var result = true;
 			try
 			{
 				track.Load();
@@ -291,11 +314,14 @@ namespace TagScanner.Controllers
 			catch (IOException ex)
 			{
 				MessageBox.Show(View, ex.Message, "Error reading track", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				result = false;
 			}
+			return result;
 		}
 
-		private void SaveTrack(Track track)
+		private bool SaveTrack(Track track)
 		{
+			var result = true;
 			try
 			{
 				track.Save();
@@ -303,7 +329,9 @@ namespace TagScanner.Controllers
 			catch (IOException ex)
 			{
 				MessageBox.Show(View, ex.Message, "Error writing track", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				result = false;
 			}
+			return result;
 		}
 
 		private void PersistenceController_FilePathChanged(object sender, EventArgs e)

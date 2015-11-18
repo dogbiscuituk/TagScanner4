@@ -302,35 +302,36 @@ namespace TagScanner.Controllers
 
 		#region Presets
 
-		private static string[] VisibleTagsDefault = new[] { "DiscTrack", "Title", "Duration", "FileSize" };
-		private static IEnumerable<string> VisibleTagsExtended = VisibleTagsDefault.Union(new[] { "JoinedPerformers", "Album" });
+		private static IEnumerable<string>
+			VisibleTagsDefault = new[] { "DiscTrack", "Title", "Duration", "FileSize" },
+			VisibleTagsExtended = VisibleTagsDefault.Union(new[] { "JoinedPerformers", "Album" });
 
-		public void GroupByAlbum()
+		public void ViewByAlbum()
 		{
 			SetQuery(VisibleTagsDefault, new[] { "Album" }, new[] { "Disc", "Track" });
 		}
 
-		public void GroupByArtist()
+		public void ViewByArtist()
 		{
 			SetQuery(new[] { "YearAlbum", "DiscTrack", "Title", "Duration", "FileSize" }, new[] { "JoinedPerformers" }, new[] { "Disc", "Track" });
 		}
 
-		public void GroupByArtistAlbum()
+		public void ViewByArtistAlbum()
 		{
 			SetQuery(VisibleTagsDefault, new[] { "JoinedPerformers", "YearAlbum" }, new[] { "Disc", "Track" });
 		}
 
-		public void GroupByGenre()
+		public void ViewByGenre()
 		{
 			SetQuery(VisibleTagsDefault, new[] { "JoinedGenres", "JoinedPerformers", "YearAlbum" }, new[] { "Disc", "Track" });
 		}
 
-		public void GroupByNone()
+		public void ViewByNone()
 		{
 			SetQuery(VisibleTagsExtended, new string[0], new[] { "Disc", "Track" });
 		}
 
-		public void GroupByYear()
+		public void ViewByYear()
 		{
 			SetQuery(VisibleTagsExtended, new[] { "Decade", "Year" }, new[] { "Disc", "Track" });
 		}

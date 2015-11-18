@@ -73,13 +73,13 @@
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
 			this.AddRecentFolders = new System.Windows.Forms.ToolStripMenuItem();
 			this.GroupMenu = new System.Windows.Forms.ToolStripMenuItem();
-			this.GroupByArtistAlbum = new System.Windows.Forms.ToolStripMenuItem();
-			this.GroupByArtist = new System.Windows.Forms.ToolStripMenuItem();
-			this.GroupByAlbum = new System.Windows.Forms.ToolStripMenuItem();
+			this.ViewByArtistAlbum = new System.Windows.Forms.ToolStripMenuItem();
+			this.ViewByArtist = new System.Windows.Forms.ToolStripMenuItem();
+			this.ViewByAlbum = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
-			this.GroupByYear = new System.Windows.Forms.ToolStripMenuItem();
-			this.GroupByGenre = new System.Windows.Forms.ToolStripMenuItem();
-			this.GroupByNone = new System.Windows.Forms.ToolStripMenuItem();
+			this.ViewByYear = new System.Windows.Forms.ToolStripMenuItem();
+			this.ViewByGenre = new System.Windows.Forms.ToolStripMenuItem();
+			this.ViewByNone = new System.Windows.Forms.ToolStripMenuItem();
 			this.HelpMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.HelpAbout = new System.Windows.Forms.ToolStripMenuItem();
 			this.AddFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
@@ -323,8 +323,8 @@
 			this.MainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.FileMenu,
             this.EditMenu,
-            this.AddMenu,
             this.GroupMenu,
+            this.AddMenu,
             this.HelpMenu});
 			this.MainMenu.Location = new System.Drawing.Point(0, 0);
 			this.MainMenu.Name = "MainMenu";
@@ -455,57 +455,57 @@
 			// AddMedia
 			// 
 			this.AddMedia.Name = "AddMedia";
-			this.AddMedia.Size = new System.Drawing.Size(151, 22);
+			this.AddMedia.Size = new System.Drawing.Size(152, 22);
 			this.AddMedia.Text = "&Media...";
 			// 
 			// AddFolder
 			// 
 			this.AddFolder.Name = "AddFolder";
-			this.AddFolder.Size = new System.Drawing.Size(151, 22);
+			this.AddFolder.Size = new System.Drawing.Size(152, 22);
 			this.AddFolder.Text = "&Folder...";
 			// 
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(148, 6);
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(149, 6);
 			// 
 			// AddRecentFolders
 			// 
 			this.AddRecentFolders.Name = "AddRecentFolders";
-			this.AddRecentFolders.Size = new System.Drawing.Size(151, 22);
+			this.AddRecentFolders.Size = new System.Drawing.Size(152, 22);
 			this.AddRecentFolders.Text = "&Recent Folders";
 			// 
 			// GroupMenu
 			// 
 			this.GroupMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.GroupByArtistAlbum,
-            this.GroupByArtist,
-            this.GroupByAlbum,
+            this.ViewByArtistAlbum,
+            this.ViewByArtist,
+            this.ViewByAlbum,
             this.toolStripMenuItem4,
-            this.GroupByYear,
-            this.GroupByGenre,
-            this.GroupByNone});
+            this.ViewByYear,
+            this.ViewByGenre,
+            this.ViewByNone});
 			this.GroupMenu.Name = "GroupMenu";
 			this.GroupMenu.Size = new System.Drawing.Size(44, 20);
 			this.GroupMenu.Text = "&View";
 			// 
 			// GroupByArtistAlbum
 			// 
-			this.GroupByArtistAlbum.Name = "GroupByArtistAlbum";
-			this.GroupByArtistAlbum.Size = new System.Drawing.Size(159, 22);
-			this.GroupByArtistAlbum.Text = "by &Artist/Album";
+			this.ViewByArtistAlbum.Name = "GroupByArtistAlbum";
+			this.ViewByArtistAlbum.Size = new System.Drawing.Size(159, 22);
+			this.ViewByArtistAlbum.Text = "by &Artist/Album";
 			// 
 			// GroupByArtist
 			// 
-			this.GroupByArtist.Name = "GroupByArtist";
-			this.GroupByArtist.Size = new System.Drawing.Size(159, 22);
-			this.GroupByArtist.Text = "by A&rtist";
+			this.ViewByArtist.Name = "GroupByArtist";
+			this.ViewByArtist.Size = new System.Drawing.Size(159, 22);
+			this.ViewByArtist.Text = "by A&rtist";
 			// 
 			// GroupByAlbum
 			// 
-			this.GroupByAlbum.Name = "GroupByAlbum";
-			this.GroupByAlbum.Size = new System.Drawing.Size(159, 22);
-			this.GroupByAlbum.Text = "by A&lbum";
+			this.ViewByAlbum.Name = "GroupByAlbum";
+			this.ViewByAlbum.Size = new System.Drawing.Size(159, 22);
+			this.ViewByAlbum.Text = "by A&lbum";
 			// 
 			// toolStripMenuItem4
 			// 
@@ -514,21 +514,21 @@
 			// 
 			// GroupByYear
 			// 
-			this.GroupByYear.Name = "GroupByYear";
-			this.GroupByYear.Size = new System.Drawing.Size(159, 22);
-			this.GroupByYear.Text = "by &Year";
+			this.ViewByYear.Name = "GroupByYear";
+			this.ViewByYear.Size = new System.Drawing.Size(159, 22);
+			this.ViewByYear.Text = "by &Year";
 			// 
 			// GroupByGenre
 			// 
-			this.GroupByGenre.Name = "GroupByGenre";
-			this.GroupByGenre.Size = new System.Drawing.Size(159, 22);
-			this.GroupByGenre.Text = "by &Genre";
+			this.ViewByGenre.Name = "GroupByGenre";
+			this.ViewByGenre.Size = new System.Drawing.Size(159, 22);
+			this.ViewByGenre.Text = "by &Genre";
 			// 
 			// GroupByNone
 			// 
-			this.GroupByNone.Name = "GroupByNone";
-			this.GroupByNone.Size = new System.Drawing.Size(159, 22);
-			this.GroupByNone.Text = "by &Track";
+			this.ViewByNone.Name = "GroupByNone";
+			this.ViewByNone.Size = new System.Drawing.Size(159, 22);
+			this.ViewByNone.Text = "by &Track";
 			// 
 			// HelpMenu
 			// 
@@ -541,7 +541,7 @@
 			// HelpAbout
 			// 
 			this.HelpAbout.Name = "HelpAbout";
-			this.HelpAbout.Size = new System.Drawing.Size(107, 22);
+			this.HelpAbout.Size = new System.Drawing.Size(152, 22);
 			this.HelpAbout.Text = "&About";
 			// 
 			// AddFolderDialog
@@ -650,11 +650,11 @@
 		public System.Windows.Forms.ToolStripMenuItem GridPopupPlay;
 		public AxWMPLib.AxWindowsMediaPlayer MediaPlayer;
 		public System.Windows.Forms.TabPage tabPlayer;
-		public System.Windows.Forms.ToolStripMenuItem GroupByArtist;
-		public System.Windows.Forms.ToolStripMenuItem GroupByGenre;
-		public System.Windows.Forms.ToolStripMenuItem GroupByYear;
-		public System.Windows.Forms.ToolStripMenuItem GroupByAlbum;
-		public System.Windows.Forms.ToolStripMenuItem GroupByNone;
+		public System.Windows.Forms.ToolStripMenuItem ViewByArtist;
+		public System.Windows.Forms.ToolStripMenuItem ViewByGenre;
+		public System.Windows.Forms.ToolStripMenuItem ViewByYear;
+		public System.Windows.Forms.ToolStripMenuItem ViewByAlbum;
+		public System.Windows.Forms.ToolStripMenuItem ViewByNone;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 		public System.Windows.Forms.ToolStripMenuItem EditFind;
 		public System.Windows.Forms.ToolStripMenuItem EditReplace;
@@ -663,7 +663,7 @@
 		private System.Windows.Forms.SplitContainer splitContainer3;
 		public System.Windows.Forms.ToolStripMenuItem GridPopupPlayAddToQueue;
 		public System.Windows.Forms.ToolStripMenuItem GridPopupPlayNewPlaylist;
-		public System.Windows.Forms.ToolStripMenuItem GroupByArtistAlbum;
+		public System.Windows.Forms.ToolStripMenuItem ViewByArtistAlbum;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
 		public System.Windows.Forms.Integration.ElementHost PlaylistElementHost;
 	}

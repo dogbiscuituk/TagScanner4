@@ -14,11 +14,11 @@ namespace TagScanner.Models
 		public SimpleCondition(string text)
 		{
 			PropertyName = TakeWord(ref text);
-			foreach (var op in AllOperators)
-				if (text.StartsWith(op))
+			foreach (var @operator in AllOperators)
+				if (text.StartsWith(@operator))
 				{
-					Operation = op;
-					ValueString = text.Substring(op.Length).TrimStart();
+					Operator = @operator;
+					ValueString = text.Substring(@operator.Length).TrimStart();
 					return;
 				}
 		}
@@ -27,7 +27,7 @@ namespace TagScanner.Models
 
 		#region Properties
 
-		public string Operation { get; private set; }
+		public string Operator { get; private set; }
 
 		public string PropertyName { get; private set; }
 
@@ -55,28 +55,28 @@ namespace TagScanner.Models
 				rightOperand = Metadata.StringTags.Contains(ValueString)
 					? Expression.Convert(Expression.Property(parameter, ValueString), PropertyType)
 					: (Expression)Expression.Constant(Value);
-			var op = OperatorToExpressionType(Operation);
+			var binaryType = OperatorToExpressionType(Operator);
 			if (PropertyTypeName == "String")
 			{
 				leftOperand = NullCheck(leftOperand);
 				rightOperand = NullCheck(rightOperand);
-				var methodName = OperatorToMethodName(Operation);
+				var methodName = OperatorToMethodName(Operator);
 				var methodInfo = typeof(string).GetMethod(methodName, new[] { typeof(string) });
 				leftOperand = Expression.Call(leftOperand, methodInfo, rightOperand);
-				switch (Operation)
+				switch (Operator)
 				{
-					case Operator.Containing:
-					case Operator.StartingWith:
-					case Operator.EndingWith:
+					case Models.Operator.Containing:
+					case Models.Operator.StartingWith:
+					case Models.Operator.EndingWith:
 						return leftOperand;
-					case Operator.NotContaining:
-					case Operator.NotStartingWith:
-					case Operator.NotEndingWith:
+					case Models.Operator.NotContaining:
+					case Models.Operator.NotStartingWith:
+					case Models.Operator.NotEndingWith:
 						return Expression.Not(leftOperand);
 				}
 				rightOperand = Expression.Constant(0);
 			}
-			return Expression.MakeBinary(op, leftOperand, rightOperand);
+			return Expression.MakeBinary(binaryType, leftOperand, rightOperand);
 		}
 
 		#endregion
@@ -141,16 +141,16 @@ namespace TagScanner.Models
 
 		private static string[] ComparisonOperators = new[]
 		{
-			Operator.LessThan,
-			Operator.NotGreaterThan,
-			Operator.NotLessThan,
-			Operator.GreaterThan
+			Models.Operator.LessThan,
+			Models.Operator.NotGreaterThan,
+			Models.Operator.NotLessThan,
+			Models.Operator.GreaterThan
 		};
 
 		private static string[] EqualityOperators = new[]
 		{
-			Operator.Equal,
-			Operator.NotEqual
+			Models.Operator.Equal,
+			Models.Operator.NotEqual
 		};
 
 		private static string[] StringTypes = new[]
@@ -160,12 +160,12 @@ namespace TagScanner.Models
 
 		private static string[] StringOperators = new[]
 		{
-			Operator.Containing,
-			Operator.StartingWith,
-			Operator.EndingWith,
-			Operator.NotContaining,
-			Operator.NotStartingWith,
-			Operator.NotEndingWith
+			Models.Operator.Containing,
+			Models.Operator.StartingWith,
+			Models.Operator.EndingWith,
+			Models.Operator.NotContaining,
+			Models.Operator.NotStartingWith,
+			Models.Operator.NotEndingWith
 		};
 
 		private static IEnumerable<string> AllOperators =
@@ -182,38 +182,38 @@ namespace TagScanner.Models
 			return Expression.Coalesce(expression, Expression.Constant(string.Empty));
 		}
 
-		private static ExpressionType OperatorToExpressionType(string op)
+		private static ExpressionType OperatorToExpressionType(string @operator)
 		{
-			switch (op)
+			switch (@operator)
 			{
-				case Operator.Equal:
+				case Models.Operator.Equal:
 					return ExpressionType.Equal;
-				case Operator.NotEqual:
+				case Models.Operator.NotEqual:
 					return ExpressionType.NotEqual;
-				case Operator.LessThan:
+				case Models.Operator.LessThan:
 					return ExpressionType.LessThan;
-				case Operator.NotGreaterThan:
+				case Models.Operator.NotGreaterThan:
 					return ExpressionType.LessThanOrEqual;
-				case Operator.NotLessThan:
+				case Models.Operator.NotLessThan:
 					return ExpressionType.GreaterThanOrEqual;
-				case Operator.GreaterThan:
+				case Models.Operator.GreaterThan:
 					return ExpressionType.GreaterThan;
 			}
 			return ExpressionType.Equal;
 		}
 
-		private static string OperatorToMethodName(string op)
+		private static string OperatorToMethodName(string @operator)
 		{
-			switch (op)
+			switch (@operator)
 			{
-				case Operator.Containing:
-				case Operator.NotContaining:
+				case Models.Operator.Containing:
+				case Models.Operator.NotContaining:
 					return "Contains";
-				case Operator.StartingWith:
-				case Operator.NotStartingWith:
+				case Models.Operator.StartingWith:
+				case Models.Operator.NotStartingWith:
 					return "StartsWith";
-				case Operator.EndingWith:
-				case Operator.NotEndingWith:
+				case Models.Operator.EndingWith:
+				case Models.Operator.NotEndingWith:
 					return "EndsWith";
 				default:
 					return "CompareTo";

@@ -155,6 +155,7 @@ namespace TagScanner
 
 		private string _amazonId;
 		[Browsable(false)]
+		[Category("Metadata")]
 		[Description("A string containing the AmazonID for the media described by the selected item(s), or an empty string if no value is present.")]
 		public string AmazonId
 		{
@@ -250,7 +251,7 @@ namespace TagScanner
 
 		private string _century;
 		[Browsable(false)]
-		[Category("Details")]
+		[Category("Category")]
 		[Description("A string containing the century that the media represented by the selected item(s) was created, or zero if no value is present.")]
 		public string Century
 		{
@@ -268,6 +269,7 @@ namespace TagScanner
 
 		private string _comment;
 		[Browsable(true)]
+		[Category("Details")]
 		[Description("A string containing user comments on the media represented by the selected item(s), or an empty string if no value is present.")]
 		public string Comment
 		{
@@ -348,6 +350,7 @@ namespace TagScanner
 
 		private string _copyright;
 		[Browsable(true)]
+		[Category("Details")]
 		[Description("A string containing the copyright information for the media represented by the selected item(s), or an empty string if no value is present.")]
 		public string Copyright
 		{
@@ -361,7 +364,7 @@ namespace TagScanner
 
 		private string _decade;
 		[Browsable(false)]
-		[Category("Details")]
+		[Category("Category")]
 		[Description("A string containing the decade that the media represented by the selected item(s) was created, or zero if no value is present. Following popular usage, years ending in '0' are treated as the start of a decade.")]
 		public string Decade
 		{
@@ -435,6 +438,8 @@ namespace TagScanner
 		}
 
 		private string _fileAttributes;
+		[Browsable(false)]
+		[Category("File")]
 		public string FileAttributes
 		{
 			get
@@ -445,6 +450,7 @@ namespace TagScanner
 
 		private DateTime _fileCreationTime = DateTime.MaxValue;
 		[Browsable(false)]
+		[Category("File")]
 		public DateTime FileCreationTime
 		{
 			get
@@ -455,6 +461,7 @@ namespace TagScanner
 
 		private DateTime _fileCreationTimeUtc = DateTime.MaxValue;
 		[Browsable(false)]
+		[Category("File")]
 		public DateTime FileCreationTimeUtc
 		{
 			get
@@ -465,7 +472,7 @@ namespace TagScanner
 
 		private string _fileExtension;
 		[Browsable(false)]
-		[Category("Details")]
+		[Category("File")]
 		[Description("A string containing just the file extension portion of the full path to the media file in the filesystem.")]
 		public string FileExtension
 		{
@@ -474,6 +481,7 @@ namespace TagScanner
 
 		private DateTime _fileLastAccessTime = DateTime.MaxValue;
 		[Browsable(false)]
+		[Category("File")]
 		public DateTime FileLastAccessTime
 		{
 			get
@@ -484,6 +492,7 @@ namespace TagScanner
 
 		private DateTime _fileLastAccessTimeUtc = DateTime.MaxValue;
 		[Browsable(false)]
+		[Category("File")]
 		public DateTime FileLastAccessTimeUtc
 		{
             get
@@ -494,6 +503,7 @@ namespace TagScanner
 
 		private DateTime _fileLastWriteTime = DateTime.MaxValue;
 		[Browsable(false)]
+		[Category("File")]
 		public DateTime FileLastWriteTime
 		{
 			get
@@ -504,6 +514,7 @@ namespace TagScanner
 
 		private DateTime _fileLastWriteTimeUtc = DateTime.MaxValue;
 		[Browsable(false)]
+		[Category("File")]
 		public DateTime FileLastWriteTimeUtc
 		{
 			get
@@ -514,7 +525,7 @@ namespace TagScanner
 
 		private string _fileName;
 		[Browsable(false)]
-		[Category("Details")]
+		[Category("File")]
 		[Description("A string containing just the file name portion (including any extension) of the full path to the media file in the filesystem.")]
 		public string FileName
 		{
@@ -523,7 +534,7 @@ namespace TagScanner
 
 		private string _fileNameWithoutExtension;
 		[Browsable(false)]
-		[Category("Details")]
+		[Category("File")]
 		[Description("A string containing just the file name portion (excluding any extension) of the full path to the media file in the filesystem.")]
 		public string FileNameWithoutExtension
 		{
@@ -532,7 +543,7 @@ namespace TagScanner
 
 		private string _filePath;
 		[Browsable(true)]
-		[Category("Details")]
+		[Category("File")]
 		[Description("A string containing the full path to the media file or folder in the filesystem.")]
 		public string FilePath
 		{
@@ -541,7 +552,7 @@ namespace TagScanner
 
 		private long _fileSize = long.MaxValue;
 		[Browsable(true)]
-		[Category("Details")]
+		[Category("File")]
 		[DefaultValue(0)]
 		[Description("A long integer containing the byte length of the media file in the filesystem.")]
 		public long FileSize
@@ -600,7 +611,7 @@ namespace TagScanner
 
 		private string _firstGenre;
 		[Browsable(false)]
-		[Category("Details")]
+		[Category("Category")]
 		[Description("A string containing the first genre of the media represented by the selected item(s), or an empty string if no value is present.")]
 		public string FirstGenre
 		{
@@ -627,7 +638,7 @@ namespace TagScanner
 
 		private string[] _genres;
 		[Browsable(true)]
-		[Category("Details")]
+		[Category("Category")]
 		[Description("A string array containing the genres of the media represented by the selected item(s), or an empty array if no value is present.")]
 		public string[] Genres
 		{
@@ -643,7 +654,7 @@ namespace TagScanner
 		}
 
 		[Browsable(false)]
-		[Category("Details")]
+		[Category("Category")]
 		[DefaultValue(0)]
 		public int GenresCount
 		{
@@ -655,7 +666,7 @@ namespace TagScanner
 
 		private string _grouping;
 		[Browsable(false)]
-		[Category("Details")]
+		[Category("Category")]
 		[Description("A string containing the grouping on the album which the media in the selected item(s) belongs to, or an empty string if no value is present.")]
 		public string Grouping
 		{
@@ -689,7 +700,7 @@ namespace TagScanner
 
 		private Logical _isClassical;
 		[Browsable(false)]
-		[Category("Details")]
+		[Category("Category")]
 		[Description("A bool indicating whether or not the first genre of the selected item(s) is 'Classical'.")]
 		public Logical IsClassical
 		{
@@ -734,7 +745,7 @@ namespace TagScanner
 
 		private string _joinedGenres;
 		[Browsable(true)]
-		[Category("Details")]
+		[Category("Category")]
 		[Description("A string containing the genres of the media represented by the selected item(s), or an empty string if no value is present.")]
 		public string JoinedGenres
 		{
@@ -761,6 +772,7 @@ namespace TagScanner
 
 		private string _lyrics;
 		[Browsable(false)]
+		[Category("Details")]
 		[Description("A string containing the lyrics or script of the media represented by the selected item(s), or an empty string if no value is present.")]
 		public string Lyrics
 		{
@@ -774,7 +786,7 @@ namespace TagScanner
 
 		private string _millennium;
 		[Browsable(false)]
-		[Category("Details")]
+		[Category("Category")]
 		[Description("A string containing the millennium that the media represented by the selected item(s) was created, or zero if no value is present.")]
 		public string Millennium
 		{
@@ -792,7 +804,7 @@ namespace TagScanner
 
 		private string _musicBrainzArtistId;
 		[Browsable(false)]
-		[Category("MusicBrainz")]
+		[Category("Metadata")]
 		[Description("A string containing the MusicBrainz Artist ID for the media described by the selected item(s), or an empty string if no value is present.")]
 		public string MusicBrainzArtistId
 		{
@@ -806,7 +818,7 @@ namespace TagScanner
 
 		private string _musicBrainzDiscId;
 		[Browsable(false)]
-		[Category("MusicBrainz")]
+		[Category("Metadata")]
 		[Description("A string containing the MusicBrainz Disc ID for the media described by the selected item(s), or an empty string if no value is present.")]
 		public string MusicBrainzDiscId
 		{
@@ -820,7 +832,7 @@ namespace TagScanner
 
 		private string _musicBrainzReleaseArtistId;
 		[Browsable(false)]
-		[Category("MusicBrainz")]
+		[Category("Metadata")]
 		[Description("A string containing the MusicBrainz Release Artist ID for the media described by the selected item(s), or an empty string if no value is present.")]
 		public string MusicBrainzReleaseArtistId
 		{
@@ -834,7 +846,7 @@ namespace TagScanner
 
 		private string _musicBrainzReleaseCountry;
 		[Browsable(false)]
-		[Category("MusicBrainz")]
+		[Category("Metadata")]
 		[Description("A string containing the MusicBrainz Release Country for the media described by the selected item(s), or an empty string if no value is present.")]
 		public string MusicBrainzReleaseCountry
 		{
@@ -848,7 +860,7 @@ namespace TagScanner
 
 		private string _musicBrainzReleaseId;
 		[Browsable(false)]
-		[Category("MusicBrainz")]
+		[Category("Metadata")]
 		[Description("A string containing the MusicBrainz Release ID for the media described by the selected item(s), or an empty string if no value is present.")]
 		public string MusicBrainzReleaseId
 		{
@@ -862,7 +874,7 @@ namespace TagScanner
 
 		private string _musicBrainzReleaseStatus;
 		[Browsable(false)]
-		[Category("MusicBrainz")]
+		[Category("Metadata")]
 		[Description("A string containing the MusicBrainz Release Status for the media described by the selected item(s), or an empty string if no value is present.")]
 		public string MusicBrainzReleaseStatus
 		{
@@ -876,7 +888,7 @@ namespace TagScanner
 
 		private string _musicBrainzReleaseType;
 		[Browsable(false)]
-		[Category("MusicBrainz")]
+		[Category("Metadata")]
 		[Description("A string containing the MusicBrainz Release Type for the media described by the selected item(s), or an empty string if no value is present.")]
 		public string MusicBrainzReleaseType
 		{
@@ -890,7 +902,7 @@ namespace TagScanner
 
 		private string _musicBrainzTrackId;
 		[Browsable(false)]
-		[Category("MusicBrainz")]
+		[Category("Metadata")]
 		[Description("A string containing the MusicBrainz Track ID for the media described by the selected item(s), or an empty string if no value is present.")]
 		public string MusicBrainzTrackId
 		{
@@ -904,7 +916,7 @@ namespace TagScanner
 
 		private string _musicIpId;
 		[Browsable(false)]
-		[Category("MusicBrainz")]
+		[Category("Metadata")]
 		[Description("A string containing the MusicIP Puid for the media described by the selected item(s), or an empty string if no value is present.")]
 		public string MusicIpId
 		{
@@ -1116,14 +1128,17 @@ namespace TagScanner
 		[Browsable(true)]
 		[Category("Selection")]
 		[Description("An enumeration value containing the combined TrackStatus values of all items in the selection. Possible values are:\n\n"
-			+ "Unknown - the item has no recognised TrackStatus value.\n"
-			+ "Current - the item's library entry exactly matches its media file.\n"
-			+ "New - the item's media file does not yet have a corresponding library entry.\n"
-			+ "Updated - the item's media file contains more recent edits than its library entry.\n"
-			+ "Pending - the item's library entry contains more recent edits than its media file.\n"
-			+ "Deleted - the item's media file no longer exists; its library entry is orphaned.\n\n"
-			+ "During synchronization: any New items are added to the library; any Updated items have their library entries brought up to date; "
-			+ "any Pending edits are applied to the corresponding media files; and any Deleted items are removed from the library.")]
+			+ "-- Unknown - the item has no recognised TrackStatus value;\n"
+			+ "-- Current - the item's library entry exactly matches its media file;\n"
+			+ "-- New - the item's media file does not yet have a corresponding library entry;\n"
+			+ "-- Updated - the item's media file contains more recent edits than its library entry;\n"
+			+ "-- Pending - the item's library entry contains more recent edits than its media file; and\n"
+			+ "-- Deleted - the item's media file no longer exists; its library entry is orphaned.\n\n"
+			+ "During the synchronization process:\n\n"
+			+ "-- New items are added to the library,\n"
+			+ "-- Updated items have their library entries brought up to date,\n"
+			+ "-- Pending edits are applied to the corresponding media files, and\n"
+			+ "-- Deleted items are removed from the library.")]
 		public TrackStatus Status
 		{
 			get { return GetTrackStatus(p => p.Status, ref _trackStatus); }
@@ -1151,7 +1166,7 @@ namespace TagScanner
 
 		private int _year = int.MaxValue;
 		[Browsable(true)]
-		[Category("Details")]
+		[Category("Category")]
 		[DefaultValue(0)]
 		[Description("An unsigned intreger containing the year that the media represented by the selected item(s) was created, or zero if no value is present.")]
 		public int Year

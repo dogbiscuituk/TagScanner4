@@ -47,8 +47,8 @@ namespace TagScanner.Models
 			var success = false;
 			try
 			{
-				var tagFile = new Track(filePath);
-				Tracks.Add(tagFile);
+				var track = new Track(filePath);
+				Tracks.Add(track);
 				TrackIndex++;
 				success = true;
 			}

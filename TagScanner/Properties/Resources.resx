@@ -145,4 +145,29 @@
   <data name="Views_7953_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\views_7953_32.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ConfirmSync" xml:space="preserve">
+    <value>
+Do you want to perform this synchronisation prior to saving?</value>
+  </data>
+  <data name="TracksChanged" xml:space="preserve">
+    <value>You may synchronise the library file with the ID3 track data in your media prior to saving.
+If you choose to do this, the following {0} operation(s) will be performed:
+
+</value>
+  </data>
+  <data name="TracksDeleted" xml:space="preserve">
+    <value>-- {0} track(s), which cannot be found, will have their previously loaded ID3 tag data removed from the library file.
+</value>
+  </data>
+  <data name="TracksPending" xml:space="preserve">
+    <value>-- {0} track(s) will have their embedded ID3 tag data overwritten to match the current contents of the library file.
+</value>
+  </data>
+  <data name="TracksUpdated" xml:space="preserve">
+    <value>-- The contents of the library file will be updated to match the currently embedded ID3 tag data of {0} track(s).
+</value>
+  </data>
+  <data name="ConfirmSyncCaption" xml:space="preserve">
+    <value>Synchronise library file (optional)</value>
+  </data>
 </root>
