@@ -30,7 +30,11 @@ namespace TagScanner.Controllers
 				{
 					progressBar.Maximum = e.Count;
 					progressBar.Value = e.Index;
-					Model.Modified |= e.Success;
+					if (e.Track != null)
+					{
+						Model.Modified = true;
+						e.Track.PropertyChanged += Model.Track_PropertyChanged;
+					}
 				}
 				else
 				{

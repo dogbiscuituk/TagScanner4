@@ -65,13 +65,13 @@ namespace TagScanner.Models
 				leftOperand = Expression.Call(leftOperand, methodInfo, rightOperand);
 				switch (Operator)
 				{
-					case Models.Operator.Containing:
-					case Models.Operator.StartingWith:
-					case Models.Operator.EndingWith:
+					case Operators.Containing:
+					case Operators.StartingWith:
+					case Operators.EndingWith:
 						return leftOperand;
-					case Models.Operator.NotContaining:
-					case Models.Operator.NotStartingWith:
-					case Models.Operator.NotEndingWith:
+					case Operators.NotContaining:
+					case Operators.NotStartingWith:
+					case Operators.NotEndingWith:
 						return Expression.Not(leftOperand);
 				}
 				rightOperand = Expression.Constant(0);
@@ -141,16 +141,16 @@ namespace TagScanner.Models
 
 		private static string[] ComparisonOperators = new[]
 		{
-			Models.Operator.LessThan,
-			Models.Operator.NotGreaterThan,
-			Models.Operator.NotLessThan,
-			Models.Operator.GreaterThan
+			Operators.LessThan,
+			Operators.NotGreaterThan,
+			Operators.NotLessThan,
+			Operators.GreaterThan
 		};
 
 		private static string[] EqualityOperators = new[]
 		{
-			Models.Operator.Equal,
-			Models.Operator.NotEqual
+			Operators.Equal,
+			Operators.NotEqual
 		};
 
 		private static string[] StringTypes = new[]
@@ -160,12 +160,12 @@ namespace TagScanner.Models
 
 		private static string[] StringOperators = new[]
 		{
-			Models.Operator.Containing,
-			Models.Operator.StartingWith,
-			Models.Operator.EndingWith,
-			Models.Operator.NotContaining,
-			Models.Operator.NotStartingWith,
-			Models.Operator.NotEndingWith
+			Operators.Containing,
+			Operators.StartingWith,
+			Operators.EndingWith,
+			Operators.NotContaining,
+			Operators.NotStartingWith,
+			Operators.NotEndingWith
 		};
 
 		private static IEnumerable<string> AllOperators =
@@ -186,17 +186,17 @@ namespace TagScanner.Models
 		{
 			switch (@operator)
 			{
-				case Models.Operator.Equal:
+				case Operators.Equal:
 					return ExpressionType.Equal;
-				case Models.Operator.NotEqual:
+				case Operators.NotEqual:
 					return ExpressionType.NotEqual;
-				case Models.Operator.LessThan:
+				case Operators.LessThan:
 					return ExpressionType.LessThan;
-				case Models.Operator.NotGreaterThan:
+				case Operators.NotGreaterThan:
 					return ExpressionType.LessThanOrEqual;
-				case Models.Operator.NotLessThan:
+				case Operators.NotLessThan:
 					return ExpressionType.GreaterThanOrEqual;
-				case Models.Operator.GreaterThan:
+				case Operators.GreaterThan:
 					return ExpressionType.GreaterThan;
 			}
 			return ExpressionType.Equal;
@@ -206,14 +206,14 @@ namespace TagScanner.Models
 		{
 			switch (@operator)
 			{
-				case Models.Operator.Containing:
-				case Models.Operator.NotContaining:
+				case Operators.Containing:
+				case Operators.NotContaining:
 					return "Contains";
-				case Models.Operator.StartingWith:
-				case Models.Operator.NotStartingWith:
+				case Operators.StartingWith:
+				case Operators.NotStartingWith:
 					return "StartsWith";
-				case Models.Operator.EndingWith:
-				case Models.Operator.NotEndingWith:
+				case Operators.EndingWith:
+				case Operators.NotEndingWith:
 					return "EndsWith";
 				default:
 					return "CompareTo";

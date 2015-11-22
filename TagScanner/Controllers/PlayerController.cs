@@ -99,7 +99,7 @@ namespace TagScanner.Controllers
 			}
 			Player.Ctlcontrols.play();
 			View.TabControl.SelectedTab = View.tabPlayer;
-        }
+		}
 
 		private void Player_CurrentItemChange(object sender, _WMPOCXEvents_CurrentItemChangeEvent e)
 		{

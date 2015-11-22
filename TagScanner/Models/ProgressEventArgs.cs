@@ -1,4 +1,5 @@
 ﻿using System;
+using TagScanner.Models;
 
 namespace TagScanner
 {
@@ -8,15 +9,17 @@ namespace TagScanner
 		public int Count { get; set; }
 		public int Index { get; set; }
 		public string Path { get; set; }
-		public bool Success { get; set; }
+		public bool Skip { get; set; }
+		public Track Track { get; set; }
 
-		public ProgressEventArgs(int index, int count, string path, bool success)
+		public ProgressEventArgs(int index, int count, string path, Track track)
 		{
-			Continue = true;
 			Count = count;
 			Index = index;
 			Path = path;
-			Success = success;
+			Track = track;
+			Continue = true;
+			Skip = false;
 		}
 	}
 }

@@ -64,6 +64,7 @@ namespace TagScanner.Controllers
 				View.ViewByYear.Click += ViewByYear_Click;
 				View.ViewByAlbum.Click += ViewByAlbum_Click;
 				View.ViewByNone.Click += ViewByNone_Click;
+				View.ViewRefresh.Click += ViewRefresh_Click;
 				View.AddMedia.Click += AddMedia_Click;
 				View.AddFolder.Click += AddFolder_Click;
 				View.HelpAbout.Click += HelpAbout_Click;
@@ -96,8 +97,7 @@ namespace TagScanner.Controllers
 
 		private void FileNew_Click(object sender, EventArgs e)
 		{
-			if (PersistenceController.Clear())
-				MediaController.AddFolder();
+			PersistenceController.Clear();
 		}
 
 		private void FileOpen_Click(object sender, EventArgs e)
@@ -169,6 +169,11 @@ namespace TagScanner.Controllers
 		{
 			LibraryGridController.ViewByYear();
 		}
+
+		private void ViewRefresh_Click(object sender, EventArgs e)
+		{
+			MediaController.Rescan();
+        }
 
 		private void AddMedia_Click(object sender, EventArgs e)
 		{
@@ -252,39 +257,34 @@ namespace TagScanner.Controllers
 				return true;
 			var message = new StringBuilder();
 			Say(message, tracks, TrackStatus.Changed, Resources.TracksChanged);
-			Say(message, tracks, TrackStatus.Deleted, Resources.TracksDeleted);
+			Say(message, tracks, TrackStatus.New, Resources.TracksAdded);
 			Say(message, tracks, TrackStatus.Updated, Resources.TracksUpdated);
 			Say(message, tracks, TrackStatus.Pending, Resources.TracksPending);
+			Say(message, tracks, TrackStatus.Deleted, Resources.TracksDeleted);
 			message.Append(Resources.ConfirmSync);
 			var decision = MessageBox.Show(
 				message.ToString(),
 				Resources.ConfirmSyncCaption,
-				MessageBoxButtons.YesNoCancel,
-				MessageBoxIcon.Question);
-			switch (decision)
-			{
-				case DialogResult.Yes:
-					foreach (var track in tracks)
-						ProcessTrack(track);
-					break;
-				case DialogResult.Cancel:
-					return false;
-			}
-			return true;
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Question) == DialogResult.Yes;
+			if (decision)
+				foreach (var track in tracks)
+					ProcessTrack(track);
+			return decision;
 		}
 
 		private bool ProcessTrack(Track track)
 		{
-			switch (track.Status)
+			var result = false;
+			try
 			{
-				case TrackStatus.Deleted:
-					return DropTrack(track);
-				case TrackStatus.Updated:
-					return LoadTrack(track);
-				case TrackStatus.Pending:
-					return SaveTrack(track);
+				result = Model.ProcessTrack(track);
 			}
-			return false;
+			catch (IOException ex)
+			{
+				MessageBox.Show(View, ex.Message, "Error streaming track", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+			return result;
 		}
 
 		private List<Track> GetTracks(TrackStatus status)
@@ -294,44 +294,9 @@ namespace TagScanner.Controllers
 
 		private void Say(StringBuilder message, List<Track> tracks, TrackStatus status, string format)
 		{
-			var count = tracks.Count(t => t.Status == status);
+			var count = tracks.Count(t => (t.Status & status) != 0);
 			if (count > 0)
 				message.AppendFormat(format, count);
-		}
-
-		private bool DropTrack(Track track)
-		{
-			return Model.Tracks.Remove(track);
-		}
-
-		private bool LoadTrack(Track track)
-		{
-			var result = true;
-			try
-			{
-				track.Load();
-			}
-			catch (IOException ex)
-			{
-				MessageBox.Show(View, ex.Message, "Error reading track", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				result = false;
-			}
-			return result;
-		}
-
-		private bool SaveTrack(Track track)
-		{
-			var result = true;
-			try
-			{
-				track.Save();
-			}
-			catch (IOException ex)
-			{
-				MessageBox.Show(View, ex.Message, "Error writing track", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				result = false;
-			}
-			return result;
 		}
 
 		private void PersistenceController_FilePathChanged(object sender, EventArgs e)

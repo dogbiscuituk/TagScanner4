@@ -147,11 +147,10 @@
   </data>
   <data name="ConfirmSync" xml:space="preserve">
     <value>
-Do you want to perform this synchronisation prior to saving?</value>
+Continue to synchronize and save?</value>
   </data>
   <data name="TracksChanged" xml:space="preserve">
-    <value>You may synchronise the library file with the ID3 track data in your media prior to saving.
-If you choose to do this, the following {0} operation(s) will be performed:
+    <value>You may synchronise the library file with the ID3 track data in your media prior to saving. If you choose to do this, the following {0} operation(s) will be performed:
 
 </value>
   </data>
@@ -168,6 +167,10 @@ If you choose to do this, the following {0} operation(s) will be performed:
 </value>
   </data>
   <data name="ConfirmSyncCaption" xml:space="preserve">
-    <value>Synchronise library file (optional)</value>
+    <value>Synchronise library file</value>
+  </data>
+  <data name="TracksAdded" xml:space="preserve">
+    <value>-- {0} new track(s) will be added to the library file.
+</value>
   </data>
 </root>

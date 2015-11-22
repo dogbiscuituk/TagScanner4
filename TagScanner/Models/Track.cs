@@ -22,6 +22,7 @@ namespace TagScanner.Models
 		{
 			FilePath = filePath;
 			Load();
+			IsNew = true;
 		}
 
 		#endregion
@@ -50,6 +51,10 @@ namespace TagScanner.Models
 				_isModified = value;
 			}
 		}
+
+		[NonSerialized]
+		[XmlIgnore]
+		public bool IsNew;
 
 		#endregion
 
@@ -779,6 +784,8 @@ namespace TagScanner.Models
 		{
 			get
 			{
+				if (IsNew)
+					return TrackStatus.New;
 				if (!FileExists)
 					return TrackStatus.Deleted;
 				if (IsModified)

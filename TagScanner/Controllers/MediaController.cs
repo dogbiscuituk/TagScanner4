@@ -44,6 +44,15 @@ namespace TagScanner.Controllers
 			}
 		}
 
+		public void Rescan()
+		{
+			foreach (var folder in Model.Folders)
+			{
+				var folderParts = folder.Split('|');
+				AddFolder(folderParts[0], folderParts[1]);
+			}
+		}
+
 		protected override void Reopen(ToolStripItem menuItem)
 		{
 			var item = menuItem.Tag.ToString();

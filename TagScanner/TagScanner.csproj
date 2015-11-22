@@ -79,6 +79,7 @@
     <Compile Include="Controllers\ReplacePreviewController.cs" />
     <Compile Include="Controllers\SdiController.cs" />
     <Compile Include="Controllers\TagSelectorController.cs" />
+    <Compile Include="Models\Library.cs" />
     <Compile Include="Models\Metadata.cs" />
     <Compile Include="Models\FindReplaceResult.cs" />
     <Compile Include="Models\TrackStatus.cs" />
@@ -91,7 +92,7 @@
     <Compile Include="Models\CompoundCondition.cs" />
     <Compile Include="ValueConverters\GroupSummary.cs" />
     <Compile Include="Models\SimpleCondition.cs" />
-    <Compile Include="Models\Operator.cs" />
+    <Compile Include="Models\Operators.cs" />
     <Compile Include="Controllers\FilterDialogController.cs" />
     <Compile Include="Controllers\LibraryGridController.cs" />
     <Compile Include="ValueConverters\LogicalConverter.cs" />

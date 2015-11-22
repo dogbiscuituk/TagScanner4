@@ -35,7 +35,7 @@ namespace TagScanner.Controllers
 
 		protected override void ClearDocument()
 		{
-			Model.Tracks = new List<Track>();
+			Model.Clear();
 		}
 
 		protected override bool LoadFromStream(Stream stream, string format)
@@ -57,23 +57,19 @@ namespace TagScanner.Controllers
 			*/
 			var result =
 				IsXml(format)
-					? UseStream(() => Model.Tracks = (List<Track>)GetXmlSerializer().Deserialize(new XmlTextReader(stream)))
-					: UseStream(() => Model.Tracks = (List<Track>)GetBinaryFormatter().Deserialize(stream));
+					? UseStream(() => Model.Library = (Library)GetXmlSerializer().Deserialize(new XmlTextReader(stream)))
+					: UseStream(() => Model.Library = (Library)GetBinaryFormatter().Deserialize(stream));
 			foreach (var track in Model.Tracks)
-				track.PropertyChanged += Track_PropertyChanged;
+				track.PropertyChanged += Model.Track_PropertyChanged;
 			return result;
-		}
-
-		private void Track_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-		{
-			Model.Modified = true;
 		}
 
 		protected override bool SaveToStream(Stream stream, string format)
 		{
-			if (IsXml(format))
-				return UseStream(() => GetXmlSerializer().Serialize(stream, Model.Tracks));
-			return UseStream(() => GetBinaryFormatter().Serialize(stream, Model.Tracks));
+			return
+				IsXml(format)
+					? UseStream(() => GetXmlSerializer().Serialize(stream, Model.Library))
+					: UseStream(() => GetBinaryFormatter().Serialize(stream, Model.Library));
 		}
 
 		private static BinaryFormatter GetBinaryFormatter()
@@ -83,7 +79,7 @@ namespace TagScanner.Controllers
 
 		private static XmlSerializer GetXmlSerializer()
 		{
-			return new XmlSerializer(typeof(List<Track>));
+			return new XmlSerializer(typeof(Library));
 		}
 
 		private static bool IsXml(string format)

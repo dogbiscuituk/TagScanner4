@@ -7,18 +7,11 @@ namespace TagScanner.Models
 {
 	public class Reader
 	{
-		public Reader(IProgress<ProgressEventArgs> progress)
+		public Reader(List<string> existingFilePaths, IProgress<ProgressEventArgs> progress)
 		{
+			ExistingFilePaths = existingFilePaths;
 			Progress = progress;
 		}
-
-		#region State
-
-		public readonly List<Track> Tracks = new List<Track>();
-		private int TrackIndex, TrackCount;
-		private IProgress<ProgressEventArgs> Progress;
-
-		#endregion
 
 		public void AddFolder(string folderPath, IEnumerable<string> searchPatterns)
 		{
@@ -42,15 +35,27 @@ namespace TagScanner.Models
 			DoAddTracks(filePathList);
 		}
 
-		private bool AddTrack(string filePath)
+		#region State
+
+		public readonly List<string> ExistingFilePaths;
+		public readonly List<Track> Tracks = new List<Track>();
+		private int TrackIndex, TrackCount;
+		private IProgress<ProgressEventArgs> Progress;
+
+		#endregion
+
+		private bool DoAddTrack(string filePath)
 		{
-			var success = false;
+			Track track = null;
 			try
 			{
-				var track = new Track(filePath);
-				Tracks.Add(track);
+				if (!ExistingFilePaths.Contains(filePath))
+				{
+					ExistingFilePaths.Add(filePath);
+					track = new Track(filePath);
+                    Tracks.Add(track);
+				}
 				TrackIndex++;
-				success = true;
 			}
 			catch (TagLib.CorruptFileException ex)
 			{
@@ -60,14 +65,14 @@ namespace TagScanner.Models
 			{
 				LogException(ex, filePath);
 			}
-			var progressEventArgs = new ProgressEventArgs(TrackIndex, TrackCount, filePath, success);
+			var progressEventArgs = new ProgressEventArgs(TrackIndex, TrackCount, filePath, track);
 			Progress.Report(progressEventArgs);
 			return progressEventArgs.Continue;
 		}
 
 		private bool DoAddTracks(IEnumerable<string> filePathList)
 		{
-			return filePathList.FirstOrDefault(p => !AddTrack(p)) == null;
+			return filePathList.FirstOrDefault(p => !DoAddTrack(p)) == null;
 		}
 
 		private void LogException(Exception ex, string filePath)

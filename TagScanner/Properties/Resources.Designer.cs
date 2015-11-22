@@ -92,7 +92,7 @@ namespace TagScanner.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to 
-        ///Do you want to perform this synchronisation prior to saving?.
+        ///Continue to synchronize and save?.
         /// </summary>
         internal static string ConfirmSync {
             get {
@@ -101,7 +101,7 @@ namespace TagScanner.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronise library file (optional).
+        ///   Looks up a localized string similar to Synchronise library file.
         /// </summary>
         internal static string ConfirmSyncCaption {
             get {
@@ -160,8 +160,17 @@ namespace TagScanner.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You may synchronise the library file with the ID3 track data in your media prior to saving.
-        ///If you choose to do this, the following {0} operation(s) will be performed:
+        ///   Looks up a localized string similar to -- {0} new track(s) will be added to the library file.
+        ///.
+        /// </summary>
+        internal static string TracksAdded {
+            get {
+                return ResourceManager.GetString("TracksAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You may synchronise the library file with the ID3 track data in your media prior to saving. If you choose to do this, the following {0} operation(s) will be performed:
         ///
         ///.
         /// </summary>
