@@ -73,6 +73,7 @@ namespace TagScanner.Models
 		public void Clear()
 		{
 			Library.Clear();
+			OnTracksChanged();
 		}
 
 		public bool ProcessTrack(Track track)
@@ -81,10 +82,12 @@ namespace TagScanner.Models
 			{
 				case TrackStatus.New:
 					return AddTrack(track);
-				case TrackStatus.Updated:
-					return LoadTrack(track);
 				case TrackStatus.Pending:
 					return SaveTrack(track);
+				case TrackStatus.New | TrackStatus.Pending:
+					return AddAndSaveTrack(track);
+				case TrackStatus.Updated:
+					return LoadTrack(track);
 				case TrackStatus.Deleted:
 					return DropTrack(track);
 			}
@@ -107,6 +110,11 @@ namespace TagScanner.Models
 		{
 			track.IsNew = false;
 			return true;
+		}
+
+		private bool AddAndSaveTrack(Track track)
+		{
+			return AddTrack(track) && SaveTrack(track);
 		}
 
 		private bool DropTrack(Track track)

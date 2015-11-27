@@ -35,7 +35,7 @@ namespace TagScanner.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(@"AV Files (*.avi;*.m4a;*.mp3;*.mp4;*.wma;*.wmv)|*.avi;*.m4a;*.mp3;*.mp4;*.wma;*.wmv|Audio Files (*.m4a;*.mp3;*.wma)|*.m4a;*.mp3;*.wma|Video Files (*.avi;*.mp4;*.wmv)|*.avi;*.mp4;*.wmv|Image Files (*.bmp;*.gif;*.jpeg;*.jpg;*.png)|*.bmp;*.gif;*.jpeg;*.jpg;*.png|All Files (*.*)|*.*")]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"Media Files (*.avi;*.mp4;*.wmv;*.m4a;*.mp3;*.wma;*.bmp;*.gif;*.jpeg;*.jpg;*.png)|*.avi;*.mp4;*.wmv;*.m4a;*.mp3;*.wma;*.bmp;*.gif;*.jpeg;*.jpg;*.png|AV Files (*.avi;*.mp4;*.wmv;*.m4a;*.mp3;*.wma)|*.avi;*.mp4;*.wmv;*.m4a;*.mp3;*.wma|Video Files (*.avi;*.mp4;*.wmv)|*.avi;*.mp4;*.wmv|Audio Files (*.m4a;*.mp3;*.wma)|*.m4a;*.mp3;*.wma|Image Files (*.bmp;*.gif;*.jpeg;*.jpg;*.png)|*.bmp;*.gif;*.jpeg;*.jpg;*.png|All Files (*.*)|*.*")]
         public string MediaFilter {
             get {
                 return ((string)(this["MediaFilter"]));

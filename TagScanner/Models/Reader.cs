@@ -57,11 +57,7 @@ namespace TagScanner.Models
 				}
 				TrackIndex++;
 			}
-			catch (TagLib.CorruptFileException ex)
-			{
-				LogException(ex, filePath);
-			}
-			catch (TagLib.UnsupportedFormatException ex)
+			catch (Exception ex)
 			{
 				LogException(ex, filePath);
 			}

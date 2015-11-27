@@ -369,7 +369,7 @@ namespace TagScanner.Models
 		{
 			get
 			{
-				return NumberOfTotal("{0}/{1}", DiscNumber, DiscCount);
+				return NumberOfTotal(DiscNumber, DiscCount, 1);
 			}
 		}
 
@@ -377,13 +377,7 @@ namespace TagScanner.Models
 		{
 			get
 			{
-				var discOf = DiscOf;
-				if (discOf == null)
-					return null;
-				var trackOf = TrackOf;
-				if (trackOf == null)
-					return null;
-				return string.Format("{0} - {1}", discOf, trackOf);
+				return string.Format("{0} - {1}", DiscOf, TrackOf);
 			}
 		}
 
@@ -419,8 +413,11 @@ namespace TagScanner.Models
 		}
 
 		public DateTime FileLastAccessTime { get; set; }
+
 		public DateTime FileLastAccessTimeUtc { get; set; }
+
 		public DateTime FileLastWriteTime { get; set; }
+
 		public DateTime FileLastWriteTimeUtc { get; set; }
 
 		public string FileName
@@ -440,7 +437,9 @@ namespace TagScanner.Models
 		}
 
 		public string FilePath { get; set; }
+
 		public long FileSize { get; set; }
+
 		public string FirstAlbumArtist { get; set; }
 		public string FirstAlbumArtistSort { get; set; }
 		public string FirstArtist { get; set; }
@@ -755,8 +754,10 @@ namespace TagScanner.Models
 
 		[DefaultValue(0)]
 		public int PhotoHeight { get; set; }
+
 		[DefaultValue(0)]
 		public int PhotoQuality { get; set; }
+
 		[DefaultValue(0)]
 		public int PhotoWidth { get; set; }
 
@@ -784,12 +785,13 @@ namespace TagScanner.Models
 		{
 			get
 			{
-				if (IsNew)
-					return TrackStatus.New;
 				if (!FileExists)
 					return TrackStatus.Deleted;
+				if (IsNew)
+					return IsModified ? TrackStatus.New | TrackStatus.Pending : TrackStatus.New;
 				if (IsModified)
 					return TrackStatus.Pending;
+				// TODO: check for resolution inaccuracies & daylight saving time transitions.
 				var elapsedTime = FileLastWriteTimeUtc - File.GetLastWriteTimeUtc(FilePath);
 				switch (Math.Sign(elapsedTime.Ticks))
 				{
@@ -877,7 +879,7 @@ namespace TagScanner.Models
 		{
 			get
 			{
-				return NumberOfTotal("{0:D2}/{1:D2}", TrackNumber, TrackCount);
+				return NumberOfTotal(TrackNumber, TrackCount, 2);
 			}
 		}
 
@@ -981,16 +983,21 @@ namespace TagScanner.Models
 			return TagLib.File.Create(FilePath);
 		}
 
+		private void InvokeHandler(PropertyChangedEventHandler propertyChanged, string propertyName)
+		{
+			propertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			foreach (var dependentPropertyName in Metadata.GetDependentPropertyNames(propertyName))
+				InvokeHandler(propertyChanged, dependentPropertyName);
+		}
+
 		protected virtual void OnPropertyChanged(string propertyName)
 		{
-			IsModified = true;
 			var propertyChanged = PropertyChanged;
-			if (propertyChanged != null)
-			{
-                propertyChanged(this, new PropertyChangedEventArgs(propertyName));
-				foreach (var dependentPropertyName in Metadata.GetDependentPropertyNames(propertyName))
-					propertyChanged(this, new PropertyChangedEventArgs(dependentPropertyName));
-			}
+			if (propertyChanged == null) // Are we just now streaming in, using XML?
+				return; // Yes: then property accessors should have no side effects.
+			IsModified = true;
+			InvokeHandler(propertyChanged, propertyName);
+			InvokeHandler(propertyChanged, "Status");
 		}
 
 		private void ReadFile(TagLib.File file)
@@ -1146,10 +1153,12 @@ namespace TagScanner.Models
 			tag.Year = (uint)_year;
 		}
 
-		private static string NumberOfTotal(string format, int number, int total)
+		private static string NumberOfTotal(int number, int total, int digits)
 		{
 			number = Math.Max(number, 1);
-			return string.Format(format, number, Math.Max(total, number));
+			total = Math.Max(number, total);
+			digits = Math.Max(digits, total.ToString().Length);
+            return string.Format(string.Format("{{0:D{0}}}/{{1:D{0}}}", digits), number, total);
 		}
 
 		private static bool SequenceEqual(IEnumerable<string> x, IEnumerable<string> y)

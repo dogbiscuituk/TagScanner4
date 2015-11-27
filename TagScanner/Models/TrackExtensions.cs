@@ -6,13 +6,18 @@ namespace TagScanner.Models
 	{
 		#region Public Interface
 
+		public static Logical AsLogical(this bool value)
+		{
+			return value ? Logical.Yes : Logical.No;
+		}
+
 		public static string AsOrdinal(this long number)
 		{
 			return string.Concat(number, GetSuffix(number));
 		}
 
 		/// <summary>
-		/// Approximate a byte count to three significant figures, using the most suitable prefix if necessary.
+		/// Approximate a byte count to three significant figures, using the most suitable prefix as necessary.
 		/// 
 		/// Examples:
 		/// 
@@ -24,17 +29,11 @@ namespace TagScanner.Models
 		/// </summary>
 		/// <param name="bytes">The exact number of bytes to be represented.</param>
 		/// <param name="binary">When true, use the appropriate IEC-preferred binary prefix:
-		/// 1 KiB = 1,024 bytes; 1 MiB = 1,048,576 bytes; and so on.
+		/// 1 KiB = 1,024 bytes; 1 MiB = 1,048,576 bytes; etc.
 		/// When false, use the appropriate SI decimal prefix:
-		/// 1 KB = 1,000 bytes; 1 MB = 1,000,000 bytes; and so on.</param>
+		/// 1 KB = 1,000 bytes; 1 MB = 1,000,000 bytes; etc.</param>
 		/// <returns>A string representation of the byte count to three significant figures,
 		/// using the most suitable prefix if necessary.</returns>
-
-		public static Logical AsLogical(this bool value)
-		{
-			return value ? Logical.Yes : Logical.No;
-		}
-
 		public static string AsString(this long bytes, bool binary)
 		{
 			const string units = "KMGTPE";
