@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using TagScanner.Logging;
 
 namespace TagScanner.Models
 {
@@ -59,7 +60,8 @@ namespace TagScanner.Models
 			}
 			catch (Exception ex)
 			{
-				LogException(ex, filePath);
+				Logger.LogException(ex, filePath);
+				TrackCount--;
 			}
 			var progressEventArgs = new ProgressEventArgs(TrackIndex, TrackCount, filePath, track);
 			Progress.Report(progressEventArgs);
@@ -69,12 +71,6 @@ namespace TagScanner.Models
 		private bool DoAddTracks(IEnumerable<string> filePathList)
 		{
 			return filePathList.FirstOrDefault(p => !DoAddTrack(p)) == null;
-		}
-
-		private void LogException(Exception ex, string filePath)
-		{
-			System.Diagnostics.Debug.WriteLine("{0} - {1} - {2}", ex.GetType(), ex.Message, filePath);
-			TrackCount--;
 		}
 	}
 }

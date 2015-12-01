@@ -784,6 +784,16 @@ namespace TagScanner
 			}
 		}
 
+		const TagLib.MediaTypes AllMediaTypes = (TagLib.MediaTypes)15;
+		private TagLib.MediaTypes _mediaTypes = AllMediaTypes;
+		[Browsable(false)]
+		[Category("Format")]
+		[Description("Gets the media types contained in the selected item(s).")]
+		public TagLib.MediaTypes MediaTypes
+		{
+			get { return GetMediaTypes(p => p.MediaTypes, ref _mediaTypes); }
+		}
+
 		private string _millennium;
 		[Browsable(false)]
 		[Category("Category")]
@@ -1307,6 +1317,19 @@ namespace TagScanner
 							break;
 						}
 				}
+			}
+			return result;
+		}
+
+		private TagLib.MediaTypes GetMediaTypes(Func<ITrack, TagLib.MediaTypes> getMediaTypes, ref TagLib.MediaTypes result)
+		{
+			if (result == AllMediaTypes)
+			{
+				result = 0;
+				if (Tracks != null)
+					result = Tracks
+						.Select(getMediaTypes)
+						.Aggregate(result, (current, mediaTypes) => current | mediaTypes);
 			}
 			return result;
 		}

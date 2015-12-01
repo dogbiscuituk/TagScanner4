@@ -1041,7 +1041,7 @@ namespace TagScanner.Models
 				.Aggregate((s, t) => s + "; " + t);
 			Description = properties.Description;
 			Duration = properties.Duration;
-			MediaTypes = properties.MediaTypes;
+			MediaTypes = properties.MediaTypes; // 0 = None, 1 = Audio, 2 = Video, 4 = Photo, 8 = Text.
 			PhotoHeight = properties.PhotoHeight;
 			PhotoQuality = properties.PhotoQuality;
 			PhotoWidth = properties.PhotoWidth;

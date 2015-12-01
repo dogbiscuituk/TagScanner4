@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using NReco.VideoConverter;
+using TagScanner.Logging;
 using TagScanner.Models;
 
 namespace TagScanner.Controllers
@@ -19,25 +23,6 @@ namespace TagScanner.Controllers
 		#endregion
 
 		#region Properties
-
-		private Picture _picture;
-		private Picture Picture
-		{
-			get { return _picture; }
-			set
-			{
-				if (_picture == value)
-					return;
-				_picture = value;
-				if (Picture != null)
-				{
-					PictureBox.Image = Picture.GetImage();
-					InitSizeMode();
-				}
-				else
-					PictureBox.Image = null;
-			}
-		}
 
 		private PictureBox _pictureBox;
 		private PictureBox PictureBox
@@ -79,6 +64,15 @@ namespace TagScanner.Controllers
 			}
 		}
 
+		private FFMpegConverter _videoConverter;
+		private FFMpegConverter VideoConverter
+		{
+			get
+			{
+				return _videoConverter ?? (_videoConverter = new FFMpegConverter());
+			}
+		}
+
 		#endregion
 
 		#region Events
@@ -107,6 +101,42 @@ namespace TagScanner.Controllers
 
 		#region Methods
 
+		private Image GetImageFromTrack(ITrack track)
+		{
+			if (track == null)
+				return null;
+			var pictures = track.Pictures;
+			if (pictures != null)
+			{
+				var picture = pictures.FirstOrDefault(p => p != null);
+				if (picture != null)
+					return picture.GetImage();
+			}
+			var filePath = track.FilePath;
+			if (string.IsNullOrWhiteSpace(filePath) || filePath.EndsWith("\\"))
+				return null;
+			if ((track.MediaTypes & TagLib.MediaTypes.Photo) != 0)
+				try
+				{
+					return Image.FromFile(filePath);
+				}
+				catch (OutOfMemoryException ex)
+				{
+					Logger.LogException(ex, filePath);
+					return null;
+				}
+			if ((track.MediaTypes & TagLib.MediaTypes.Video) != 0)
+			{
+				var frameTimeSec = track.Duration.TotalSeconds / 10;
+				using (var stream = new MemoryStream())
+				{
+					VideoConverter.GetVideoThumbnail(filePath, stream, (float)frameTimeSec);
+					return Image.FromStream(stream);
+				}
+			}
+			return null;
+        }
+
 		private void InitPicture()
 		{
 			// If a Picture is selected in the PropertyGrid,
@@ -117,7 +147,7 @@ namespace TagScanner.Controllers
 				var picture = gridItem.Value as Picture;
 				if (picture != null)
 				{
-					Picture = picture;
+					SetPicture(picture);
 					return;
 				}
 			}
@@ -128,7 +158,7 @@ namespace TagScanner.Controllers
 
 		private void InitPictureFromTrack(ITrack track)
 		{
-			Picture = track != null && track.Pictures.Any() ? track.Pictures[0] : null;
+			SetImage(GetImageFromTrack(track));
 		}
 
 		private void InitSizeMode()
@@ -140,6 +170,17 @@ namespace TagScanner.Controllers
 				image.Width > PictureBox.Width || image.Height > PictureBox.Height
 					? PictureBoxSizeMode.Zoom
 					: PictureBoxSizeMode.CenterImage;
+		}
+
+		private void SetImage(Image image)
+		{
+			PictureBox.Image = image;
+			InitSizeMode();
+		}
+
+		private void SetPicture(Picture picture)
+		{
+			SetImage(picture != null ? picture.GetImage() : null);
 		}
 
 		#endregion

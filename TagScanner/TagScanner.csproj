@@ -47,6 +47,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NReco.VideoConverter, Version=1.0.8.0, Culture=neutral, PublicKeyToken=395ccb334978a0cd, processorArchitecture=MSIL">
+      <HintPath>..\packages\NReco.VideoConverter.1.0.8.0\lib\net20\NReco.VideoConverter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="policy.2.0.taglib-sharp">
       <HintPath>..\packages\taglib.2.1.0.0\lib\policy.2.0.taglib-sharp.dll</HintPath>
     </Reference>
@@ -79,6 +83,7 @@
     <Compile Include="Controllers\ReplacePreviewController.cs" />
     <Compile Include="Controllers\SdiController.cs" />
     <Compile Include="Controllers\TagSelectorController.cs" />
+    <Compile Include="Logging\Logger.cs" />
     <Compile Include="Models\Library.cs" />
     <Compile Include="Models\Metadata.cs" />
     <Compile Include="Models\FindReplaceResult.cs" />

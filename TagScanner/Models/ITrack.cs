@@ -68,6 +68,7 @@ namespace TagScanner.Models
 		string JoinedPerformers { get; }
 		string JoinedPerformersSort { get; }
 		string Lyrics { get; set; }
+		TagLib.MediaTypes MediaTypes { get; }
 		string Millennium { get; }
 		string MimeType { get; }
 		string MusicBrainzArtistId { get; set; }
