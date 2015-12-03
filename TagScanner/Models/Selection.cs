@@ -681,6 +681,7 @@ namespace TagScanner
 		private double _imageAltitude = double.MaxValue;
 		[Browsable(false)]
 		[Category("Image")]
+		[Description("The altitude, in metres, of the GPS coordinate where the current image was taken. A positive value is above sea level, a negative value below sea level.")]
 		public double ImageAltitude
 		{
 			get { return GetDouble(p => p.ImageAltitude, ref _imageAltitude); }
@@ -689,6 +690,7 @@ namespace TagScanner
 		private string _imageCreator;
 		[Browsable(false)]
 		[Category("Image")]
+		[Description("The name of the creator associated with the image.")]
 		public string ImageCreator
 		{
 			get { return GetString(p => p.ImageCreator, ref _imageCreator); }
@@ -697,6 +699,7 @@ namespace TagScanner
 		private DateTime _imageDateTime = DateTime.MaxValue;
 		[Browsable(false)]
 		[Category("Image")]
+		[Description("The time when the image was taken.")]
 		public DateTime ImageDateTime
 		{
 			get { return GetDateTime(p => p.ImageDateTime, ref _imageDateTime); }
@@ -705,6 +708,7 @@ namespace TagScanner
 		private double _imageExposureTime = double.MaxValue;
 		[Browsable(false)]
 		[Category("Image")]
+		[Description("The image exposure time, in seconds.")]
 		public double ImageExposureTime
 		{
 			get { return GetDouble(p => p.ImageExposureTime, ref _imageExposureTime); }
@@ -713,6 +717,7 @@ namespace TagScanner
 		private double _imageFNumber = double.MaxValue;
 		[Browsable(false)]
 		[Category("Image")]
+		[Description("The F number with which the image was taken.")]
 		public double ImageFNumber
 		{
 			get { return GetDouble(p => p.ImageFNumber, ref _imageFNumber); }
@@ -721,6 +726,7 @@ namespace TagScanner
 		private double _imageFocalLength = double.MaxValue;
 		[Browsable(false)]
 		[Category("Image")]
+		[Description("The focal length, in millimetres, with which the image was taken.")]
 		public double ImageFocalLength
 		{
 			get { return GetDouble(p => p.ImageFocalLength, ref _imageFocalLength); }
@@ -729,6 +735,7 @@ namespace TagScanner
 		private int _imageFocalLengthIn35mmFilm = int.MaxValue;
 		[Browsable(false)]
 		[Category("Image")]
+		[Description("The focal length with which the image was taken, assuming a 35mm film camera.")]
 		public int ImageFocalLengthIn35mmFilm
 		{
 			get { return GetInt(p => p.ImageFocalLengthIn35mmFilm, ref _imageFocalLengthIn35mmFilm); }
@@ -737,6 +744,7 @@ namespace TagScanner
 		private int _imageISOSpeedRatings = int.MaxValue;
 		[Browsable(false)]
 		[Category("Image")]
+		[Description("The ISO speed, as defined in ISO 12232, with which the image was taken.")]
 		public int ImageISOSpeedRatings
 		{
 			get { return GetInt(p => p.ImageISOSpeedRatings, ref _imageISOSpeedRatings); }
@@ -745,6 +753,7 @@ namespace TagScanner
 		private string[] _imageKeywords;
 		[Browsable(false)]
 		[Category("Image")]
+		[Description("The list of keywords associated with the image.")]
 		public string[] ImageKeywords
 		{
 			get { return GetStringArray(p => p.ImageKeywords, ref _imageKeywords); }
@@ -753,6 +762,7 @@ namespace TagScanner
 		private double _imageLatitude = double.MaxValue;
 		[Browsable(false)]
 		[Category("Image")]
+		[Description("The latitude of the GPS coordinate where the current image was taken. Latitude ranges from -90.0 to +90.0 degrees.")]
 		public double ImageLatitude
 		{
 			get { return GetDouble(p => p.ImageLatitude, ref _imageLatitude); }
@@ -761,6 +771,7 @@ namespace TagScanner
 		private double _imageLongitude = double.MaxValue;
 		[Browsable(false)]
 		[Category("Image")]
+		[Description("The longitude of the GPS coordinate where the current image was taken. Longitude ranges from -180.0 to +180.0 degrees.")]
 		public double ImageLongitude
 		{
 			get { return GetDouble(p => p.ImageLongitude, ref _imageLongitude); }
@@ -769,6 +780,7 @@ namespace TagScanner
 		private string _imageMake;
 		[Browsable(false)]
 		[Category("Image")]
+		[Description("The name of the manufacture of the recording equipment with which the image was taken.")]
 		public string ImageMake
 		{
 			get { return GetString(p => p.ImageMake, ref _imageMake); }
@@ -777,6 +789,7 @@ namespace TagScanner
 		private string _imageModel;
 		[Browsable(false)]
 		[Category("Image")]
+		[Description("The model name and/or number of the recording equipment with which the image was taken.")]
 		public string ImageModel
 		{
 			get { return GetString(p => p.ImageModel, ref _imageModel); }
@@ -785,6 +798,7 @@ namespace TagScanner
 		private TagLib.Image.ImageOrientation _imageOrientation = TagLib.Image.ImageOrientation.None;
 		[Browsable(false)]
 		[Category("Image")]
+		[Description("The orientation of the image.")]
 		public TagLib.Image.ImageOrientation ImageOrientation
 		{
 			get { return GetImageOrientation(p => p.ImageOrientation, ref _imageOrientation); }
@@ -793,6 +807,7 @@ namespace TagScanner
 		private int _imageRating = int.MaxValue;
 		[Browsable(false)]
 		[Category("Image")]
+		[Description("The rating of the image.")]
 		public int ImageRating
 		{
 			get { return GetInt(p => p.ImageRating, ref _imageRating); }
@@ -801,6 +816,7 @@ namespace TagScanner
 		private string _imageSoftware;
 		[Browsable(false)]
 		[Category("Image")]
+		[Description("The name of the software with which the image was created.")]
 		public string ImageSoftware
 		{
 			get { return GetString(p => p.ImageSoftware, ref _imageSoftware); }
