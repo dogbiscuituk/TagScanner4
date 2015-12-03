@@ -678,6 +678,102 @@ namespace TagScanner
 			}
 		}
 
+		private double _imageAltitude = double.MaxValue;
+		public double ImageAltitude
+		{
+			get { return GetDouble(p => p.ImageAltitude, ref _imageAltitude); }
+		}
+
+		private string _imageCreator;
+		public string ImageCreator
+		{
+			get { return GetString(p => p.ImageCreator, ref _imageCreator); }
+		}
+
+		private DateTime _imageDateTime = DateTime.MaxValue;
+		public DateTime ImageDateTime
+		{
+			get { return GetDateTime(p => p.ImageDateTime, ref _imageDateTime); }
+		}
+
+		private double _imageExposureTime = double.MaxValue;
+		public double ImageExposureTime
+		{
+			get { return GetDouble(p => p.ImageExposureTime, ref _imageExposureTime); }
+		}
+
+		private double _imageFNumber = double.MaxValue;
+		public double ImageFNumber
+		{
+			get { return GetDouble(p => p.ImageFNumber, ref _imageFNumber); }
+		}
+
+		private double _imageFocalLength = double.MaxValue;
+		public double ImageFocalLength
+		{
+			get { return GetDouble(p => p.ImageFocalLength, ref _imageFocalLength); }
+		}
+
+		private int _imageFocalLengthIn35mmFilm = int.MaxValue;
+		public int ImageFocalLengthIn35mmFilm
+		{
+			get { return GetInt(p => p.ImageFocalLengthIn35mmFilm, ref _imageFocalLengthIn35mmFilm); }
+		}
+
+		private int _imageISOSpeedRatings = int.MaxValue;
+		public int ImageISOSpeedRatings
+		{
+			get { return GetInt(p => p.ImageISOSpeedRatings, ref _imageISOSpeedRatings); }
+		}
+
+		private string[] _imageKeywords;
+		public string[] ImageKeywords
+		{
+			get { return GetStringArray(p => p.ImageKeywords, ref _imageKeywords); }
+		}
+
+		private double _imageLatitude = double.MaxValue;
+		public double ImageLatitude
+		{
+			get { return GetDouble(p => p.ImageLatitude, ref _imageLatitude); }
+		}
+
+		private double _imageLongitude = double.MaxValue;
+		public double ImageLongitude
+		{
+			get { return GetDouble(p => p.ImageLongitude, ref _imageLongitude); }
+		}
+
+		private string _imageMake;
+		public string ImageMake
+		{
+			get { return GetString(p => p.ImageMake, ref _imageMake); }
+		}
+
+		private string _imageModel;
+		public string ImageModel
+		{
+			get { return GetString(p => p.ImageModel, ref _imageModel); }
+		}
+
+		private TagLib.Image.ImageOrientation _imageOrientation = TagLib.Image.ImageOrientation.None;
+		public TagLib.Image.ImageOrientation ImageOrientation
+		{
+			get { return GetImageOrientation(p => p.ImageOrientation, ref _imageOrientation); }
+		}
+
+		private int _imageRating = int.MaxValue;
+		public int ImageRating
+		{
+			get { return GetInt(p => p.ImageRating, ref _imageRating); }
+		}
+
+		private string _imageSoftware;
+		public string ImageSoftware
+		{
+			get { return GetString(p => p.ImageSoftware, ref _imageSoftware); }
+		}
+		
 		private long _invariantEndPosition = long.MaxValue;
 		[Browsable(false)]
 		[Category("Format")]
@@ -1231,6 +1327,32 @@ namespace TagScanner
 			return result;
 		}
 
+		private double GetDouble(Func<ITrack, double> getDouble, ref double result)
+		{
+			if (result == double.MaxValue)
+			{
+				result = 0;
+				if (Tracks != null)
+				{
+					var first = true;
+					foreach (var value in Tracks.Select(getDouble))
+					{
+						if (first)
+						{
+							result = value;
+							first = false;
+						}
+						else if (result != value)
+						{
+							result = 0;
+							break;
+						}
+					}
+				}
+			}
+			return result;
+		}
+
 		private string GetFileOrCommonFolderPath(Func<ITrack, string> getString, ref string result)
 		{
 			if (result == null)
@@ -1253,6 +1375,28 @@ namespace TagScanner
 					}
 					result = path;
 				}
+			}
+			return result;
+		}
+
+		private TagLib.Image.ImageOrientation GetImageOrientation(
+			Func<ITrack, TagLib.Image.ImageOrientation> getImageOrientation,
+			ref TagLib.Image.ImageOrientation result)
+		{
+			if (result == TagLib.Image.ImageOrientation.None)
+			{
+				var first = true;
+				foreach (var value in Tracks.Select(getImageOrientation))
+					if (first)
+					{
+						result = value;
+						first = false;
+					}
+					else if (result != value)
+					{
+						result = TagLib.Image.ImageOrientation.None;
+						break;
+					}
 			}
 			return result;
 		}
@@ -1380,7 +1524,13 @@ namespace TagScanner
 			{
 				var values = new List<string>();
 				if (Tracks != null)
-					values.AddRange(Tracks.SelectMany(getStringArray).Distinct());
+					try
+					{
+						values.AddRange(Tracks.SelectMany(getStringArray).Distinct());
+					}
+					catch (NullReferenceException)
+					{
+					}
 				result = values.ToArray();
 			}
 			return result;

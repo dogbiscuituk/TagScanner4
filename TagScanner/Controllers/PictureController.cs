@@ -101,6 +101,30 @@ namespace TagScanner.Controllers
 
 		#region Methods
 
+		private Image GetImageFromFile(string filePath, TagLib.Image.ImageOrientation orientation)
+		{
+			Image image;
+			try
+			{
+				image = Image.FromFile(filePath);
+				switch (orientation)
+				{
+					case TagLib.Image.ImageOrientation.RightTop:
+						image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+						break;
+					case TagLib.Image.ImageOrientation.LeftBottom:
+						image.RotateFlip(RotateFlipType.Rotate270FlipNone);
+						break;
+				}
+			}
+			catch (OutOfMemoryException ex)
+			{
+				Logger.LogException(ex, filePath);
+				return null;
+			}
+			return image;
+		}
+
 		private Image GetImageFromTrack(ITrack track)
 		{
 			if (track == null)
@@ -116,15 +140,7 @@ namespace TagScanner.Controllers
 			if (string.IsNullOrWhiteSpace(filePath) || filePath.EndsWith("\\"))
 				return null;
 			if ((track.MediaTypes & TagLib.MediaTypes.Photo) != 0)
-				try
-				{
-					return Image.FromFile(filePath);
-				}
-				catch (OutOfMemoryException ex)
-				{
-					Logger.LogException(ex, filePath);
-					return null;
-				}
+				return GetImageFromFile(filePath, track.ImageOrientation);
 			if ((track.MediaTypes & TagLib.MediaTypes.Video) != 0)
 			{
 				var frameTimeSec = track.Duration.TotalSeconds / 10;

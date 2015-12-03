@@ -32,19 +32,6 @@ namespace TagScanner.Controllers
 			ModifiedChanged();
 			LibraryGridController.ViewByArtist();
 			UpdatePropertyGrid();
-
-
-			var mediaTypes = new TagLib.MediaTypes[]
-				{
-					TagLib.MediaTypes.None,
-					TagLib.MediaTypes.Audio,
-					TagLib.MediaTypes.Video,
-					TagLib.MediaTypes.Photo,
-					TagLib.MediaTypes.Text
-				};
-			foreach (var mediaType in mediaTypes)
-				System.Diagnostics.Debug.WriteLine((int)mediaType);
-
 		}
 
 		#endregion

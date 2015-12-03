@@ -491,6 +491,23 @@ namespace TagScanner.Models
 			}
 		}
 
+		public double ImageAltitude { get; set; }
+		public string ImageCreator { get; set; }
+		public DateTime ImageDateTime { get; set; }
+		public double ImageExposureTime { get; set; }
+		public double ImageFNumber { get; set; }
+		public double ImageFocalLength { get; set; }
+		public int ImageFocalLengthIn35mmFilm { get; set; }
+		public int ImageISOSpeedRatings { get; set; }
+		public string[] ImageKeywords { get; set; }
+		public double ImageLatitude { get; set; }
+		public double ImageLongitude { get; set; }
+		public string ImageMake { get; set; }
+		public string ImageModel { get; set; }
+		public TagLib.Image.ImageOrientation ImageOrientation { get; set; }
+		public int ImageRating { get; set; }
+		public string ImageSoftware { get; set; }
+
 		public long InvariantEndPosition { get; set; }
 		public long InvariantStartPosition { get; set; }
 
@@ -1015,6 +1032,26 @@ namespace TagScanner.Models
 			ReadTag(file.Tag);
 		}
 
+		private void ReadImageTag(TagLib.Image.ImageTag tag)
+		{
+			ImageAltitude = tag.Altitude ?? 0;
+			ImageCreator = tag.Creator;
+			ImageDateTime = tag.DateTime ?? DateTime.MinValue;
+			ImageExposureTime = tag.ExposureTime ?? 0;
+			ImageFNumber = tag.FNumber ?? 0;
+			ImageFocalLength = tag.FocalLength ?? 0;
+			ImageFocalLengthIn35mmFilm = (int)(tag.FocalLengthIn35mmFilm ?? 0);
+			ImageISOSpeedRatings = (int)(tag.ISOSpeedRatings ?? 0);
+			ImageKeywords = tag.Keywords;
+			ImageLatitude = tag.Latitude ?? 0;
+			ImageLongitude = tag.Longitude ?? 0;
+			ImageMake = tag.Make;
+			ImageModel = tag.Model;
+			ImageOrientation = tag.Orientation;
+			ImageRating = (int)(tag.Rating ?? 0);
+			ImageSoftware = tag.Software;
+		}
+
 		private void ReadMetadata()
 		{
 			FileSize = new FileInfo(FilePath).Length;
@@ -1110,6 +1147,8 @@ namespace TagScanner.Models
 			_trackNumber = (int)tag.Track;
 			_trackCount = (int)tag.TrackCount;
 			_year = (int)tag.Year;
+			if (tag is TagLib.Image.ImageTag)
+				ReadImageTag((TagLib.Image.ImageTag)tag);
 		}
 
 		private void WriteTag(TagLib.Tag tag)
