@@ -679,96 +679,128 @@ namespace TagScanner
 		}
 
 		private double _imageAltitude = double.MaxValue;
+		[Browsable(false)]
+		[Category("Image")]
 		public double ImageAltitude
 		{
 			get { return GetDouble(p => p.ImageAltitude, ref _imageAltitude); }
 		}
 
 		private string _imageCreator;
+		[Browsable(false)]
+		[Category("Image")]
 		public string ImageCreator
 		{
 			get { return GetString(p => p.ImageCreator, ref _imageCreator); }
 		}
 
 		private DateTime _imageDateTime = DateTime.MaxValue;
+		[Browsable(false)]
+		[Category("Image")]
 		public DateTime ImageDateTime
 		{
 			get { return GetDateTime(p => p.ImageDateTime, ref _imageDateTime); }
 		}
 
 		private double _imageExposureTime = double.MaxValue;
+		[Browsable(false)]
+		[Category("Image")]
 		public double ImageExposureTime
 		{
 			get { return GetDouble(p => p.ImageExposureTime, ref _imageExposureTime); }
 		}
 
 		private double _imageFNumber = double.MaxValue;
+		[Browsable(false)]
+		[Category("Image")]
 		public double ImageFNumber
 		{
 			get { return GetDouble(p => p.ImageFNumber, ref _imageFNumber); }
 		}
 
 		private double _imageFocalLength = double.MaxValue;
+		[Browsable(false)]
+		[Category("Image")]
 		public double ImageFocalLength
 		{
 			get { return GetDouble(p => p.ImageFocalLength, ref _imageFocalLength); }
 		}
 
 		private int _imageFocalLengthIn35mmFilm = int.MaxValue;
+		[Browsable(false)]
+		[Category("Image")]
 		public int ImageFocalLengthIn35mmFilm
 		{
 			get { return GetInt(p => p.ImageFocalLengthIn35mmFilm, ref _imageFocalLengthIn35mmFilm); }
 		}
 
 		private int _imageISOSpeedRatings = int.MaxValue;
+		[Browsable(false)]
+		[Category("Image")]
 		public int ImageISOSpeedRatings
 		{
 			get { return GetInt(p => p.ImageISOSpeedRatings, ref _imageISOSpeedRatings); }
 		}
 
 		private string[] _imageKeywords;
+		[Browsable(false)]
+		[Category("Image")]
 		public string[] ImageKeywords
 		{
 			get { return GetStringArray(p => p.ImageKeywords, ref _imageKeywords); }
 		}
 
 		private double _imageLatitude = double.MaxValue;
+		[Browsable(false)]
+		[Category("Image")]
 		public double ImageLatitude
 		{
 			get { return GetDouble(p => p.ImageLatitude, ref _imageLatitude); }
 		}
 
 		private double _imageLongitude = double.MaxValue;
+		[Browsable(false)]
+		[Category("Image")]
 		public double ImageLongitude
 		{
 			get { return GetDouble(p => p.ImageLongitude, ref _imageLongitude); }
 		}
 
 		private string _imageMake;
+		[Browsable(false)]
+		[Category("Image")]
 		public string ImageMake
 		{
 			get { return GetString(p => p.ImageMake, ref _imageMake); }
 		}
 
 		private string _imageModel;
+		[Browsable(false)]
+		[Category("Image")]
 		public string ImageModel
 		{
 			get { return GetString(p => p.ImageModel, ref _imageModel); }
 		}
 
 		private TagLib.Image.ImageOrientation _imageOrientation = TagLib.Image.ImageOrientation.None;
+		[Browsable(false)]
+		[Category("Image")]
 		public TagLib.Image.ImageOrientation ImageOrientation
 		{
 			get { return GetImageOrientation(p => p.ImageOrientation, ref _imageOrientation); }
 		}
 
 		private int _imageRating = int.MaxValue;
+		[Browsable(false)]
+		[Category("Image")]
 		public int ImageRating
 		{
 			get { return GetInt(p => p.ImageRating, ref _imageRating); }
 		}
 
 		private string _imageSoftware;
+		[Browsable(false)]
+		[Category("Image")]
 		public string ImageSoftware
 		{
 			get { return GetString(p => p.ImageSoftware, ref _imageSoftware); }

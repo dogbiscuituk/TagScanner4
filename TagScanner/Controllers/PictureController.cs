@@ -64,14 +64,18 @@ namespace TagScanner.Controllers
 			}
 		}
 
-		private FFMpegConverter _videoConverter;
-		private FFMpegConverter VideoConverter
+		private static readonly RotateFlipType[] RotateFlipTypes =
 		{
-			get
-			{
-				return _videoConverter ?? (_videoConverter = new FFMpegConverter());
-			}
-		}
+			RotateFlipType.RotateNoneFlipNone,
+			RotateFlipType.RotateNoneFlipNone,
+			RotateFlipType.RotateNoneFlipY,
+			RotateFlipType.Rotate180FlipNone,
+			RotateFlipType.RotateNoneFlipX,
+			RotateFlipType.Rotate90FlipY,
+			RotateFlipType.Rotate90FlipNone,
+			RotateFlipType.Rotate90FlipX,
+			RotateFlipType.Rotate270FlipNone
+		};
 
 		#endregion
 
@@ -107,21 +111,15 @@ namespace TagScanner.Controllers
 			try
 			{
 				image = Image.FromFile(filePath);
-				switch (orientation)
-				{
-					case TagLib.Image.ImageOrientation.RightTop:
-						image.RotateFlip(RotateFlipType.Rotate90FlipNone);
-						break;
-					case TagLib.Image.ImageOrientation.LeftBottom:
-						image.RotateFlip(RotateFlipType.Rotate270FlipNone);
-						break;
-				}
 			}
 			catch (OutOfMemoryException ex)
 			{
 				Logger.LogException(ex, filePath);
 				return null;
 			}
+			var rotateFlipType = GetRotateFlipType(orientation);
+			if (rotateFlipType != RotateFlipType.RotateNoneFlipNone)
+				image.RotateFlip(rotateFlipType);
 			return image;
 		}
 
@@ -137,21 +135,35 @@ namespace TagScanner.Controllers
 					return picture.GetImage();
 			}
 			var filePath = track.FilePath;
-			if (string.IsNullOrWhiteSpace(filePath) || filePath.EndsWith("\\"))
+			if (string.IsNullOrWhiteSpace(filePath) || filePath.EndsWith(@"\"))
 				return null;
 			if ((track.MediaTypes & TagLib.MediaTypes.Photo) != 0)
 				return GetImageFromFile(filePath, track.ImageOrientation);
 			if ((track.MediaTypes & TagLib.MediaTypes.Video) != 0)
-			{
-				var frameTimeSec = track.Duration.TotalSeconds / 10;
-				using (var stream = new MemoryStream())
-				{
-					VideoConverter.GetVideoThumbnail(filePath, stream, (float)frameTimeSec);
-					return Image.FromStream(stream);
-				}
-			}
+				return GetVideoThumbnail(filePath, track.Duration.TotalSeconds / 10);
 			return null;
         }
+
+		/// <summary>
+		/// Given the EXIF orientation of an image, compute the rotation and/or reflection (flip)
+		/// required to transform the image to standard "top left" orientation.
+		/// </summary>
+		/// <param name="orientation">The EXIF orientation of the image.</param>
+		/// <returns>The System.Drawing.RotateFlipType value needed to "correct" the image.</returns>
+		private static RotateFlipType GetRotateFlipType(TagLib.Image.ImageOrientation orientation)
+		{
+			return RotateFlipTypes[(int)orientation];
+		}
+
+		private Image GetVideoThumbnail(string filePath, double frameTimeSeconds)
+		{
+			var videoConverter = new FFMpegConverter();
+            using (var stream = new MemoryStream())
+			{
+				videoConverter.GetVideoThumbnail(filePath, stream, (float)frameTimeSeconds);
+				return Image.FromStream(stream);
+			}
+		}
 
 		private void InitPicture()
 		{
