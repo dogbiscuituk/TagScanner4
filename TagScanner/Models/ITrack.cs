@@ -57,22 +57,22 @@ namespace TagScanner.Models
 		string[] Genres { get; set; }
 		int GenresCount { get; }
 		string Grouping { get; set; }
-		double ImageAltitude { get; }
-		string ImageCreator { get; }
-		DateTime ImageDateTime { get; }
-		double ImageExposureTime { get; }
-		double ImageFNumber { get; }
-		double ImageFocalLength { get; }
-		int ImageFocalLengthIn35mmFilm { get; }
-		int ImageISOSpeedRatings { get; }
-		string[] ImageKeywords { get; }
-		double ImageLatitude { get; }
-		double ImageLongitude { get; }
-		string ImageMake { get; }
-		string ImageModel { get; }
-		TagLib.Image.ImageOrientation ImageOrientation { get; }
-		int ImageRating { get; }
-		string ImageSoftware { get; }
+		double ImageAltitude { get; set; }
+		string ImageCreator { get; set; }
+		DateTime ImageDateTime { get; set; }
+		double ImageExposureTime { get; set; }
+		double ImageFNumber { get; set; }
+		double ImageFocalLength { get; set; }
+		int ImageFocalLengthIn35mmFilm { get; set; }
+		int ImageISOSpeedRatings { get; set; }
+		string[] ImageKeywords { get; set; }
+		double ImageLatitude { get; set; }
+		double ImageLongitude { get; set; }
+		string ImageMake { get; set; }
+		string ImageModel { get; set; }
+		TagLib.Image.ImageOrientation ImageOrientation { get; set; }
+		int ImageRating { get; set; }
+		string ImageSoftware { get; set; }
 		long InvariantEndPosition { get; }
 		long InvariantStartPosition { get; }
 		Logical IsClassical { get; }

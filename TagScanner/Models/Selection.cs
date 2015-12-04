@@ -685,6 +685,11 @@ namespace TagScanner
 		public double ImageAltitude
 		{
 			get { return GetDouble(p => p.ImageAltitude, ref _imageAltitude); }
+			set
+			{
+				SetValue(p => p.ImageAltitude = value);
+				_imageAltitude = value;
+			}
 		}
 
 		private string _imageCreator;
@@ -694,6 +699,11 @@ namespace TagScanner
 		public string ImageCreator
 		{
 			get { return GetString(p => p.ImageCreator, ref _imageCreator); }
+			set
+			{
+				SetValue(p => p.ImageCreator = value);
+				_imageCreator = value;
+			}
 		}
 
 		private DateTime _imageDateTime = DateTime.MaxValue;
@@ -703,6 +713,11 @@ namespace TagScanner
 		public DateTime ImageDateTime
 		{
 			get { return GetDateTime(p => p.ImageDateTime, ref _imageDateTime); }
+			set
+			{
+				SetValue(p => p.ImageDateTime = value);
+				_imageDateTime = value;
+			}
 		}
 
 		private double _imageExposureTime = double.MaxValue;
@@ -712,6 +727,11 @@ namespace TagScanner
 		public double ImageExposureTime
 		{
 			get { return GetDouble(p => p.ImageExposureTime, ref _imageExposureTime); }
+			set
+			{
+				SetValue(p => p.ImageExposureTime = value);
+				_imageExposureTime = value;
+			}
 		}
 
 		private double _imageFNumber = double.MaxValue;
@@ -721,6 +741,11 @@ namespace TagScanner
 		public double ImageFNumber
 		{
 			get { return GetDouble(p => p.ImageFNumber, ref _imageFNumber); }
+			set
+			{
+				SetValue(p => p.ImageFNumber = value);
+				_imageFNumber = value;
+			}
 		}
 
 		private double _imageFocalLength = double.MaxValue;
@@ -730,6 +755,11 @@ namespace TagScanner
 		public double ImageFocalLength
 		{
 			get { return GetDouble(p => p.ImageFocalLength, ref _imageFocalLength); }
+			set
+			{
+				SetValue(p => p.ImageFocalLength = value);
+				_imageFocalLength = value;
+			}
 		}
 
 		private int _imageFocalLengthIn35mmFilm = int.MaxValue;
@@ -739,6 +769,11 @@ namespace TagScanner
 		public int ImageFocalLengthIn35mmFilm
 		{
 			get { return GetInt(p => p.ImageFocalLengthIn35mmFilm, ref _imageFocalLengthIn35mmFilm); }
+			set
+			{
+				SetValue(p => p.ImageFocalLengthIn35mmFilm = value);
+				_imageFocalLengthIn35mmFilm = value;
+			}
 		}
 
 		private int _imageISOSpeedRatings = int.MaxValue;
@@ -748,6 +783,11 @@ namespace TagScanner
 		public int ImageISOSpeedRatings
 		{
 			get { return GetInt(p => p.ImageISOSpeedRatings, ref _imageISOSpeedRatings); }
+			set
+			{
+				SetValue(p => p.ImageISOSpeedRatings = value);
+				_imageISOSpeedRatings = value;
+			}
 		}
 
 		private string[] _imageKeywords;
@@ -757,6 +797,11 @@ namespace TagScanner
 		public string[] ImageKeywords
 		{
 			get { return GetStringArray(p => p.ImageKeywords, ref _imageKeywords); }
+			set
+			{
+				SetValue(p => p.ImageKeywords = value);
+				_imageKeywords = value;
+			}
 		}
 
 		private double _imageLatitude = double.MaxValue;
@@ -766,6 +811,11 @@ namespace TagScanner
 		public double ImageLatitude
 		{
 			get { return GetDouble(p => p.ImageLatitude, ref _imageLatitude); }
+			set
+			{
+				SetValue(p => p.ImageLatitude = value);
+				_imageLatitude = value;
+			}
 		}
 
 		private double _imageLongitude = double.MaxValue;
@@ -775,6 +825,11 @@ namespace TagScanner
 		public double ImageLongitude
 		{
 			get { return GetDouble(p => p.ImageLongitude, ref _imageLongitude); }
+			set
+			{
+				SetValue(p => p.ImageLongitude = value);
+				_imageLongitude = value;
+			}
 		}
 
 		private string _imageMake;
@@ -784,6 +839,11 @@ namespace TagScanner
 		public string ImageMake
 		{
 			get { return GetString(p => p.ImageMake, ref _imageMake); }
+			set
+			{
+				SetValue(p => p.ImageMake = value);
+				_imageMake = value;
+			}
 		}
 
 		private string _imageModel;
@@ -793,6 +853,11 @@ namespace TagScanner
 		public string ImageModel
 		{
 			get { return GetString(p => p.ImageModel, ref _imageModel); }
+			set
+			{
+				SetValue(p => p.ImageModel = value);
+				_imageModel = value;
+			}
 		}
 
 		private TagLib.Image.ImageOrientation _imageOrientation = TagLib.Image.ImageOrientation.None;
@@ -802,6 +867,11 @@ namespace TagScanner
 		public TagLib.Image.ImageOrientation ImageOrientation
 		{
 			get { return GetImageOrientation(p => p.ImageOrientation, ref _imageOrientation); }
+			set
+			{
+				SetValue(p => p.ImageOrientation = value);
+				_imageOrientation = value;
+			}
 		}
 
 		private int _imageRating = int.MaxValue;
@@ -811,6 +881,11 @@ namespace TagScanner
 		public int ImageRating
 		{
 			get { return GetInt(p => p.ImageRating, ref _imageRating); }
+			set
+			{
+				SetValue(p => p.ImageRating = value);
+				_imageRating = value;
+			}
 		}
 
 		private string _imageSoftware;
@@ -820,8 +895,13 @@ namespace TagScanner
 		public string ImageSoftware
 		{
 			get { return GetString(p => p.ImageSoftware, ref _imageSoftware); }
+			set
+			{
+				SetValue(p => p.ImageSoftware = value);
+				_imageSoftware = value;
+			}
 		}
-		
+
 		private long _invariantEndPosition = long.MaxValue;
 		[Browsable(false)]
 		[Category("Format")]

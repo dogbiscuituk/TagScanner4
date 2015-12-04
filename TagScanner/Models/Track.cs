@@ -331,6 +331,7 @@ namespace TagScanner.Models
 
 		public string Description { get; set; }
 
+		[DefaultValue(0)]
 		private int _discCount;
 		public int DiscCount
 		{
@@ -348,6 +349,7 @@ namespace TagScanner.Models
 			}
 		}
 
+		[DefaultValue(0)]
 		private int _discNumber;
 		public int DiscNumber
 		{
@@ -491,21 +493,46 @@ namespace TagScanner.Models
 			}
 		}
 
+		[DefaultValue(0)]
 		public double ImageAltitude { get; set; }
+
 		public string ImageCreator { get; set; }
+
 		public DateTime ImageDateTime { get; set; }
+
+		[DefaultValue(0)]
 		public double ImageExposureTime { get; set; }
+
+		[DefaultValue(0)]
 		public double ImageFNumber { get; set; }
+
+		[DefaultValue(0)]
 		public double ImageFocalLength { get; set; }
+
+		[DefaultValue(0)]
 		public int ImageFocalLengthIn35mmFilm { get; set; }
+
+		[DefaultValue(0)]
 		public int ImageISOSpeedRatings { get; set; }
+
 		public string[] ImageKeywords { get; set; }
+
+		[DefaultValue(0)]
 		public double ImageLatitude { get; set; }
+
+		[DefaultValue(0)]
 		public double ImageLongitude { get; set; }
+
 		public string ImageMake { get; set; }
+
 		public string ImageModel { get; set; }
+
+		[DefaultValue(TagLib.Image.ImageOrientation.None)]
 		public TagLib.Image.ImageOrientation ImageOrientation { get; set; }
+
+		[DefaultValue(0)]
 		public int ImageRating { get; set; }
+
 		public string ImageSoftware { get; set; }
 
 		public long InvariantEndPosition { get; set; }
@@ -859,6 +886,7 @@ namespace TagScanner.Models
 		}
 
 		private int _trackCount;
+		[DefaultValue(0)]
 		public int TrackCount
 		{
 			get
@@ -876,6 +904,7 @@ namespace TagScanner.Models
 		}
 
 		private int _trackNumber;
+		[DefaultValue(0)]
 		public int TrackNumber
 		{
 			get
@@ -906,7 +935,6 @@ namespace TagScanner.Models
 		public int VideoWidth { get; set; }
 
 		private int _year;
-
 		[DefaultValue(0)]
 		public int Year
 		{
@@ -1032,26 +1060,6 @@ namespace TagScanner.Models
 			ReadTag(file.Tag);
 		}
 
-		private void ReadImageTag(TagLib.Image.ImageTag tag)
-		{
-			ImageAltitude = tag.Altitude ?? 0;
-			ImageCreator = tag.Creator;
-			ImageDateTime = tag.DateTime ?? DateTime.MinValue;
-			ImageExposureTime = tag.ExposureTime ?? 0;
-			ImageFNumber = tag.FNumber ?? 0;
-			ImageFocalLength = tag.FocalLength ?? 0;
-			ImageFocalLengthIn35mmFilm = (int)(tag.FocalLengthIn35mmFilm ?? 0);
-			ImageISOSpeedRatings = (int)(tag.ISOSpeedRatings ?? 0);
-			ImageKeywords = tag.Keywords;
-			ImageLatitude = tag.Latitude ?? 0;
-			ImageLongitude = tag.Longitude ?? 0;
-			ImageMake = tag.Make;
-			ImageModel = tag.Model;
-			ImageOrientation = tag.Orientation;
-			ImageRating = (int)(tag.Rating ?? 0);
-			ImageSoftware = tag.Software;
-		}
-
 		private void ReadMetadata()
 		{
 			FileSize = new FileInfo(FilePath).Length;
@@ -1147,8 +1155,26 @@ namespace TagScanner.Models
 			_trackNumber = (int)tag.Track;
 			_trackCount = (int)tag.TrackCount;
 			_year = (int)tag.Year;
-			if (tag is TagLib.Image.ImageTag)
-				ReadImageTag((TagLib.Image.ImageTag)tag);
+			var imageTag = tag as TagLib.Image.ImageTag;
+            if (imageTag != null)
+			{
+				ImageAltitude = imageTag.Altitude ?? 0;
+				ImageCreator = imageTag.Creator;
+				ImageDateTime = imageTag.DateTime ?? DateTime.MinValue;
+				ImageExposureTime = imageTag.ExposureTime ?? 0;
+				ImageFNumber = imageTag.FNumber ?? 0;
+				ImageFocalLength = imageTag.FocalLength ?? 0;
+				ImageFocalLengthIn35mmFilm = (int)(imageTag.FocalLengthIn35mmFilm ?? 0);
+				ImageISOSpeedRatings = (int)(imageTag.ISOSpeedRatings ?? 0);
+				ImageKeywords = imageTag.Keywords;
+				ImageLatitude = imageTag.Latitude ?? 0;
+				ImageLongitude = imageTag.Longitude ?? 0;
+				ImageMake = imageTag.Make;
+				ImageModel = imageTag.Model;
+				ImageOrientation = imageTag.Orientation;
+				ImageRating = (int)(imageTag.Rating ?? 0);
+				ImageSoftware = imageTag.Software;
+			}
 		}
 
 		private void WriteTag(TagLib.Tag tag)
@@ -1190,6 +1216,26 @@ namespace TagScanner.Models
 			tag.Track = (uint)_trackNumber;
 			tag.TrackCount = (uint)_trackCount;
 			tag.Year = (uint)_year;
+			var imageTag = tag as TagLib.Image.ImageTag;
+			if (imageTag != null)
+			{
+				imageTag.Altitude = ImageAltitude;
+                imageTag.Creator = ImageCreator;
+				imageTag.DateTime = ImageDateTime;
+				imageTag.ExposureTime = ImageExposureTime;
+				imageTag.FNumber = ImageFNumber;
+				imageTag.FocalLength = ImageFocalLength;
+				imageTag.FocalLengthIn35mmFilm = (uint)ImageFocalLengthIn35mmFilm;
+				imageTag.ISOSpeedRatings = (uint)ImageISOSpeedRatings;
+                imageTag.Keywords = ImageKeywords;
+				imageTag.Latitude = ImageLatitude;
+				imageTag.Longitude = ImageLongitude;
+				imageTag.Make = ImageMake;
+				imageTag.Model = ImageModel;
+				imageTag.Orientation = ImageOrientation;
+				imageTag.Rating = (uint)ImageRating;
+				imageTag.Software = ImageSoftware;
+			}
 		}
 
 		private static string NumberOfTotal(int number, int total, int digits)

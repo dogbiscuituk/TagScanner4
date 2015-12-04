@@ -36,6 +36,8 @@ namespace TagScanner.Controllers
 		{
 			switch (propertyTypeName)
 			{
+				case "DateTime":
+				case "Double":
 				case "Int32":
 				case "Int64":
 				case "TimeSpan":

@@ -119,13 +119,13 @@
 			// PopupViewList
 			// 
 			this.PopupViewList.Name = "PopupViewList";
-			this.PopupViewList.Size = new System.Drawing.Size(109, 22);
+			this.PopupViewList.Size = new System.Drawing.Size(152, 22);
 			this.PopupViewList.Text = "&List";
 			// 
 			// PopupViewDetails
 			// 
 			this.PopupViewDetails.Name = "PopupViewDetails";
-			this.PopupViewDetails.Size = new System.Drawing.Size(109, 22);
+			this.PopupViewDetails.Size = new System.Drawing.Size(152, 22);
 			this.PopupViewDetails.Text = "&Details";
 			// 
 			// panel1
@@ -189,12 +189,12 @@
 		public System.Windows.Forms.Button btnOK;
 		private System.Windows.Forms.ColumnHeader columnHeader2;
 		private System.Windows.Forms.ColumnHeader columnHeader3;
-		private System.Windows.Forms.ContextMenuStrip PopupMenu;
 		public System.Windows.Forms.ToolStripMenuItem PopupCheck;
 		public System.Windows.Forms.ToolStripMenuItem PopupUncheck;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		public System.Windows.Forms.ToolStripMenuItem PopupViewList;
 		public System.Windows.Forms.ToolStripMenuItem PopupViewDetails;
 		public System.Windows.Forms.ToolStripMenuItem PopupView;
+		public System.Windows.Forms.ContextMenuStrip PopupMenu;
 	}
 }

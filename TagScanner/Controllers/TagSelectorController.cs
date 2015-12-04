@@ -32,8 +32,9 @@ namespace TagScanner.Controllers
 				}
 				_listView.ColumnClick += ListView_ColumnClick;
 				_listView.ListViewItemSorter = this;
-				_dialog.PopupCheck.Click += PopupSelect_Click;
-				_dialog.PopupUncheck.Click += PopupDeselect_Click;
+				_dialog.PopupMenu.Opening += PopupMenu_Opening;
+				_dialog.PopupCheck.Click += PopupCheck_Click;
+				_dialog.PopupUncheck.Click += PopupUncheck_Click;
 				_dialog.PopupView.DropDownOpening += PopupView_DropDownOpening;
 				_dialog.PopupViewDetails.Click += PopupViewDetails_Click;
 				_dialog.PopupViewList.Click += PopupViewList_Click;
@@ -69,14 +70,21 @@ namespace TagScanner.Controllers
 			_listView.Sort();
 		}
 
-		private void PopupDeselect_Click(object sender, EventArgs e)
+		private void PopupMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			SetChecked(false);
+			var selectionExists = _listView.SelectedItems.Count > 0;
+			_dialog.PopupCheck.Enabled = selectionExists;
+			_dialog.PopupUncheck.Enabled = selectionExists;
 		}
 
-		private void PopupSelect_Click(object sender, EventArgs e)
+		private void PopupCheck_Click(object sender, EventArgs e)
 		{
 			SetChecked(true);
+		}
+
+		private void PopupUncheck_Click(object sender, EventArgs e)
+		{
+			SetChecked(false);
 		}
 
 		private void PopupView_DropDownOpening(object sender, EventArgs e)
