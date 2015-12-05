@@ -87,7 +87,7 @@
     <Compile Include="Models\Library.cs" />
     <Compile Include="Models\Metadata.cs" />
     <Compile Include="Models\FindReplaceResult.cs" />
-    <Compile Include="Models\TrackStatus.cs" />
+    <Compile Include="Models\FileStatus.cs" />
     <Compile Include="ValueConverters\DateTimeConverter.cs" />
     <Compile Include="ValueConverters\FileSizeConverter.cs" />
     <Compile Include="Controllers\FilterController.cs" />

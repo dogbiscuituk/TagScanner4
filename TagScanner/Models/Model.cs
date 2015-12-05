@@ -78,17 +78,17 @@ namespace TagScanner.Models
 
 		public bool ProcessTrack(Track track)
 		{
-			switch (track.Status)
+			switch (track.FileStatus)
 			{
-				case TrackStatus.New:
+				case FileStatus.New:
 					return AddTrack(track);
-				case TrackStatus.Pending:
+				case FileStatus.Pending:
 					return SaveTrack(track);
-				case TrackStatus.New | TrackStatus.Pending:
+				case FileStatus.New | FileStatus.Pending:
 					return AddAndSaveTrack(track);
-				case TrackStatus.Updated:
+				case FileStatus.Updated:
 					return LoadTrack(track);
-				case TrackStatus.Deleted:
+				case FileStatus.Deleted:
 					return DropTrack(track);
 			}
 			return false;

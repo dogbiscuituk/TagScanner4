@@ -211,11 +211,11 @@ namespace TagScanner.Controllers
 
 		private void PropertyGridPopupTagVisibility_Click(object sender, EventArgs e)
 		{
-			var trackVisibleTags = Selection.GetTrackVisibleTags();
-			var ok = new TagSelectorController(Selection.TrackPropertyInfos).Execute(trackVisibleTags);
+			var trackVisibleTags = Metadata.GetTrackVisibleTags();
+			var ok = new TagSelectorController(Metadata.SelectionPropertyInfos).Execute(trackVisibleTags);
 			if (ok)
 			{
-				Selection.SetTrackVisibleTags(trackVisibleTags);
+				Metadata.SetTrackVisibleTags(trackVisibleTags);
 				UpdatePropertyGrid();
 			}
 		}
@@ -252,15 +252,15 @@ namespace TagScanner.Controllers
 
 		private bool ContinueSaving()
 		{
-            var tracks = Model.Tracks.Where(t => (t.Status & TrackStatus.Changed) != 0).ToList();
+            var tracks = Model.Tracks.Where(t => (t.FileStatus & FileStatus.Changed) != 0).ToList();
 			if (!tracks.Any())
 				return true;
 			var message = new StringBuilder();
-			Say(message, tracks, TrackStatus.Changed, Resources.TracksChanged);
-			Say(message, tracks, TrackStatus.New, Resources.TracksAdded);
-			Say(message, tracks, TrackStatus.Updated, Resources.TracksUpdated);
-			Say(message, tracks, TrackStatus.Pending, Resources.TracksPending);
-			Say(message, tracks, TrackStatus.Deleted, Resources.TracksDeleted);
+			Say(message, tracks, FileStatus.Changed, Resources.TracksChanged);
+			Say(message, tracks, FileStatus.New, Resources.TracksAdded);
+			Say(message, tracks, FileStatus.Updated, Resources.TracksUpdated);
+			Say(message, tracks, FileStatus.Pending, Resources.TracksPending);
+			Say(message, tracks, FileStatus.Deleted, Resources.TracksDeleted);
 			message.Append(Resources.ConfirmSync);
 			var decision = MessageBox.Show(
 				message.ToString(),
@@ -287,14 +287,14 @@ namespace TagScanner.Controllers
 			return result;
 		}
 
-		private List<Track> GetTracks(TrackStatus status)
+		private List<Track> GetTracks(FileStatus status)
 		{
-			return Model.Tracks.Where(track => track.Status == status).ToList();
+			return Model.Tracks.Where(track => track.FileStatus == status).ToList();
 		}
 
-		private void Say(StringBuilder message, List<Track> tracks, TrackStatus status, string format)
+		private void Say(StringBuilder message, List<Track> tracks, FileStatus status, string format)
 		{
-			var count = tracks.Count(t => (t.Status & status) != 0);
+			var count = tracks.Count(t => (t.FileStatus & status) != 0);
 			if (count > 0)
 				message.AppendFormat(format, count);
 		}

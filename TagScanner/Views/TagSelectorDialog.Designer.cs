@@ -39,10 +39,11 @@
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.PopupView = new System.Windows.Forms.ToolStripMenuItem();
 			this.PopupViewList = new System.Windows.Forms.ToolStripMenuItem();
-			this.PopupViewDetails = new System.Windows.Forms.ToolStripMenuItem();
+			this.PopupViewGrouped = new System.Windows.Forms.ToolStripMenuItem();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.btnOK = new System.Windows.Forms.Button();
+			this.PopupViewAlphabetical = new System.Windows.Forms.ToolStripMenuItem();
 			this.PopupMenu.SuspendLayout();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
@@ -69,16 +70,17 @@
 			// columnHeader1
 			// 
 			this.columnHeader1.Text = "Name";
-			this.columnHeader1.Width = 161;
+			this.columnHeader1.Width = 200;
 			// 
 			// columnHeader2
 			// 
 			this.columnHeader2.Text = "Type";
-			this.columnHeader2.Width = 72;
+			this.columnHeader2.Width = 100;
 			// 
 			// columnHeader3
 			// 
 			this.columnHeader3.Text = "Writable";
+			this.columnHeader3.Width = 80;
 			// 
 			// PopupMenu
 			// 
@@ -88,32 +90,33 @@
             this.toolStripMenuItem1,
             this.PopupView});
 			this.PopupMenu.Name = "PopupMenu";
-			this.PopupMenu.Size = new System.Drawing.Size(121, 76);
+			this.PopupMenu.Size = new System.Drawing.Size(153, 98);
 			// 
 			// PopupCheck
 			// 
 			this.PopupCheck.Name = "PopupCheck";
-			this.PopupCheck.Size = new System.Drawing.Size(120, 22);
+			this.PopupCheck.Size = new System.Drawing.Size(152, 22);
 			this.PopupCheck.Text = "&Check";
 			// 
 			// PopupUncheck
 			// 
 			this.PopupUncheck.Name = "PopupUncheck";
-			this.PopupUncheck.Size = new System.Drawing.Size(120, 22);
+			this.PopupUncheck.Size = new System.Drawing.Size(152, 22);
 			this.PopupUncheck.Text = "&Uncheck";
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(117, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
 			// 
 			// PopupView
 			// 
 			this.PopupView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.PopupViewList,
-            this.PopupViewDetails});
+            this.PopupViewGrouped,
+            this.PopupViewAlphabetical});
 			this.PopupView.Name = "PopupView";
-			this.PopupView.Size = new System.Drawing.Size(120, 22);
+			this.PopupView.Size = new System.Drawing.Size(152, 22);
 			this.PopupView.Text = "&View";
 			// 
 			// PopupViewList
@@ -122,11 +125,11 @@
 			this.PopupViewList.Size = new System.Drawing.Size(152, 22);
 			this.PopupViewList.Text = "&List";
 			// 
-			// PopupViewDetails
+			// PopupViewGrouped
 			// 
-			this.PopupViewDetails.Name = "PopupViewDetails";
-			this.PopupViewDetails.Size = new System.Drawing.Size(152, 22);
-			this.PopupViewDetails.Text = "&Details";
+			this.PopupViewGrouped.Name = "PopupViewGrouped";
+			this.PopupViewGrouped.Size = new System.Drawing.Size(152, 22);
+			this.PopupViewGrouped.Text = "&Grouped";
 			// 
 			// panel1
 			// 
@@ -159,6 +162,12 @@
 			this.btnOK.TabIndex = 19;
 			this.btnOK.Text = "OK";
 			this.btnOK.UseVisualStyleBackColor = true;
+			// 
+			// PopupViewAlphabetical
+			// 
+			this.PopupViewAlphabetical.Name = "PopupViewAlphabetical";
+			this.PopupViewAlphabetical.Size = new System.Drawing.Size(152, 22);
+			this.PopupViewAlphabetical.Text = "&Alphabetical";
 			// 
 			// TagSelectorDialog
 			// 
@@ -193,8 +202,9 @@
 		public System.Windows.Forms.ToolStripMenuItem PopupUncheck;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		public System.Windows.Forms.ToolStripMenuItem PopupViewList;
-		public System.Windows.Forms.ToolStripMenuItem PopupViewDetails;
+		public System.Windows.Forms.ToolStripMenuItem PopupViewGrouped;
 		public System.Windows.Forms.ToolStripMenuItem PopupView;
 		public System.Windows.Forms.ContextMenuStrip PopupMenu;
+		public System.Windows.Forms.ToolStripMenuItem PopupViewAlphabetical;
 	}
 }

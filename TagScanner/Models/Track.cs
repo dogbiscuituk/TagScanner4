@@ -825,26 +825,26 @@ namespace TagScanner.Models
 			}
 		}
 
-		public TrackStatus Status
+		public FileStatus FileStatus
 		{
 			get
 			{
 				if (!FileExists)
-					return TrackStatus.Deleted;
+					return FileStatus.Deleted;
 				if (IsNew)
-					return IsModified ? TrackStatus.New | TrackStatus.Pending : TrackStatus.New;
+					return IsModified ? FileStatus.New | FileStatus.Pending : FileStatus.New;
 				if (IsModified)
-					return TrackStatus.Pending;
+					return FileStatus.Pending;
 				// TODO: check for resolution inaccuracies & daylight saving time transitions.
 				var elapsedTime = FileLastWriteTimeUtc - File.GetLastWriteTimeUtc(FilePath);
 				switch (Math.Sign(elapsedTime.Ticks))
 				{
 					case +1:
-						return TrackStatus.Pending;
+						return FileStatus.Pending;
 					case -1:
-						return TrackStatus.Updated;
+						return FileStatus.Updated;
 				}
-				return TrackStatus.Current;
+				return FileStatus.Current;
 			}
 		}
 

@@ -113,7 +113,7 @@ namespace TagScanner.Models
 		int TrackCount { get; set; }
 		int TrackNumber { get; set; }
 		string TrackOf { get; }
-		TrackStatus Status { get; }
+		FileStatus FileStatus { get; }
 		int VideoHeight { get; }
 		int VideoWidth { get; }
 		int Year { get; set; }

@@ -93,7 +93,7 @@ namespace TagScanner.Controllers
 		public void EditTagVisibility()
 		{
 			var trackVisibleTags = VisibleTags.ToList();
-			var ok = new TagSelectorController(Metadata.PropertyInfos).Execute(trackVisibleTags);
+			var ok = new TagSelectorController(Metadata.TrackPropertyInfos).Execute(trackVisibleTags);
 			if (ok)
 				VisibleTags = VisibleTags.Intersect(trackVisibleTags).Union(trackVisibleTags);
 		}
@@ -112,7 +112,7 @@ namespace TagScanner.Controllers
 
 		protected override PropertyInfo[] GetPropertyInfos()
 		{
-			return Metadata.PropertyInfos;
+			return Metadata.TrackPropertyInfos;
 		}
 
 		private IEnumerable<string> _visibleTags = new[] { "FilePath" };

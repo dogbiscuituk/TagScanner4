@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using TagScanner.Models;
 
 namespace TagScanner
@@ -22,17 +21,6 @@ namespace TagScanner
 		#region Properties
 
 		public readonly IEnumerable<Track> Tracks;
-
-		[Browsable(true)]
-		[Category("Selection")]
-		[Description("The total number of tracks in the current selection.")]
-		public int SelectedTracksCount
-		{
-			get
-			{
-				return Tracks.Count();
-			}
-		}
 
 		[Browsable(true)]
 		[Category("Selection")]
@@ -64,6 +52,17 @@ namespace TagScanner
 			get
 			{
 				return Tracks.SelectMany(f => f.Genres).Distinct().Count();
+			}
+		}
+
+		[Browsable(true)]
+		[Category("Selection")]
+		[Description("The total number of tracks in the current selection.")]
+		public int SelectedTracksCount
+		{
+			get
+			{
+				return Tracks.Count();
 			}
 		}
 
@@ -564,6 +563,27 @@ namespace TagScanner
 			}
 		}
 
+		private FileStatus _fileStatus;
+		[Browsable(true)]
+		[Category("File")]
+		[Description("An enumeration value containing the combined FileStatus values of all items in the selection. Possible values are:\n\n"
+			+ "-- Unknown: the item has no recognised FileStatus value.\n"
+			+ "-- Current: the item's library entry exactly matches its media file.\n"
+			+ "-- New: the item's media file does not yet have a corresponding saved library entry.\n"
+			+ "-- Pending: the item's library entry contains more recent edits than its media file.\n"
+			+ "-- Updated: the item's media file contains more recent edits than its library entry.\n"
+			+ "-- Deleted: the item's media file no longer exists; its library entry is orphaned.\n"
+			+ "-- Changed: the item's status is a combination of New, Pending, Updated and/or Deleted.\n\n"
+			+ "During the synchronization process, Changed items are processed as follows:\n\n"
+			+ "-- New items are added to the library.\n"
+			+ "-- Pending edits are applied to the corresponding media files.\n"
+			+ "-- Updated items have their library entries brought up to date.\n"
+			+ "-- Deleted items are removed from the library.")]
+		public FileStatus FileStatus
+		{
+			get { return GetFileStatus(p => p.FileStatus, ref _fileStatus); }
+		}
+
 		private string _firstAlbumArtist;
 		[Browsable(false)]
 		[Category("Personnel")]
@@ -681,6 +701,7 @@ namespace TagScanner
 		private double _imageAltitude = double.MaxValue;
 		[Browsable(false)]
 		[Category("Image")]
+		[DefaultValue(0)]
 		[Description("The altitude, in metres, of the GPS coordinate where the current image was taken. A positive value is above sea level, a negative value below sea level.")]
 		public double ImageAltitude
 		{
@@ -723,6 +744,7 @@ namespace TagScanner
 		private double _imageExposureTime = double.MaxValue;
 		[Browsable(false)]
 		[Category("Image")]
+		[DefaultValue(0)]
 		[Description("The image exposure time, in seconds.")]
 		public double ImageExposureTime
 		{
@@ -737,6 +759,7 @@ namespace TagScanner
 		private double _imageFNumber = double.MaxValue;
 		[Browsable(false)]
 		[Category("Image")]
+		[DefaultValue(0)]
 		[Description("The F number with which the image was taken.")]
 		public double ImageFNumber
 		{
@@ -751,6 +774,7 @@ namespace TagScanner
 		private double _imageFocalLength = double.MaxValue;
 		[Browsable(false)]
 		[Category("Image")]
+		[DefaultValue(0)]
 		[Description("The focal length, in millimetres, with which the image was taken.")]
 		public double ImageFocalLength
 		{
@@ -765,6 +789,7 @@ namespace TagScanner
 		private int _imageFocalLengthIn35mmFilm = int.MaxValue;
 		[Browsable(false)]
 		[Category("Image")]
+		[DefaultValue(0)]
 		[Description("The focal length with which the image was taken, assuming a 35mm film camera.")]
 		public int ImageFocalLengthIn35mmFilm
 		{
@@ -779,6 +804,7 @@ namespace TagScanner
 		private int _imageISOSpeedRatings = int.MaxValue;
 		[Browsable(false)]
 		[Category("Image")]
+		[DefaultValue(0)]
 		[Description("The ISO speed, as defined in ISO 12232, with which the image was taken.")]
 		public int ImageISOSpeedRatings
 		{
@@ -807,6 +833,7 @@ namespace TagScanner
 		private double _imageLatitude = double.MaxValue;
 		[Browsable(false)]
 		[Category("Image")]
+		[DefaultValue(0)]
 		[Description("The latitude of the GPS coordinate where the current image was taken. Latitude ranges from -90.0 to +90.0 degrees.")]
 		public double ImageLatitude
 		{
@@ -821,6 +848,7 @@ namespace TagScanner
 		private double _imageLongitude = double.MaxValue;
 		[Browsable(false)]
 		[Category("Image")]
+		[DefaultValue(0)]
 		[Description("The longitude of the GPS coordinate where the current image was taken. Longitude ranges from -180.0 to +180.0 degrees.")]
 		public double ImageLongitude
 		{
@@ -863,6 +891,7 @@ namespace TagScanner
 		private TagLib.Image.ImageOrientation _imageOrientation = TagLib.Image.ImageOrientation.None;
 		[Browsable(false)]
 		[Category("Image")]
+		[DefaultValue(TagLib.Image.ImageOrientation.None)]
 		[Description("The orientation of the image.")]
 		public TagLib.Image.ImageOrientation ImageOrientation
 		{
@@ -877,6 +906,7 @@ namespace TagScanner
 		private int _imageRating = int.MaxValue;
 		[Browsable(false)]
 		[Category("Image")]
+		[DefaultValue(0)]
 		[Description("The rating of the image.")]
 		public int ImageRating
 		{
@@ -1358,26 +1388,6 @@ namespace TagScanner
 			get { return GetString(p => p.TrackOf, ref _trackOf); }
 		}
 
-		private TrackStatus _trackStatus;
-		[Browsable(true)]
-		[Category("Selection")]
-		[Description("An enumeration value containing the combined TrackStatus values of all items in the selection. Possible values are:\n\n"
-			+ "-- Unknown - the item has no recognised TrackStatus value;\n"
-			+ "-- Current - the item's library entry exactly matches its media file;\n"
-			+ "-- New - the item's media file does not yet have a corresponding library entry;\n"
-			+ "-- Updated - the item's media file contains more recent edits than its library entry;\n"
-			+ "-- Pending - the item's library entry contains more recent edits than its media file; and\n"
-			+ "-- Deleted - the item's media file no longer exists; its library entry is orphaned.\n\n"
-			+ "During the synchronization process:\n\n"
-			+ "-- New items are added to the library,\n"
-			+ "-- Updated items have their library entries brought up to date,\n"
-			+ "-- Pending edits are applied to the corresponding media files, and\n"
-			+ "-- Deleted items are removed from the library.")]
-		public TrackStatus Status
-		{
-			get { return GetTrackStatus(p => p.Status, ref _trackStatus); }
-		}
-
 		private int _videoHeight = int.MaxValue;
 		[Browsable(false)]
 		[Category("Media")]
@@ -1504,6 +1514,15 @@ namespace TagScanner
 					result = path;
 				}
 			}
+			return result;
+		}
+
+		private FileStatus GetFileStatus(Func<ITrack, FileStatus> getFileStatus, ref FileStatus result)
+		{
+			if (result == FileStatus.Unknown && Tracks != null)
+				result = Tracks
+					.Select(getFileStatus)
+					.Aggregate(result, (p, q) => p | q);
 			return result;
 		}
 
@@ -1690,59 +1709,10 @@ namespace TagScanner
 			return result;
 		}
 
-		private TrackStatus GetTrackStatus(Func<ITrack, TrackStatus> getTrackStatus, ref TrackStatus result)
-		{
-			if (result == TrackStatus.Unknown && Tracks != null)
-				result = Tracks
-					.Select(getTrackStatus)
-					.Aggregate(result, (current, trackStatus) => current | trackStatus);
-			return result;
-		}
-
 		private void SetValue(Action<ITrack> setValue)
 		{
 			foreach (var file in Tracks)
 				setValue(file);
-		}
-
-		#endregion
-
-		#region Tag Visibility
-
-		public static readonly PropertyInfo[] TrackPropertyInfos = typeof(Selection).GetProperties();
-
-		public static readonly IEnumerable<string> TrackTags = TrackPropertyInfos.Select(p => p.Name);
-
-		public static List<string> GetTrackVisibleTags()
-		{
-			return TrackTags.Where(t => GetTagVisibility(t)).ToList();
-		}
-
-		public static void SetTrackVisibleTags(IEnumerable<string> trackVisibleTags)
-		{
-			foreach (var t in TrackTags)
-				SetTagVisibility(t, trackVisibleTags.Contains(t));
-		}
-
-		private static bool GetTagVisibility(string propertyName)
-		{
-			return UseTagVisibility(propertyName, null);
-		}
-
-		private static void SetTagVisibility(string propertyName, bool isBrowsable)
-		{
-			UseTagVisibility(propertyName, isBrowsable);
-		}
-
-		private static bool UseTagVisibility(string propertyName, bool? isBrowsable)
-		{
-			var descriptor = TypeDescriptor.GetProperties(typeof(Selection))[propertyName];
-			var attribute = (BrowsableAttribute)descriptor.Attributes[typeof(BrowsableAttribute)];
-			var fieldInfo = attribute.GetType().GetField("browsable", BindingFlags.NonPublic | BindingFlags.Instance);
-			if (!isBrowsable.HasValue)
-				return (bool)fieldInfo.GetValue(attribute);
-			fieldInfo.SetValue(attribute, isBrowsable);
-			return isBrowsable.Value;
 		}
 
 		#endregion

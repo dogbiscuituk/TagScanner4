@@ -126,7 +126,7 @@ namespace TagScanner.Controllers
 					"JoinedPerformers",
 					"Album"
 				}
-				.Select(name => Metadata.PropertyInfos.First(p => p.Name == name))
+				.Select(name => Metadata.TrackPropertyInfos.First(p => p.Name == name))
 				.ToArray();
 		}
 	}
