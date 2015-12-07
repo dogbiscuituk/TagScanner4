@@ -1,7 +1,6 @@
 ﻿using System;
-using TagScanner.Models;
 
-namespace TagScanner
+namespace TagScanner.Models
 {
 	public class ProgressEventArgs : EventArgs
 	{
@@ -14,12 +13,12 @@ namespace TagScanner
 
 		public ProgressEventArgs(int index, int count, string path, Track track)
 		{
+			Continue = true;
 			Count = count;
 			Index = index;
 			Path = path;
-			Track = track;
-			Continue = true;
 			Skip = false;
+			Track = track;
 		}
 	}
 }

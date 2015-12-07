@@ -8,7 +8,7 @@ namespace TagScanner.Models
 {
 	public static class Metadata
 	{
-		#region Properties
+		#region Fields
 
 		public static readonly PropertyInfo[] SelectionPropertyInfos = typeof(Selection).GetProperties();
 		public static readonly PropertyInfo[] TrackPropertyInfos = typeof(ITrack).GetProperties();
@@ -42,11 +42,37 @@ namespace TagScanner.Models
 
 		#endregion
 
-		#region Categories
+		#region Tag Attributes
 
 		public static string GetTagCategory(string propertyName)
 		{
 			return (string)UseTagAttribute(propertyName, typeof(CategoryAttribute), "categoryValue");
+		}
+
+		public static string GetTagDescription(string propertyName)
+		{
+			return (string)UseTagAttribute(propertyName, typeof(DescriptionAttribute), "description");
+		}
+
+		private static bool GetTagVisible(string propertyName)
+		{
+			return UseTagVisible(propertyName);
+		}
+
+		public static List<string> GetVisibleTags()
+		{
+			return SelectionTags.Where(t => GetTagVisible(t)).ToList();
+		}
+
+		private static void SetTagVisible(string propertyName, bool isBrowsable)
+		{
+			UseTagVisible(propertyName, isBrowsable);
+		}
+
+		public static void SetVisibleTags(IEnumerable<string> visibleTags)
+		{
+			foreach (var t in SelectionTags)
+				SetTagVisible(t, visibleTags.Contains(t));
 		}
 
 		#endregion
@@ -92,21 +118,6 @@ namespace TagScanner.Models
 					return Quantifiers.Nor;
 			}
 			return Quantifiers.None;
-		}
-
-		#endregion
-
-		#region Visibilities
-
-		public static List<string> GetTrackVisibleTags()
-		{
-			return SelectionTags.Where(t => GetTagVisibility(t)).ToList();
-		}
-
-		public static void SetTrackVisibleTags(IEnumerable<string> trackVisibleTags)
-		{
-			foreach (var t in SelectionTags)
-				SetTagVisibility(t, trackVisibleTags.Contains(t));
 		}
 
 		#endregion
@@ -162,11 +173,6 @@ namespace TagScanner.Models
 			return TrackPropertyInfos.FirstOrDefault(p => p.Name == propertyName);
 		}
 
-		public static Type GetPropertyType(string propertyName)
-		{
-			return GetPropertyInfo(propertyName).PropertyType;
-		}
-
 		public static string GetPropertyTypeName(string propertyName)
 		{
 			return GetPropertyType(propertyName).Name;
@@ -181,24 +187,19 @@ namespace TagScanner.Models
 			return TypeDescriptor.GetProperties(typeof(Selection))[propertyName];
 		}
 
-		private static bool GetTagVisibility(string propertyName)
+		private static Type GetPropertyType(string propertyName)
 		{
-			return UseTagVisibility(propertyName);
+			return GetPropertyInfo(propertyName).PropertyType;
 		}
 
-		private static void SetTagVisibility(string propertyName, bool isBrowsable)
+		private static object UseTagAttribute(string propertyName, Type attributeType, string fieldName, object value = null)
 		{
-			UseTagVisibility(propertyName, isBrowsable);
+			return UseTagAttribute(GetPropertyDescriptor(propertyName), attributeType, fieldName, value);
 		}
 
-		private static object UseTagAttribute(string propertyName, Type attributeType, string attributeName, object value = null)
+		private static object UseTagAttribute(PropertyDescriptor descriptor, Type attributeType, string fieldName, object value = null)
 		{
-			return UseTagAttribute(GetPropertyDescriptor(propertyName), attributeType, attributeName, value);
-		}
-
-		private static object UseTagAttribute(PropertyDescriptor descriptor, Type attributeType, string attributeName, object value = null)
-		{
-			var fieldInfo = attributeType.GetField(attributeName, BindingFlags.NonPublic | BindingFlags.Instance);
+			var fieldInfo = attributeType.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
 			var attribute = descriptor.Attributes[attributeType];
 			if (value == null)
 				return fieldInfo.GetValue(attribute);
@@ -206,7 +207,7 @@ namespace TagScanner.Models
 			return value;
 		}
 
-		private static bool UseTagVisibility(string propertyName, bool? isBrowsable = null)
+		private static bool UseTagVisible(string propertyName, bool? isBrowsable = null)
 		{
 			return (bool)UseTagAttribute(propertyName, typeof(BrowsableAttribute), "browsable", isBrowsable);
 		}

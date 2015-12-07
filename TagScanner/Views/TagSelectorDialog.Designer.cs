@@ -40,10 +40,10 @@
 			this.PopupView = new System.Windows.Forms.ToolStripMenuItem();
 			this.PopupViewList = new System.Windows.Forms.ToolStripMenuItem();
 			this.PopupViewGrouped = new System.Windows.Forms.ToolStripMenuItem();
+			this.PopupViewAlphabetical = new System.Windows.Forms.ToolStripMenuItem();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.btnOK = new System.Windows.Forms.Button();
-			this.PopupViewAlphabetical = new System.Windows.Forms.ToolStripMenuItem();
 			this.PopupMenu.SuspendLayout();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
@@ -62,6 +62,7 @@
 			this.ListView.HideSelection = false;
 			this.ListView.Location = new System.Drawing.Point(0, 0);
 			this.ListView.Name = "ListView";
+			this.ListView.ShowItemToolTips = true;
 			this.ListView.Size = new System.Drawing.Size(624, 402);
 			this.ListView.TabIndex = 2;
 			this.ListView.UseCompatibleStateImageBehavior = false;
@@ -90,24 +91,24 @@
             this.toolStripMenuItem1,
             this.PopupView});
 			this.PopupMenu.Name = "PopupMenu";
-			this.PopupMenu.Size = new System.Drawing.Size(153, 98);
+			this.PopupMenu.Size = new System.Drawing.Size(121, 76);
 			// 
 			// PopupCheck
 			// 
 			this.PopupCheck.Name = "PopupCheck";
-			this.PopupCheck.Size = new System.Drawing.Size(152, 22);
+			this.PopupCheck.Size = new System.Drawing.Size(120, 22);
 			this.PopupCheck.Text = "&Check";
 			// 
 			// PopupUncheck
 			// 
 			this.PopupUncheck.Name = "PopupUncheck";
-			this.PopupUncheck.Size = new System.Drawing.Size(152, 22);
+			this.PopupUncheck.Size = new System.Drawing.Size(120, 22);
 			this.PopupUncheck.Text = "&Uncheck";
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(117, 6);
 			// 
 			// PopupView
 			// 
@@ -116,20 +117,26 @@
             this.PopupViewGrouped,
             this.PopupViewAlphabetical});
 			this.PopupView.Name = "PopupView";
-			this.PopupView.Size = new System.Drawing.Size(152, 22);
+			this.PopupView.Size = new System.Drawing.Size(120, 22);
 			this.PopupView.Text = "&View";
 			// 
 			// PopupViewList
 			// 
 			this.PopupViewList.Name = "PopupViewList";
-			this.PopupViewList.Size = new System.Drawing.Size(152, 22);
+			this.PopupViewList.Size = new System.Drawing.Size(140, 22);
 			this.PopupViewList.Text = "&List";
 			// 
 			// PopupViewGrouped
 			// 
 			this.PopupViewGrouped.Name = "PopupViewGrouped";
-			this.PopupViewGrouped.Size = new System.Drawing.Size(152, 22);
+			this.PopupViewGrouped.Size = new System.Drawing.Size(140, 22);
 			this.PopupViewGrouped.Text = "&Grouped";
+			// 
+			// PopupViewAlphabetical
+			// 
+			this.PopupViewAlphabetical.Name = "PopupViewAlphabetical";
+			this.PopupViewAlphabetical.Size = new System.Drawing.Size(140, 22);
+			this.PopupViewAlphabetical.Text = "&Alphabetical";
 			// 
 			// panel1
 			// 
@@ -162,12 +169,6 @@
 			this.btnOK.TabIndex = 19;
 			this.btnOK.Text = "OK";
 			this.btnOK.UseVisualStyleBackColor = true;
-			// 
-			// PopupViewAlphabetical
-			// 
-			this.PopupViewAlphabetical.Name = "PopupViewAlphabetical";
-			this.PopupViewAlphabetical.Size = new System.Drawing.Size(152, 22);
-			this.PopupViewAlphabetical.Text = "&Alphabetical";
 			// 
 			// TagSelectorDialog
 			// 

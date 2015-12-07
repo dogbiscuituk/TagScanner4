@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using TagScanner.Models;
 
-namespace TagScanner
+namespace TagScanner.Models
 {
 	[DefaultProperty("Title")]
 	public class Selection : ITrack
@@ -1437,7 +1436,7 @@ namespace TagScanner
 
 		#endregion
 
-		#region Getters & Setters
+		#region Tag Accessors
 
 		private DateTime GetDateTime(Func<ITrack, DateTime> getDateTime, ref DateTime result)
 		{

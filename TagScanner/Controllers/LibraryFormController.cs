@@ -211,11 +211,11 @@ namespace TagScanner.Controllers
 
 		private void PropertyGridPopupTagVisibility_Click(object sender, EventArgs e)
 		{
-			var trackVisibleTags = Metadata.GetTrackVisibleTags();
-			var ok = new TagSelectorController(Metadata.SelectionPropertyInfos).Execute(trackVisibleTags);
+			var visibleTags = Metadata.GetVisibleTags();
+			var ok = new TagSelectorController(Metadata.SelectionPropertyInfos).Execute(visibleTags);
 			if (ok)
 			{
-				Metadata.SetTrackVisibleTags(trackVisibleTags);
+				Metadata.SetVisibleTags(visibleTags);
 				UpdatePropertyGrid();
 			}
 		}

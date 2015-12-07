@@ -31,6 +31,7 @@ namespace TagScanner.Controllers
                     subItems.Add(propertyInfo.PropertyType.Name);
 					subItems.Add(propertyInfo.CanWrite ? "Yes" : "No");
 					item.Group = GetGroup(Metadata.GetTagCategory(name));
+					item.ToolTipText = Metadata.GetTagDescription(name);
                 }
 				_listView.ColumnClick += ListView_ColumnClick;
 				_listView.ListViewItemSorter = this;
