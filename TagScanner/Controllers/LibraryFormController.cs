@@ -132,12 +132,12 @@ namespace TagScanner.Controllers
 
 		private void EditFind_Click(object sender, EventArgs e)
 		{
-			EditQuery();
+			FindReplaceDialogController.ShowDialog(View, false);
 		}
 
 		private void EditReplace_Click(object sender, EventArgs e)
 		{
-			ReplaceDialogController.ShowDialog(View);
+			FindReplaceDialogController.ShowDialog(View, true);
 		}
 
 		private void ViewByArtistAlbum_Click(object sender, EventArgs e)
@@ -327,14 +327,14 @@ namespace TagScanner.Controllers
 			}
 		}
 
-		private ReplaceDialogController _replaceDialogController;
-		private ReplaceDialogController ReplaceDialogController
+		private FindReplaceDialogController _findReplaceDialogController;
+		private FindReplaceDialogController FindReplaceDialogController
 		{
 			get
 			{
 				return
-					_replaceDialogController
-					?? (_replaceDialogController = new ReplaceDialogController(LibraryGridController));
+					_findReplaceDialogController
+					?? (_findReplaceDialogController = new FindReplaceDialogController(LibraryGridController));
 			}
 		}
 	}

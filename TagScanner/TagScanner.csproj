@@ -79,7 +79,7 @@
     <Compile Include="Controllers\GridController.cs" />
     <Compile Include="Controllers\LibraryFormController.cs" />
     <Compile Include="Controllers\PlayerController.cs" />
-    <Compile Include="Controllers\ReplaceDialogController.cs" />
+    <Compile Include="Controllers\FindReplaceDialogController.cs" />
     <Compile Include="Controllers\ReplacePreviewController.cs" />
     <Compile Include="Controllers\SdiController.cs" />
     <Compile Include="Controllers\TagSelectorController.cs" />
@@ -132,11 +132,11 @@
     <Compile Include="Models\TrackExtensions.cs" />
     <Compile Include="Models\Model.cs" />
     <Compile Include="Models\Selection.cs" />
-    <Compile Include="Views\ReplaceDialog.cs">
+    <Compile Include="Views\FindReplaceDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\ReplaceDialog.Designer.cs">
-      <DependentUpon>ReplaceDialog.cs</DependentUpon>
+    <Compile Include="Views\FindReplaceDialog.Designer.cs">
+      <DependentUpon>FindReplaceDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\ReplacePreview.cs">
       <SubType>Form</SubType>
@@ -166,8 +166,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Views\ReplaceDialog.resx">
-      <DependentUpon>ReplaceDialog.cs</DependentUpon>
+    <EmbeddedResource Include="Views\FindReplaceDialog.resx">
+      <DependentUpon>FindReplaceDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ReplacePreview.resx">
       <DependentUpon>ReplacePreview.cs</DependentUpon>
