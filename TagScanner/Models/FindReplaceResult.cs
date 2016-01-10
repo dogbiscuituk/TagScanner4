@@ -14,10 +14,10 @@ namespace TagScanner.Models
 		}
 
 		public bool Replace { get; set; }
-		public Track Track { get; }
-		public string Tag { get; }
-		public object OldValue { get; }
-		public object NewValue { get; }
+		public Track Track { get; set; }
+		public string Tag { get; set; }
+		public object OldValue { get; set; }
+		public object NewValue { get; set; }
 
 		private string _oldValueSort;
 		public string OldValueSort { get { return _oldValueSort ?? (_oldValueSort = GetSort(OldValue)); } }

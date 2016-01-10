@@ -108,7 +108,7 @@ namespace TagScanner.Controllers
 		private int ErrorCount { get; set; }
 		private ErrorProvider ErrorProvider { get { return View.ErrorProvider; } }
 		private bool FindInAnyTag { get { return SourceTagBox.SelectedIndex == 0; } }
-		private LibraryGridController LibraryGridController { get; }
+		private LibraryGridController LibraryGridController { get; set; }
 		private bool MatchCase { get { return MatchCaseCheckbox.Checked; } }
 		private CheckBox MatchCaseCheckbox { get { return View.cbMatchCase; } }
 		private ContextMenuStrip PopupFindMenu { get { return View.popupFindMenu; } }
