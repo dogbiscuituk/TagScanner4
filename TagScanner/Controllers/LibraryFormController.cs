@@ -23,7 +23,7 @@ namespace TagScanner.Controllers
 			LibraryGridController = new LibraryGridController(Model, View.GridElementHost);
 			LibraryGridController.SelectionChanged += LibraryGridController_SelectionChanged;
 			StatusController = new StatusController(Model, View.StatusBar);
-			PersistenceController = new PersistenceController(Model, View, View.FileReopen);
+			PersistenceController = new PersistenceController(Model, View.FileReopen);
             PersistenceController.FilePathChanged += PersistenceController_FilePathChanged;
 			PersistenceController.FileSaving += PersistenceController_FileSaving;
 			MediaController = new MediaController(this, View.AddRecentFolders);

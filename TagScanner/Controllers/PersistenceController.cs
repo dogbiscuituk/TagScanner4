@@ -9,13 +9,10 @@ namespace TagScanner.Controllers
 {
 	public class PersistenceController : SdiController
 	{
-		public PersistenceController(Model model, Control view, ToolStripDropDownItem recentMenu)
+		public PersistenceController(Model model, ToolStripDropDownItem recentMenu)
 			: base(model, Properties.Settings.Default.LibraryFilter, "LibraryMRU", recentMenu)
 		{
-			View = view;
 		}
-
-		private readonly Control View;
 
 		public string WindowCaption
 		{
