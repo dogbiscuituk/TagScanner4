@@ -17,10 +17,7 @@ namespace TagScanner.Controllers
 
 		protected override FilterDialog View
 		{
-			get
-			{
-				return base.View;
-			}
+			get => base.View;
 			set
 			{
 				base.View = value;
@@ -31,18 +28,12 @@ namespace TagScanner.Controllers
 			}
 		}
 
-		private ComboBox QuantifierBox { get { return View.QuantifierBox; } }
+		private ComboBox QuantifierBox => View.QuantifierBox;
 
 		public override bool Visible
 		{
-			get
-			{
-				return QuantifierBox.Visible;
-			}
-			set
-			{
-				QuantifierBox.Visible = value;
-			}
+			get => QuantifierBox.Visible;
+			set => QuantifierBox.Visible = value;
 		}
 
 		#endregion
@@ -51,14 +42,8 @@ namespace TagScanner.Controllers
 
 		public override string Text
 		{
-			get
-			{
-				return QuantifierBox.Text;
-			}
-			set
-			{
-				QuantifierBox.Text = value;
-			}
+			get => QuantifierBox.Text;
+			set => QuantifierBox.Text = value;
 		}
 
 		#endregion

@@ -30,9 +30,9 @@ namespace TagScanner.Controllers
 			InvalidateFilter();
 		}
 
-		private LibraryGridController _libraryGridController;
-		private SimpleFilterController _simpleFilterEditController;
-		private CompoundFilterController _compoundFilterEditController;
+		private readonly LibraryGridController _libraryGridController;
+		private readonly SimpleFilterController _simpleFilterEditController;
+		private readonly CompoundFilterController _compoundFilterEditController;
 
 		#endregion
 
@@ -86,20 +86,14 @@ namespace TagScanner.Controllers
 			TreeView.MouseDown += TreeView_MouseDown;
 		}
 
-		private TreeView TreeView { get { return View.TreeView; } }
+		private TreeView TreeView => View.TreeView;
 
-		private TreeNodeCollection TreeViewNodes { get { return TreeView.Nodes; } }
+		private TreeNodeCollection TreeViewNodes => TreeView.Nodes;
 
 		private TreeNode SelectedNode
 		{
-			get
-			{
-				return TreeView.SelectedNode;
-			}
-			set
-			{
-				TreeView.SelectedNode = value;
-			}
+			get => TreeView.SelectedNode;
+			set => TreeView.SelectedNode = value;
 		}
 
 		private string SelectedNodeText
@@ -117,8 +111,10 @@ namespace TagScanner.Controllers
 			}
 		}
 
-		private string
-			_defaultFilterText = string.Concat(Metadata.SortableTags[0], " contains"),
+		private readonly string
+			_defaultFilterText = string.Concat(Metadata.SortableTags[0], " contains");
+
+		private readonly string
 			_defaultGroupText = Metadata.QuantifierStrings[0];
 
 		#endregion
@@ -321,13 +317,7 @@ namespace TagScanner.Controllers
 
 		#region Predicate
 
-		public Predicate<object> Predicate
-		{
-			get
-			{
-				return Test;
-			}
-		}
+		public Predicate<object> Predicate => Test;
 
 		private bool Test(object track)
 		{
@@ -335,13 +325,7 @@ namespace TagScanner.Controllers
 		}
 
 		private Func<ITrack, bool> _function;
-		private Func<ITrack, bool> Function
-		{
-			get
-			{
-				return _function ?? (_function = GetFunction());
-			}
-		}
+		private Func<ITrack, bool> Function => _function ?? (_function = GetFunction());
 
 		private Func<ITrack, bool> GetFunction()
 		{
@@ -380,7 +364,7 @@ namespace TagScanner.Controllers
 				: new SimpleCondition(text).ToExpression(_parameter);
 		}
 
-		private static ParameterExpression _parameter = Expression.Parameter(typeof(ITrack), "track");
+		private static readonly ParameterExpression _parameter = Expression.Parameter(typeof(ITrack), "track");
 
 		private void InvalidateFilter()
 		{

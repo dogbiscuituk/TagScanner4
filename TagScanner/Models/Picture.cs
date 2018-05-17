@@ -120,9 +120,7 @@ namespace TagScanner.Models
 
 	    public override string ToString()
         {
-            return string.Format(
-                "{0} {1} {2} ({3}x{4}, {5}, {6} bytes)",
-                Type, MimeType, Description, Size.Width, Size.Height, PixelFormat, DataSize);
+            return $"{Type} {MimeType} {Description} ({Size.Width}x{Size.Height}, {PixelFormat}, {DataSize} bytes)";
         }
 
         #endregion

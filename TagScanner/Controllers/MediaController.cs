@@ -62,7 +62,7 @@ namespace TagScanner.Controllers
             if (Directory.Exists(folderPath))
 				AddFolder(folderPath, filter);
 			else if (MessageBox.Show(
-				string.Format("Folder \"{0}\" no longer exists. Remove from menu?", folderPath),
+				         $"Folder \"{folderPath}\" no longer exists. Remove from menu?",
 				"Add Recent Folder",
 				MessageBoxButtons.YesNo) == DialogResult.Yes)
 				RemoveItem(item);

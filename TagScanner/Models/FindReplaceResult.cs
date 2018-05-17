@@ -20,17 +20,17 @@ namespace TagScanner.Models
 		public object NewValue { get; set; }
 
 		private string _oldValueSort;
-		public string OldValueSort { get { return _oldValueSort ?? (_oldValueSort = GetSort(OldValue)); } }
+		public string OldValueSort => _oldValueSort ?? (_oldValueSort = GetSort(OldValue));
 
 		private string _newValueSort;
-		public string NewValueSort { get { return _newValueSort ?? (_newValueSort = GetSort(NewValue)); } }
+		public string NewValueSort => _newValueSort ?? (_newValueSort = GetSort(NewValue));
 
 		private string GetSort(object value)
 		{
 			if (value == null)
 				return string.Empty;
-			if (value is string)
-				return (string)value;
+			if (value is string stringValue)
+				return stringValue;
 			var strings = value as string[];
 			if (strings == null || !strings.Any())
 				return string.Empty;

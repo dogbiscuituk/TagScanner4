@@ -41,10 +41,7 @@ namespace TagScanner.Controllers
 		private LibraryForm _view;
 		public LibraryForm View
 		{
-			get
-			{
-				return _view;
-			}
+			get => _view;
 			set
 			{
 				_view = value;
@@ -188,10 +185,7 @@ namespace TagScanner.Controllers
 		private void HelpAbout_Click(object sender, EventArgs e)
 		{
 			MessageBox.Show(
-				string.Format("{0}\n{1}\nVersion {2}", 
-					Application.CompanyName,
-					Application.ProductName,
-					Application.ProductVersion),
+				$"{Application.CompanyName}\n{Application.ProductName}\nVersion {Application.ProductVersion}",
 				string.Concat("About ", Application.ProductName));
 		}
 
@@ -317,25 +311,11 @@ namespace TagScanner.Controllers
 		}
 
 		private FilterDialogController _filterDialogController;
-		private FilterDialogController FilterDialogController
-		{
-			get
-			{
-				return
-					_filterDialogController
-					?? (_filterDialogController = new FilterDialogController(LibraryGridController, null));
-			}
-		}
+		private FilterDialogController FilterDialogController => _filterDialogController
+		                                                         ?? (_filterDialogController = new FilterDialogController(LibraryGridController, null));
 
 		private FindReplaceDialogController _findReplaceDialogController;
-		private FindReplaceDialogController FindReplaceDialogController
-		{
-			get
-			{
-				return
-					_findReplaceDialogController
-					?? (_findReplaceDialogController = new FindReplaceDialogController(LibraryGridController));
-			}
-		}
+		private FindReplaceDialogController FindReplaceDialogController => _findReplaceDialogController
+		                                                                   ?? (_findReplaceDialogController = new FindReplaceDialogController(LibraryGridController));
 	}
 }

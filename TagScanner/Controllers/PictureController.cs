@@ -27,7 +27,7 @@ namespace TagScanner.Controllers
 		private PictureBox _pictureBox;
 		private PictureBox PictureBox
 		{
-			get { return _pictureBox; }
+			get => _pictureBox;
 			set
 			{
 				_pictureBox = value;
@@ -38,10 +38,7 @@ namespace TagScanner.Controllers
 		private PropertyGrid _propertyGrid;
 		private PropertyGrid PropertyGrid
 		{
-			get
-			{
-				return _propertyGrid;
-			}
+			get => _propertyGrid;
 			set
 			{
 				_propertyGrid = value;
@@ -53,10 +50,7 @@ namespace TagScanner.Controllers
 		private System.Windows.Controls.DataGrid _playlistGrid;
 		private System.Windows.Controls.DataGrid PlaylistGrid
 		{
-			get
-			{
-				return _playlistGrid;
-			}
+			get => _playlistGrid;
 			set
 			{
 				_playlistGrid = value;
@@ -128,12 +122,9 @@ namespace TagScanner.Controllers
 			if (track == null)
 				return null;
 			var pictures = track.Pictures;
-			if (pictures != null)
-			{
-				var picture = pictures.FirstOrDefault(p => p != null);
-				if (picture != null)
-					return picture.GetImage();
-			}
+			var picture = pictures?.FirstOrDefault(p => p != null);
+			if (picture != null)
+				return picture.GetImage();
 			var filePath = track.FilePath;
 			if (string.IsNullOrWhiteSpace(filePath) || filePath.EndsWith(@"\"))
 				return null;
@@ -170,14 +161,10 @@ namespace TagScanner.Controllers
 			// If a Picture is selected in the PropertyGrid,
 			// then use that particular Picture.
 			var gridItem = PropertyGrid.SelectedGridItem;
-			if (gridItem != null)
+			if (gridItem?.Value is Picture picture)
 			{
-				var picture = gridItem.Value as Picture;
-				if (picture != null)
-				{
-					SetPicture(picture);
-					return;
-				}
+				SetPicture(picture);
+				return;
 			}
 			// If no Picture is selected in the PropertyGrid,
 			// then use the first Picture in the selection, if any.
@@ -208,7 +195,7 @@ namespace TagScanner.Controllers
 
 		private void SetPicture(Picture picture)
 		{
-			SetImage(picture != null ? picture.GetImage() : null);
+			SetImage(picture?.GetImage());
 		}
 
 		#endregion

@@ -100,8 +100,10 @@ namespace TagScanner.Controllers
 
 		private static DataGridBoundColumn GetCheckBoxColumn()
 		{
-			var column = new DataGridCheckBoxColumn();
-			column.Width = 80;
+			var column = new DataGridCheckBoxColumn
+			{
+				Width = 80
+			};
 			return column;
 		}
 
@@ -126,8 +128,10 @@ namespace TagScanner.Controllers
 
 		private static DataGridBoundColumn GetTextBoxColumn(StringAlignment alignment)
 		{
-			var column = new DataGridTextColumn();
-			column.Width = alignment == StringAlignment.Near ? 160 : 80;
+			var column = new DataGridTextColumn
+			{
+				Width = alignment == StringAlignment.Near ? 160 : 80
+			};
 			return column;
 		}
 	}

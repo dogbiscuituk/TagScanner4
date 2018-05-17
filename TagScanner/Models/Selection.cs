@@ -57,13 +57,7 @@ namespace TagScanner.Models
 		[Browsable(true)]
 		[Category("Selection")]
 		[Description("The total number of tracks in the current selection.")]
-		public int SelectedTracksCount
-		{
-			get
-			{
-				return Tracks.Count();
-			}
-		}
+		public int SelectedTracksCount => Tracks.Count();
 
 		#endregion
 
@@ -103,13 +97,7 @@ namespace TagScanner.Models
 		[Browsable(false)]
 		[Category("Personnel")]
 		[DefaultValue(0)]
-		public int AlbumArtistsCount
-		{
-			get
-			{
-				return AlbumArtists.Length;
-			}
-		}
+		public int AlbumArtistsCount => AlbumArtists.Length;
 
 		private string[] _albumArtistsSort;
 		[Browsable(false)]
@@ -129,13 +117,7 @@ namespace TagScanner.Models
 		[Browsable(false)]
 		[Category("Personnel")]
 		[DefaultValue(0)]
-		public int AlbumArtistsSortCount
-		{
-			get
-			{
-				return AlbumArtistsSort.Length;
-			}
-		}
+		public int AlbumArtistsSortCount => AlbumArtistsSort.Length;
 
 		private string _albumSort;
 		[Browsable(false)]
@@ -184,13 +166,7 @@ namespace TagScanner.Models
 		[Browsable(false)]
 		[Category("Personnel")]
 		[DefaultValue(0)]
-		public int ArtistsCount
-		{
-			get
-			{
-				return Artists.Length;
-			}
-		}
+		public int ArtistsCount => Artists.Length;
 
 		private int _audioBitrate = int.MaxValue;
 		[Browsable(true)]
@@ -298,13 +274,7 @@ namespace TagScanner.Models
 		[Browsable(false)]
 		[Category("Personnel")]
 		[DefaultValue(0)]
-		public int ComposersCount
-		{
-			get
-			{
-				return Composers.Length;
-			}
-		}
+		public int ComposersCount => Composers.Length;
 
 		private string[] _composersSort;
 		[Browsable(false)]
@@ -324,13 +294,7 @@ namespace TagScanner.Models
 		[Browsable(false)]
 		[Category("Personnel")]
 		[DefaultValue(0)]
-		public int ComposersSortCount
-		{
-			get
-			{
-				return ComposersSort.Length;
-			}
-		}
+		public int ComposersSortCount => ComposersSort.Length;
 
 		private string _conductor;
 		[Browsable(true)]
@@ -675,13 +639,7 @@ namespace TagScanner.Models
 		[Browsable(false)]
 		[Category("Category")]
 		[DefaultValue(0)]
-		public int GenresCount
-		{
-			get
-			{
-				return Genres.Length;
-			}
-		}
+		public int GenresCount => Genres.Length;
 
 		private string _grouping;
 		[Browsable(false)]
@@ -1210,13 +1168,7 @@ namespace TagScanner.Models
 		[Browsable(false)]
 		[Category("Personnel")]
 		[DefaultValue(0)]
-		public int PerformersCount
-		{
-			get
-			{
-				return Performers.Length;
-			}
-		}
+		public int PerformersCount => Performers.Length;
 
 		private string[] _performersSort;
 		[Browsable(false)]
@@ -1237,13 +1189,7 @@ namespace TagScanner.Models
 		[Browsable(false)]
 		[Category("Personnel")]
 		[DefaultValue(0)]
-		public int PerformersSortCount
-		{
-			get
-			{
-				return PerformersSort.Length;
-			}
-		}
+		public int PerformersSortCount => PerformersSort.Length;
 
 		private int _photoHeight = int.MaxValue;
 		[Browsable(false)]

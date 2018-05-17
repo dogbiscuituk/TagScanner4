@@ -20,8 +20,8 @@ namespace TagScanner.Controllers
 		protected FilterDialog _view;
 		protected virtual FilterDialog View
 		{
-			get { return _view; }
-			set { _view = value; }
+			get => _view;
+			set => _view = value;
 		}
 
 		public abstract bool Visible { get; set; }
@@ -45,8 +45,7 @@ namespace TagScanner.Controllers
 			if (Updating)
 				return;
 			var valueChanged = ValueChanged;
-			if (valueChanged != null)
-				valueChanged(this, EventArgs.Empty);
+			valueChanged?.Invoke(this, EventArgs.Empty);
 		}
 
 		#endregion

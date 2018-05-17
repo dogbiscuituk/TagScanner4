@@ -55,7 +55,7 @@ namespace TagScanner.Controllers
 				}
 			MessageBox.Show(
 				owner,
-				string.Format("{0} replacement(s) made.", PerformReplace()),
+				$"{PerformReplace()} replacement(s) made.",
 				"Replace");
 		}
 
@@ -104,46 +104,46 @@ namespace TagScanner.Controllers
 
 		#region Private Properties
 
-		private IEnumerable<Track> AllTracks { get { return LibraryGridController.Model.Tracks; } }
+		private IEnumerable<Track> AllTracks => LibraryGridController.Model.Tracks;
 		private int ErrorCount { get; set; }
-		private ErrorProvider ErrorProvider { get { return View.ErrorProvider; } }
-		private bool FindInAnyTag { get { return SourceTagBox.SelectedIndex == 0; } }
-		private LibraryGridController LibraryGridController { get; set; }
-		private bool MatchCase { get { return MatchCaseCheckbox.Checked; } }
-		private CheckBox MatchCaseCheckbox { get { return View.cbMatchCase; } }
-		private ContextMenuStrip PopupFindMenu { get { return View.popupFindMenu; } }
-		private ToolStripMenuItem PopupFindRegularExpressionHelp { get { return View.popupFindRegularExpressionHelp; } }
-		private ContextMenuStrip PopupReplaceMenu { get { return View.popupReplaceMenu; } }
-		private ToolStripMenuItem PopupReplaceRegularExpressionHelp { get { return View.popupReplaceRegularExpressionHelp; } }
-		private bool PreviewResults { get { return View.cbPreview.Checked; } }
+		private ErrorProvider ErrorProvider => View.ErrorProvider;
+		private bool FindInAnyTag => SourceTagBox.SelectedIndex == 0;
+		private LibraryGridController LibraryGridController { get; }
+		private bool MatchCase => MatchCaseCheckbox.Checked;
+		private CheckBox MatchCaseCheckbox => View.cbMatchCase;
+		private ContextMenuStrip PopupFindMenu => View.popupFindMenu;
+		private ToolStripMenuItem PopupFindRegularExpressionHelp => View.popupFindRegularExpressionHelp;
+		private ContextMenuStrip PopupReplaceMenu => View.popupReplaceMenu;
+		private ToolStripMenuItem PopupReplaceRegularExpressionHelp => View.popupReplaceRegularExpressionHelp;
+		private bool PreviewResults => View.cbPreview.Checked;
 		private Regex Regex { get; set; }
-		private Button ReplaceAllButton { get { return View.btnReplaceAll; } }
-		private bool ReplaceInSameTag { get { return TargetTagBox.SelectedIndex == 0; } }
+		private Button ReplaceAllButton => View.btnReplaceAll;
+		private bool ReplaceInSameTag => TargetTagBox.SelectedIndex == 0;
 		private bool ReplaceMode { get; set; }
-		private IEnumerable<Track> Scope { get { return ScopeAll ? AllTracks : SelectedTracks; } }
-		private bool ScopeAll { get { return ScopeAllRadioButton.Checked; } }
-		private RadioButton ScopeAllRadioButton { get { return View.rbAllTracks; } }
-		private RadioButton ScopeSelectionRadioButton { get { return View.rbCurrentSelection; } }
-		private IEnumerable<Track> SelectedTracks { get { return LibraryGridController.Selection.Tracks; } }
-		private string SourcePattern { get { return SourcePatternBox.Text; } }
-		private ComboBox SourcePatternBox { get { return View.cbSourcePattern; } }
-		private Button SourceRegexButton { get { return View.btnSourceRegex; } }
-		private string SourceTag { get { return SourceTagBox.Text; } }
-		private ComboBox SourceTagBox { get { return View.cbSourceTag; } }
-		private string TargetPattern { get { return TargetPatternBox.Text; } }
-		private ComboBox TargetPatternBox { get { return View.cbTargetPattern; } }
-		private Button TargetRegexButton { get { return View.btnTargetRegex; } }
-		private string TargetTag { get { return TargetTagBox.Text; } }
-		private ComboBox TargetTagBox { get { return View.cbTargetTag; } }
-		private bool UseRegex { get { return UseRegexCheckbox.Checked; } }
-		private CheckBox UseRegexCheckbox { get { return View.cbUseRegex; } }
-		private FindReplaceDialog View { get; set; }
+		private IEnumerable<Track> Scope => ScopeAll ? AllTracks : SelectedTracks;
+		private bool ScopeAll => ScopeAllRadioButton.Checked;
+		private RadioButton ScopeAllRadioButton => View.rbAllTracks;
+		private RadioButton ScopeSelectionRadioButton => View.rbCurrentSelection;
+		private IEnumerable<Track> SelectedTracks => LibraryGridController.Selection.Tracks;
+		private string SourcePattern => SourcePatternBox.Text;
+		private ComboBox SourcePatternBox => View.cbSourcePattern;
+		private Button SourceRegexButton => View.btnSourceRegex;
+		private string SourceTag => SourceTagBox.Text;
+		private ComboBox SourceTagBox => View.cbSourceTag;
+		private string TargetPattern => TargetPatternBox.Text;
+		private ComboBox TargetPatternBox => View.cbTargetPattern;
+		private Button TargetRegexButton => View.btnTargetRegex;
+		private string TargetTag => TargetTagBox.Text;
+		private ComboBox TargetTagBox => View.cbTargetTag;
+		private bool UseRegex => UseRegexCheckbox.Checked;
+		private CheckBox UseRegexCheckbox => View.cbUseRegex;
+		private FindReplaceDialog View { get; }
 
 		#endregion
 
 		#region Private Fields
 
-		private List<FindReplaceResult> Results = new List<FindReplaceResult>();
+		private readonly List<FindReplaceResult> Results = new List<FindReplaceResult>();
 
 		#endregion
 
@@ -214,7 +214,7 @@ namespace TagScanner.Controllers
 			var targetTag = ReplaceInSameTag ? sourceTag : TargetTag;
 			var source = track.GetPropertyValue(sourceTag) ?? string.Empty;
 			var target = targetTag == sourceTag ? source : track.GetPropertyValue(targetTag) ?? string.Empty;
-			var sources = source is string ? new[] { (string)source } : source as string[];
+			var sources = source is string src ? new[] { src } : source as string[];
 			var targets = new string[sources.Length];
 			var changed = false;
 			for (var index = 0; index < sources.Length; index++)
@@ -288,7 +288,7 @@ namespace TagScanner.Controllers
 			if (ScopeAll && !AllTracks.Any())
 				SetError(ScopeAllRadioButton, "There are no tracks in this library.");
 			if (ReplaceMode && !FindInAnyTag && ReplaceInSameTag && !Metadata.WritableStringTags.Contains(SourceTag))
-				SetError(TargetTagBox, string.Format("Source tag '{0}' is not writable.", SourceTag));
+				SetError(TargetTagBox, $"Source tag '{SourceTag}' is not writable.");
 			if (UseRegex)
 				try { InitRegex(false); }
 				catch (ArgumentException ex) { SetError(SourceRegexButton, ex.Message); }

@@ -15,8 +15,7 @@ namespace TagScanner.Controllers
 		public ReplacePreviewController(IWin32Window owner)
 		{
 			Owner = owner;
-			View = new ReplacePreview();
-			View.ElementHost.Child = new GridElement();
+			View = new ReplacePreview {ElementHost = {Child = new GridElement()}};
 			DataGrid.GridLinesVisibility = DataGridGridLinesVisibility.Vertical;
 			DataGrid.SelectionMode = DataGridSelectionMode.Single;
 			DataGrid.SelectionUnit = DataGridSelectionUnit.Cell;
@@ -25,15 +24,15 @@ namespace TagScanner.Controllers
 
 		public DialogResult Execute(List<FindReplaceResult> results)
 		{
-			View.Text = string.Format("Replace preview - {0} matches found", results.Count);
+			View.Text = $"Replace preview - {results.Count} matches found";
 			DataGrid.ItemsSource = new ListCollectionView(results);
 			return View.ShowDialog(Owner);
 		}
 
-		private IWin32Window Owner;
-		private ReplacePreview View;
+		private readonly IWin32Window Owner;
+		private readonly ReplacePreview View;
 
-		protected override System.Windows.Controls.DataGrid DataGrid { get { return ((GridElement)View.ElementHost.Child).DataGrid; } }
+		protected override System.Windows.Controls.DataGrid DataGrid => ((GridElement)View.ElementHost.Child).DataGrid;
 
 		private Brush GetBrush(string propertyName)
 		{
@@ -58,8 +57,8 @@ namespace TagScanner.Controllers
 			}
 			var column = base.GetColumn(propertyInfo);
 			column.SortMemberPath = GetSortMemberPath(propertyName);
-			if (column is DataGridTextColumn)
-				((DataGridTextColumn)column).Foreground = GetBrush(propertyInfo.Name);
+			if (column is DataGridTextColumn textColumn)
+				textColumn.Foreground = GetBrush(propertyInfo.Name);
             return column;
 		}
 

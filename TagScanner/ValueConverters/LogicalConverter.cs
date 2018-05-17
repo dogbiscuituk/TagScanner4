@@ -14,7 +14,7 @@ namespace TagScanner.ValueConverters
 					return true;
 				case "No":
 					return false;
-			};
+			}
 			return value;
 		}
 

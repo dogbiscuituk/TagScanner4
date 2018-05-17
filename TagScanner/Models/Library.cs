@@ -9,27 +9,15 @@ namespace TagScanner.Models
 		private List<string> _folders = new List<string>();
 		public List<string> Folders
 		{
-			get
-			{
-				return _folders;
-			}
-			set
-			{
-				_folders = value;
-			}
+			get => _folders;
+			set => _folders = value;
 		}
 
 		private List<Track> _tracks = new List<Track>();
 		public List<Track> Tracks
 		{
-			get
-			{
-				return _tracks;
-			}
-			set
-			{
-				_tracks = value;
-			}
+			get => _tracks;
+			set => _tracks = value;
 		}
 
 		public void Clear()

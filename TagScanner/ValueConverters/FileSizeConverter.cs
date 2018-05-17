@@ -9,8 +9,8 @@ namespace TagScanner.ValueConverters
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (value is long)
-				return ((long)value).AsString(false);
+			if (value is long longValue)
+				return longValue.AsString(false);
 			return value;
 		}
 

@@ -29,27 +29,15 @@ namespace TagScanner.Models
 
 		#region Properties
 
-		private bool FileExists
-		{
-			get
-			{
-				return File.Exists(FilePath);
-			}
-		}
+		private bool FileExists => File.Exists(FilePath);
 
 		[NonSerialized]
 		private bool _isModified;
 		[XmlIgnore]
 		public bool IsModified
 		{
-			get
-			{
-				return _isModified;
-			}
-			set
-			{
-				_isModified = value;
-			}
+			get => _isModified;
+			set => _isModified = value;
 		}
 
 		[NonSerialized]
@@ -63,10 +51,7 @@ namespace TagScanner.Models
 		private string _album;
 		public string Album
 		{
-			get
-			{
-				return _album;
-			}
+			get => _album;
 			set
 			{
 				if (Album != value)
@@ -80,10 +65,7 @@ namespace TagScanner.Models
 		private string[] _albumArtists;
 		public string[] AlbumArtists
 		{
-			get
-			{
-				return _albumArtists;
-			}
+			get => _albumArtists;
 			set
 			{
 				if (!SequenceEqual(AlbumArtists, value))
@@ -94,21 +76,12 @@ namespace TagScanner.Models
 			}
 		}
 
-		public int AlbumArtistsCount
-		{
-			get
-			{
-				return AlbumArtists.Length;
-			}
-		}
+		public int AlbumArtistsCount => AlbumArtists.Length;
 
 		private string[] _albumArtistsSort;
 		public string[] AlbumArtistsSort
 		{
-			get
-			{
-				return _albumArtistsSort;
-			}
+			get => _albumArtistsSort;
 			set
 			{
 				if (!SequenceEqual(AlbumArtistsSort, value))
@@ -119,21 +92,12 @@ namespace TagScanner.Models
 			}
 		}
 
-		public int AlbumArtistsSortCount
-		{
-			get
-			{
-				return AlbumArtistsSort.Length;
-			}
-		}
+		public int AlbumArtistsSortCount => AlbumArtistsSort.Length;
 
 		private string _albumSort;
 		public string AlbumSort
 		{
-			get
-			{
-				return _albumSort;
-			}
+			get => _albumSort;
 			set
 			{
 				if (AlbumSort != value)
@@ -147,10 +111,7 @@ namespace TagScanner.Models
 		private string _amazonId;
 		public string AmazonId
 		{
-			get
-			{
-				return _amazonId;
-			}
+			get => _amazonId;
 			set
 			{
 				if (AmazonId != value)
@@ -164,10 +125,7 @@ namespace TagScanner.Models
 		private string[] _artists;
 		public string[] Artists
 		{
-			get
-			{
-				return _artists;
-			}
+			get => _artists;
 			set
 			{
 				if (!SequenceEqual(Artists, value))
@@ -178,13 +136,7 @@ namespace TagScanner.Models
 			}
 		}
 
-		public int ArtistsCount
-		{
-			get
-			{
-				return Artists.Length;
-			}
-		}
+		public int ArtistsCount => Artists.Length;
 
 		public int AudioBitrate { get; set; }
 		public int AudioChannels { get; set; }
@@ -194,10 +146,7 @@ namespace TagScanner.Models
 		[DefaultValue(0)]
 		public int BeatsPerMinute
 		{
-			get
-			{
-				return _beatsPerMinute;
-			}
+			get => _beatsPerMinute;
 			set
 			{
 				if (BeatsPerMinute != value)
@@ -210,23 +159,14 @@ namespace TagScanner.Models
 
 		public int BitsPerSample { get; set; }
 
-		public string Century
-		{
-			get
-			{
-				return Year > 0 ? ((long)(Year + 99) / 100).AsOrdinal() : string.Empty;
-			}
-		}
+		public string Century => Year > 0 ? ((long)(Year + 99) / 100).AsOrdinal() : string.Empty;
 
 		public string Codecs { get; set; }
 
 		private string _comment;
 		public string Comment
 		{
-			get
-			{
-				return _comment;
-			}
+			get => _comment;
 			set
 			{
 				if (Comment != value)
@@ -240,10 +180,7 @@ namespace TagScanner.Models
 		private string[] _composers;
 		public string[] Composers
 		{
-			get
-			{
-				return _composers;
-			}
+			get => _composers;
 			set
 			{
 				if (!SequenceEqual(Composers, value))
@@ -254,21 +191,12 @@ namespace TagScanner.Models
 			}
 		}
 
-		public int ComposersCount
-		{
-			get
-			{
-				return Composers.Length;
-			}
-		}
+		public int ComposersCount => Composers.Length;
 
 		private string[] _composersSort;
 		public string[] ComposersSort
 		{
-			get
-			{
-				return _composersSort;
-			}
+			get => _composersSort;
 			set
 			{
 				if (!SequenceEqual(ComposersSort, value))
@@ -279,21 +207,12 @@ namespace TagScanner.Models
 			}
 		}
 
-		public int ComposersSortCount
-		{
-			get
-			{
-				return ComposersSort.Length;
-			}
-		}
+		public int ComposersSortCount => ComposersSort.Length;
 
 		private string _conductor;
 		public string Conductor
 		{
-			get
-			{
-				return _conductor;
-			}
+			get => _conductor;
 			set
 			{
 				if (Conductor != value)
@@ -307,10 +226,7 @@ namespace TagScanner.Models
 		private string _copyright;
 		public string Copyright
 		{
-			get
-			{
-				return _copyright;
-			}
+			get => _copyright;
 			set
 			{
 				if (Copyright != value)
@@ -321,13 +237,7 @@ namespace TagScanner.Models
 			}
 		}
 
-		public string Decade
-		{
-			get
-			{
-				return Year > 0 ? string.Format("{0}0s", Year / 10) : string.Empty;
-			}
-		}
+		public string Decade => Year > 0 ? $"{Year / 10}0s" : string.Empty;
 
 		public string Description { get; set; }
 
@@ -335,10 +245,7 @@ namespace TagScanner.Models
 		private int _discCount;
 		public int DiscCount
 		{
-			get
-			{
-				return _discCount;
-			}
+			get => _discCount;
 			set
 			{
 				if (DiscCount != value)
@@ -353,10 +260,7 @@ namespace TagScanner.Models
 		private int _discNumber;
 		public int DiscNumber
 		{
-			get
-			{
-				return _discNumber;
-			}
+			get => _discNumber;
 			set
 			{
 				if (DiscNumber != value)
@@ -367,21 +271,9 @@ namespace TagScanner.Models
 			}
 		}
 
-		public string DiscOf
-		{
-			get
-			{
-				return NumberOfTotal(DiscNumber, DiscCount, 1);
-			}
-		}
+		public string DiscOf => NumberOfTotal(DiscNumber, DiscCount, 1);
 
-		public string DiscTrack
-		{
-			get
-			{
-				return string.Format("{0} - {1}", DiscOf, TrackOf);
-			}
-		}
+		public string DiscTrack => $"{DiscOf} - {TrackOf}";
 
 		[XmlIgnore]
 		public TimeSpan Duration { get; set; }
@@ -391,14 +283,8 @@ namespace TagScanner.Models
 		[XmlElement(DataType ="duration", ElementName ="Duration")]
 		public string DurationString
 		{
-			get
-			{
-				return XmlConvert.ToString(Duration);
-			}
-			set
-			{
-				Duration = string.IsNullOrWhiteSpace(value) ? TimeSpan.Zero : XmlConvert.ToTimeSpan(value);
-			}
+			get => XmlConvert.ToString(Duration);
+			set => Duration = string.IsNullOrWhiteSpace(value) ? TimeSpan.Zero : XmlConvert.ToTimeSpan(value);
 		}
 
 		public string FileAttributes { get; set; }
@@ -406,13 +292,7 @@ namespace TagScanner.Models
 		public DateTime FileCreationTime { get; set; }
 		public DateTime FileCreationTimeUtc { get; set; }
 
-		public string FileExtension
-		{
-			get
-			{
-				return Path.GetExtension(FilePath);
-			}
-		}
+		public string FileExtension => Path.GetExtension(FilePath);
 
 		public DateTime FileLastAccessTime { get; set; }
 
@@ -422,21 +302,9 @@ namespace TagScanner.Models
 
 		public DateTime FileLastWriteTimeUtc { get; set; }
 
-		public string FileName
-		{
-			get
-			{
-				return Path.GetFileName(FilePath);
-			}
-		}
+		public string FileName => Path.GetFileName(FilePath);
 
-		public string FileNameWithoutExtension
-		{
-			get
-			{
-				return Path.GetFileNameWithoutExtension(FilePath);
-			}
-		}
+		public string FileNameWithoutExtension => Path.GetFileNameWithoutExtension(FilePath);
 
 		public string FilePath { get; set; }
 
@@ -454,10 +322,7 @@ namespace TagScanner.Models
 		private string[] _genres;
 		public string[] Genres
 		{
-			get
-			{
-				return _genres;
-			}
+			get => _genres;
 			set
 			{
 				if (!SequenceEqual(Genres, value))
@@ -468,21 +333,12 @@ namespace TagScanner.Models
 			}
 		}
 
-		public int GenresCount
-		{
-			get
-			{
-				return Genres.Length;
-			}
-		}
+		public int GenresCount => Genres.Length;
 
 		private string _grouping;
 		public string Grouping
 		{
-			get
-			{
-				return _grouping;
-			}
+			get => _grouping;
 			set
 			{
 				if (Grouping != value)
@@ -538,22 +394,10 @@ namespace TagScanner.Models
 		public long InvariantEndPosition { get; set; }
 		public long InvariantStartPosition { get; set; }
 
-		public Logical IsClassical
-		{
-			get
-			{
-				return (FirstGenre == "Classical").AsLogical();
-			}
-		}
+		public Logical IsClassical => (FirstGenre == "Classical").AsLogical();
 
 		private bool _isEmpty;
-		public Logical IsEmpty
-		{
-			get
-			{
-				return _isEmpty.AsLogical();
-			}
-		}
+		public Logical IsEmpty => _isEmpty.AsLogical();
 
 		public string JoinedAlbumArtists { get; set; }
 		public string JoinedArtists { get; set; }
@@ -565,10 +409,7 @@ namespace TagScanner.Models
 		private string _lyrics;
 		public string Lyrics
 		{
-			get
-			{
-				return _lyrics;
-			}
+			get => _lyrics;
 			set
 			{
 				if (Lyrics != value)
@@ -581,23 +422,14 @@ namespace TagScanner.Models
 
 		public TagLib.MediaTypes MediaTypes { get; set; }
 
-		public string Millennium
-		{
-			get
-			{
-				return Year > 0 ? ((long)(Year + 999) / 1000).AsOrdinal() : string.Empty;
-			}
-		}
+		public string Millennium => Year > 0 ? ((long)(Year + 999) / 1000).AsOrdinal() : string.Empty;
 
 		public string MimeType { get; set; }
 
 		private string _musicBrainzArtistId;
 		public string MusicBrainzArtistId
 		{
-			get
-			{
-				return _musicBrainzArtistId;
-			}
+			get => _musicBrainzArtistId;
 			set
 			{
 				if (MusicBrainzArtistId != value)
@@ -611,10 +443,7 @@ namespace TagScanner.Models
 		private string _musicBrainzDiscId;
 		public string MusicBrainzDiscId
 		{
-			get
-			{
-				return _musicBrainzDiscId;
-			}
+			get => _musicBrainzDiscId;
 			set
 			{
 				if (MusicBrainzArtistId != value)
@@ -628,10 +457,7 @@ namespace TagScanner.Models
 		private string _musicBrainzReleaseArtistId;
 		public string MusicBrainzReleaseArtistId
 		{
-			get
-			{
-				return _musicBrainzReleaseArtistId;
-			}
+			get => _musicBrainzReleaseArtistId;
 			set
 			{
 				if (MusicBrainzReleaseArtistId != value)
@@ -645,10 +471,7 @@ namespace TagScanner.Models
 		private string _musicBrainzReleaseCountry;
 		public string MusicBrainzReleaseCountry
 		{
-			get
-			{
-				return _musicBrainzReleaseCountry;
-			}
+			get => _musicBrainzReleaseCountry;
 			set
 			{
 				if (MusicBrainzReleaseCountry != value)
@@ -662,10 +485,7 @@ namespace TagScanner.Models
 		private string _musicBrainzReleaseId;
 		public string MusicBrainzReleaseId
 		{
-			get
-			{
-				return _musicBrainzReleaseId;
-			}
+			get => _musicBrainzReleaseId;
 			set
 			{
 				if (MusicBrainzReleaseId != value)
@@ -679,10 +499,7 @@ namespace TagScanner.Models
 		private string _musicBrainzReleaseStatus;
 		public string MusicBrainzReleaseStatus
 		{
-			get
-			{
-				return _musicBrainzReleaseStatus;
-			}
+			get => _musicBrainzReleaseStatus;
 			set
 			{
 				if (MusicBrainzReleaseStatus != value)
@@ -696,10 +513,7 @@ namespace TagScanner.Models
 		private string _musicBrainzReleaseType;
 		public string MusicBrainzReleaseType
 		{
-			get
-			{
-				return _musicBrainzReleaseType;
-			}
+			get => _musicBrainzReleaseType;
 			set
 			{
 				if (MusicBrainzReleaseType != value)
@@ -713,10 +527,7 @@ namespace TagScanner.Models
 		private string _musicBrainzTrackId;
 		public string MusicBrainzTrackId
 		{
-			get
-			{
-				return _musicBrainzTrackId;
-			}
+			get => _musicBrainzTrackId;
 			set
 			{
 				if (MusicBrainzTrackId != value)
@@ -730,10 +541,7 @@ namespace TagScanner.Models
 		private string _musicIpId;
 		public string MusicIpId
 		{
-			get
-			{
-				return _musicIpId;
-			}
+			get => _musicIpId;
 			set
 			{
 				if (MusicIpId != value)
@@ -749,10 +557,7 @@ namespace TagScanner.Models
 		private string[] _performers;
 		public string[] Performers
 		{
-			get
-			{
-				return _performers;
-			}
+			get => _performers;
 			set
 			{
 				if (!SequenceEqual(Performers, value))
@@ -763,21 +568,12 @@ namespace TagScanner.Models
 			}
 		}
 
-		public int PerformersCount
-		{
-			get
-			{
-				return Performers.Length;
-			}
-		}
+		public int PerformersCount => Performers.Length;
 
 		private string[] _performersSort;
 		public string[] PerformersSort
 		{
-			get
-			{
-				return _performersSort;
-			}
+			get => _performersSort;
 			set
 			{
 				if (!SequenceEqual(PerformersSort, value))
@@ -788,13 +584,7 @@ namespace TagScanner.Models
 			}
 		}
 
-		public int PerformersSortCount
-		{
-			get
-			{
-				return PerformersSort.Length;
-			}
-		}
+		public int PerformersSortCount => PerformersSort.Length;
 
 		[DefaultValue(0)]
 		public int PhotoHeight { get; set; }
@@ -808,22 +598,10 @@ namespace TagScanner.Models
 		public Picture[] Pictures { get; set; }
 
 		private int _picturesCount;
-		public int PicturesCount
-		{
-			get
-			{
-				return _picturesCount;
-			}
-		}
+		public int PicturesCount => _picturesCount;
 
 		private bool _possiblyCorrupt;
-		public Logical PossiblyCorrupt
-		{
-			get
-			{
-				return _possiblyCorrupt.AsLogical();
-			}
-		}
+		public Logical PossiblyCorrupt => _possiblyCorrupt.AsLogical();
 
 		public FileStatus FileStatus
 		{
@@ -854,10 +632,7 @@ namespace TagScanner.Models
 		private string _title;
 		public string Title
 		{
-			get
-			{
-				return _title;
-			}
+			get => _title;
 			set
 			{
 				if (Title != value)
@@ -871,10 +646,7 @@ namespace TagScanner.Models
 		private string _titleSort;
 		public string TitleSort
 		{
-			get
-			{
-				return _titleSort;
-			}
+			get => _titleSort;
 			set
 			{
 				if (TitleSort != value)
@@ -889,10 +661,7 @@ namespace TagScanner.Models
 		[DefaultValue(0)]
 		public int TrackCount
 		{
-			get
-			{
-				return _trackCount;
-			}
+			get => _trackCount;
 			set
 			{
 				if (TrackCount != value)
@@ -907,10 +676,7 @@ namespace TagScanner.Models
 		[DefaultValue(0)]
 		public int TrackNumber
 		{
-			get
-			{
-				return _trackNumber;
-			}
+			get => _trackNumber;
 			set
 			{
 				if (TrackNumber != value)
@@ -921,13 +687,7 @@ namespace TagScanner.Models
 			}
 		}
 
-		public string TrackOf
-		{
-			get
-			{
-				return NumberOfTotal(TrackNumber, TrackCount, 2);
-			}
-		}
+		public string TrackOf => NumberOfTotal(TrackNumber, TrackCount, 2);
 
 		[DefaultValue(0)]
 		public int VideoHeight { get; set; }
@@ -938,10 +698,7 @@ namespace TagScanner.Models
 		[DefaultValue(0)]
 		public int Year
 		{
-			get
-			{
-				return _year;
-			}
+			get => _year;
 			set
 			{
 				if (Year != value)
@@ -952,13 +709,7 @@ namespace TagScanner.Models
 			}
 		}
 
-		public string YearAlbum
-		{
-			get
-			{
-				return string.Format("{0} - {1}", Year, Album);
-			}
-		}
+		public string YearAlbum => $"{Year} - {Album}";
 
 		#endregion
 
@@ -1002,14 +753,8 @@ namespace TagScanner.Models
 
 		public override string ToString()
 		{
-			return string.Format(
-				"{0} | {1} | {2} {3} ({4}) {5}",
-				JoinedPerformers,
-				YearAlbum,
-				TrackOf,
-				Title,
-				Duration.AsString(false),
-				FileSize.AsString(true));
+			return
+				$"{JoinedPerformers} | {YearAlbum} | {TrackOf} {Title} ({Duration.AsString(false)}) {FileSize.AsString(true)}";
 		}
 
 		#endregion
@@ -1082,7 +827,7 @@ namespace TagScanner.Models
 			BitsPerSample = properties.BitsPerSample;
 			Codecs = properties.Codecs
 				.Where(c => c != null)
-				.Select(c => string.Format("{0} ({1} - {2:g})", c.MediaTypes, c.Description, c.Duration))
+				.Select(c => $"{c.MediaTypes} ({c.Description} - {c.Duration:g})")
 				.Aggregate((s, t) => s + "; " + t);
 			Description = properties.Description;
 			Duration = properties.Duration;
@@ -1155,8 +900,7 @@ namespace TagScanner.Models
 			_trackNumber = (int)tag.Track;
 			_trackCount = (int)tag.TrackCount;
 			_year = (int)tag.Year;
-			var imageTag = tag as TagLib.Image.ImageTag;
-            if (imageTag != null)
+			if (tag is TagLib.Image.ImageTag imageTag)
 			{
 				ImageAltitude = imageTag.Altitude ?? 0;
 				ImageCreator = imageTag.Creator;
@@ -1216,18 +960,17 @@ namespace TagScanner.Models
 			tag.Track = (uint)_trackNumber;
 			tag.TrackCount = (uint)_trackCount;
 			tag.Year = (uint)_year;
-			var imageTag = tag as TagLib.Image.ImageTag;
-			if (imageTag != null)
+			if (tag is TagLib.Image.ImageTag imageTag)
 			{
 				imageTag.Altitude = ImageAltitude;
-                imageTag.Creator = ImageCreator;
+				imageTag.Creator = ImageCreator;
 				imageTag.DateTime = ImageDateTime;
 				imageTag.ExposureTime = ImageExposureTime;
 				imageTag.FNumber = ImageFNumber;
 				imageTag.FocalLength = ImageFocalLength;
 				imageTag.FocalLengthIn35mmFilm = (uint)ImageFocalLengthIn35mmFilm;
 				imageTag.ISOSpeedRatings = (uint)ImageISOSpeedRatings;
-                imageTag.Keywords = ImageKeywords;
+				imageTag.Keywords = ImageKeywords;
 				imageTag.Latitude = ImageLatitude;
 				imageTag.Longitude = ImageLongitude;
 				imageTag.Make = ImageMake;
@@ -1248,7 +991,7 @@ namespace TagScanner.Models
 
 		private static bool SequenceEqual(IEnumerable<string> x, IEnumerable<string> y)
 		{
-			return x == null ? y == null : y != null && Enumerable.SequenceEqual(x, y);
+			return x == null ? y == null : y != null && x.SequenceEqual(y);
 		}
 
 		#endregion

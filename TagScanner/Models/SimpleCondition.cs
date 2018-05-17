@@ -27,11 +27,11 @@ namespace TagScanner.Models
 
 		#region Properties
 
-		public string Operator { get; private set; }
+		public string Operator { get; }
 
-		public string PropertyName { get; private set; }
+		public string PropertyName { get; }
 
-		public string ValueString { get; private set; }
+		public string ValueString { get; }
 
 		#endregion
 
@@ -87,21 +87,9 @@ namespace TagScanner.Models
 
 		#region Properties
 
-		private Type PropertyType
-		{
-			get
-			{
-				return Metadata.GetPropertyInfo(PropertyName).PropertyType;
-			}
-		}
+		private Type PropertyType => Metadata.GetPropertyInfo(PropertyName).PropertyType;
 
-		private string PropertyTypeName
-		{
-			get
-			{
-				return PropertyType.Name;
-			}
-		}
+		private string PropertyTypeName => PropertyType.Name;
 
 		private object Value
 		{
@@ -130,7 +118,7 @@ namespace TagScanner.Models
 
 		#region Static Properties
 
-		private static string[] ComparableTypes = new[]
+		private static readonly string[] ComparableTypes = new[]
 		{
 			"DateTime",
 			"Int32",
@@ -139,7 +127,7 @@ namespace TagScanner.Models
 			"TimeSpan"
 		};
 
-		private static string[] ComparisonOperators = new[]
+		private static readonly string[] ComparisonOperators = new[]
 		{
 			Operators.LessThan,
 			Operators.NotGreaterThan,
@@ -147,18 +135,18 @@ namespace TagScanner.Models
 			Operators.GreaterThan
 		};
 
-		private static string[] EqualityOperators = new[]
+		private static readonly string[] EqualityOperators = new[]
 		{
 			Operators.Equal,
 			Operators.NotEqual
 		};
 
-		private static string[] StringTypes = new[]
+		private static readonly string[] StringTypes = new[]
 		{
 			"String"
 		};
 
-		private static string[] StringOperators = new[]
+		private static readonly string[] StringOperators = new[]
 		{
 			Operators.Containing,
 			Operators.StartingWith,
@@ -168,7 +156,7 @@ namespace TagScanner.Models
 			Operators.NotEndingWith
 		};
 
-		private static IEnumerable<string> AllOperators =
+		private static readonly IEnumerable<string> AllOperators =
 			StringOperators
 			.Union(EqualityOperators)
 			.Union(ComparisonOperators);

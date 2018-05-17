@@ -77,10 +77,7 @@ namespace TagScanner.Controllers
 		private string _filePath = string.Empty;
 		protected string FilePath
 		{
-			get
-			{
-				return _filePath;
-			}
+			get => _filePath;
 			set
 			{
 				if (FilePath != value)
@@ -97,9 +94,7 @@ namespace TagScanner.Controllers
 
 		protected virtual void OnFilePathChanged()
 		{
-			var filePathChanged = FilePathChanged;
-			if (filePathChanged != null)
-				filePathChanged(this, EventArgs.Empty);
+			FilePathChanged?.Invoke(this, EventArgs.Empty);
 		}
 
 		protected virtual bool OnFileLoading()
@@ -137,7 +132,7 @@ namespace TagScanner.Controllers
 					LoadFromFile(filePath);
 			}
 			else if (MessageBox.Show(
-				string.Format("File \"{0}\" no longer exists. Remove from menu?", filePath),
+				         $"File \"{filePath}\" no longer exists. Remove from menu?",
 				"Reopen file",
 				MessageBoxButtons.YesNo) == DialogResult.Yes)
 				RemoveItem(filePath);

@@ -61,7 +61,7 @@ namespace TagScanner.Models
 
 		public static List<string> GetVisibleTags()
 		{
-			return SelectionTags.Where(t => GetTagVisible(t)).ToList();
+			return SelectionTags.Where(GetTagVisible).ToList();
 		}
 
 		private static void SetTagVisible(string propertyName, bool isBrowsable)

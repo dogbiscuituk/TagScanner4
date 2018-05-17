@@ -8,8 +8,8 @@ namespace TagScanner.ValueConverters
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (value is DateTime)
-				return ((DateTime)value).ToString("g");
+			if (value is DateTime dateTime)
+				return dateTime.ToString("g");
 			return value;
 		}
 
