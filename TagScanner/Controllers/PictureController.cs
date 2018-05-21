@@ -30,8 +30,11 @@ namespace TagScanner.Controllers
 			get => _pictureBox;
 			set
 			{
+				if (PictureBox != null)
+					PictureBox.Resize -= PictureBox_Resize;
 				_pictureBox = value;
-				PictureBox.Resize += PictureBox_Resize;
+				if (PictureBox != null)
+					PictureBox.Resize += PictureBox_Resize;
 			}
 		}
 
@@ -41,7 +44,13 @@ namespace TagScanner.Controllers
 			get => _propertyGrid;
 			set
 			{
+				if (PropertyGrid != null)
+				{
+					PropertyGrid.SelectedObjectsChanged -= PropertyGrid_SelectedObjectsChanged;
+					PropertyGrid.SelectedGridItemChanged -= PropertyGrid_SelectedGridItemChanged;
+				}
 				_propertyGrid = value;
+				if (PropertyGrid == null) return;
 				PropertyGrid.SelectedGridItemChanged += PropertyGrid_SelectedGridItemChanged;
 				PropertyGrid.SelectedObjectsChanged += PropertyGrid_SelectedObjectsChanged;
 			}
@@ -53,8 +62,11 @@ namespace TagScanner.Controllers
 			get => _playlistGrid;
 			set
 			{
+				if (PlaylistGrid != null)
+					PlaylistGrid.SelectionChanged -= PlaylistGrid_SelectionChanged;
 				_playlistGrid = value;
-				PlaylistGrid.SelectionChanged += PlaylistGrid_SelectionChanged;
+				if (PlaylistGrid != null)
+					PlaylistGrid.SelectionChanged += PlaylistGrid_SelectionChanged;
 			}
 		}
 
@@ -117,7 +129,7 @@ namespace TagScanner.Controllers
 			return image;
 		}
 
-		private Image GetImageFromTrack(ITrack track)
+		private static Image GetImageFromTrack(ITrack track)
 		{
 			if (track == null)
 				return null;
