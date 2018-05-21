@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using TagScanner.Models;
+using TagScanner.Properties;
 using TagScanner.Views;
 
 namespace TagScanner.Controllers
@@ -55,8 +56,8 @@ namespace TagScanner.Controllers
 				}
 			MessageBox.Show(
 				owner,
-				$"{PerformReplace()} replacement(s) made.",
-				"Replace");
+				string.Format(Resources.S_ReplacementsMade, PerformReplace()),
+				Resources.S_Replace);
 		}
 
 		#endregion
@@ -279,7 +280,7 @@ namespace TagScanner.Controllers
 
 		private void UpdateControls()
 		{
-			View.Text = ReplaceMode ? "Replace" : "Find";
+			View.Text = ReplaceMode ? Resources.S_Replace : "Find";
 			SourceRegexButton.Enabled = TargetRegexButton.Enabled = UseRegex;
 			ErrorProvider.Clear();
 			ErrorCount = 0;

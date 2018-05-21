@@ -5,6 +5,7 @@ using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Media;
 using TagScanner.Models;
+using TagScanner.Properties;
 using TagScanner.ValueConverters;
 using TagScanner.Views;
 
@@ -24,7 +25,7 @@ namespace TagScanner.Controllers
 
 		public DialogResult Execute(List<FindReplaceResult> results)
 		{
-			View.Text = $"Replace preview - {results.Count} matches found";
+			View.Text = string.Format(Resources.S_ReplacePreview, results.Count);
 			DataGrid.ItemsSource = new ListCollectionView(results);
 			return View.ShowDialog(Owner);
 		}

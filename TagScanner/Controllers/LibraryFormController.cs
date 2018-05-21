@@ -185,7 +185,7 @@ namespace TagScanner.Controllers
 		private void HelpAbout_Click(object sender, EventArgs e)
 		{
 			MessageBox.Show(
-				$"{Application.CompanyName}\n{Application.ProductName}\nVersion {Application.ProductVersion}",
+				string.Format(Resources.S_Version, Application.CompanyName, Application.ProductName, Application.ProductVersion),
 				string.Concat("About ", Application.ProductName));
 		}
 
@@ -250,15 +250,15 @@ namespace TagScanner.Controllers
 			if (!tracks.Any())
 				return true;
 			var message = new StringBuilder();
-			Say(message, tracks, FileStatus.Changed, Resources.TracksChanged);
-			Say(message, tracks, FileStatus.New, Resources.TracksAdded);
-			Say(message, tracks, FileStatus.Updated, Resources.TracksUpdated);
-			Say(message, tracks, FileStatus.Pending, Resources.TracksPending);
-			Say(message, tracks, FileStatus.Deleted, Resources.TracksDeleted);
-			message.Append(Resources.ConfirmSync);
+			Say(message, tracks, FileStatus.Changed, Resources.S_TracksChanged);
+			Say(message, tracks, FileStatus.New, Resources.S_TracksAdded);
+			Say(message, tracks, FileStatus.Updated, Resources.S_TracksUpdated);
+			Say(message, tracks, FileStatus.Pending, Resources.S_TracksPending);
+			Say(message, tracks, FileStatus.Deleted, Resources.S_TracksDeleted);
+			message.Append(Resources.S_ConfirmSync);
 			var decision = MessageBox.Show(
 				message.ToString(),
-				Resources.ConfirmSyncCaption,
+				Resources.S_ConfirmSyncCaption,
 				MessageBoxButtons.YesNo,
 				MessageBoxIcon.Question) == DialogResult.Yes;
 			if (decision)
@@ -276,7 +276,7 @@ namespace TagScanner.Controllers
 			}
 			catch (IOException ex)
 			{
-				MessageBox.Show(View, ex.Message, "Error streaming track", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(View, ex.Message, Resources.S_ErrorStreamingTrack, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 			return result;
 		}

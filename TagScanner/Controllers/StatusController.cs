@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using TagScanner.Models;
+using TagScanner.Properties;
 
 namespace TagScanner.Controllers
 {
@@ -18,7 +19,7 @@ namespace TagScanner.Controllers
 		public IProgress<ProgressEventArgs> CreateNewProgress()
 		{
 			var progressBar = new ToolStripProgressBar { Style = ProgressBarStyle.Continuous };
-			var cancelButton = new ToolStripSplitButton { DropDownButtonWidth = 0, Text = "Cancel" };
+			var cancelButton = new ToolStripSplitButton { DropDownButtonWidth = 0, Text = Resources.S_Cancel };
 			cancelButton.ButtonClick += CancelButton_ButtonClick;
 			StatusBar.AddRange(new ToolStripItem[] { progressBar, cancelButton });
 			var progress = new Progress<ProgressEventArgs>((e) =>

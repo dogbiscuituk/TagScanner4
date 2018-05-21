@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TagScanner.Models;
+using TagScanner.Properties;
 
 namespace TagScanner.Controllers
 {
@@ -16,11 +17,11 @@ namespace TagScanner.Controllers
 			{
 				Filter = filter,
 				Multiselect = true,
-				Title = "Select the media file(s) to add"
+				Title = Resources.S_SelectTheMediaFilesToAdd
 			};
 			FolderBrowserDialog = new FolderBrowserDialog
 			{
-				Description = "Select the media folder to add"
+				Description = Resources.S_SelectTheMediaFolderToAdd
 			};
 			LibraryFormController = libraryFormController;
 		}
@@ -61,11 +62,12 @@ namespace TagScanner.Controllers
 			var filter = itemParts[1];
             if (Directory.Exists(folderPath))
 				AddFolder(folderPath, filter);
-			else if (MessageBox.Show(
-				         $"Folder \"{folderPath}\" no longer exists. Remove from menu?",
-				"Add Recent Folder",
-				MessageBoxButtons.YesNo) == DialogResult.Yes)
-				RemoveItem(item);
+			else if (
+	            MessageBox.Show(
+		            string.Format(Resources.S_FolderNoLongerExists, folderPath),
+		            Resources.S_AddRecentFolder,
+		            MessageBoxButtons.YesNo) == DialogResult.Yes)
+	            RemoveItem(item);
 		}
 
 		private readonly FolderBrowserDialog FolderBrowserDialog;

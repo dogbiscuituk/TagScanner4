@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using TagScanner.Models;
+using TagScanner.Properties;
 using TagScanner.Views;
 
 namespace TagScanner.Controllers
@@ -100,7 +101,7 @@ namespace TagScanner.Controllers
 					{
 						Dock = DockStyle.Bottom,
 						Format = DateTimePickerFormat.Custom,
-						CustomFormat = "dd/MM/yyyy HH:mm",
+						CustomFormat = Resources.S_CustomDateTimeFormat,
 						ShowUpDown = true,
 						Value = DateTime.Now
 					};

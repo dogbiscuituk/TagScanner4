@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
 using TagScanner.Models;
+using TagScanner.Properties;
 
 namespace TagScanner.Controllers
 {
@@ -14,12 +15,12 @@ namespace TagScanner.Controllers
 			OpenFileDialog = new OpenFileDialog
 			{
 				Filter = filter,
-				Title = "Select the file to open"
+				Title = Resources.S_SelectFileToOpen
 			};
 			SaveFileDialog = new SaveFileDialog
 			{
 				Filter = filter,
-				Title = "Save file"
+				Title = Resources.S_SaveFile
 			};
 		}
 
@@ -54,8 +55,8 @@ namespace TagScanner.Controllers
 		{
 			if (Model.Modified)
 				switch (MessageBox.Show(
-					"The contents of this file have changed. Do you want to save the changes?",
-					"File modified",
+					Resources.S_FileContentsHaveChanged,
+					Resources.S_FileModified,
 					MessageBoxButtons.YesNoCancel,
 					MessageBoxIcon.Warning))
 				{
@@ -131,10 +132,11 @@ namespace TagScanner.Controllers
 				if (SaveIfModified())
 					LoadFromFile(filePath);
 			}
-			else if (MessageBox.Show(
-				         $"File \"{filePath}\" no longer exists. Remove from menu?",
-				"Reopen file",
-				MessageBoxButtons.YesNo) == DialogResult.Yes)
+			else if (
+				MessageBox.Show(
+					string.Format(Resources.S_FileNoLongerExists, filePath),
+					Resources.S_RepoenFile,
+					MessageBoxButtons.YesNo) == DialogResult.Yes)
 				RemoveItem(filePath);
 		}
 
