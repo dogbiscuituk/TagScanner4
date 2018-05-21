@@ -99,7 +99,7 @@ namespace TagScanner.Controllers
 
 		#region Methods
 
-		private Image GetImageFromFile(string filePath, TagLib.Image.ImageOrientation orientation)
+		private static Image GetImageFromFile(string filePath, TagLib.Image.ImageOrientation orientation)
 		{
 			Image image;
 			try
@@ -146,7 +146,7 @@ namespace TagScanner.Controllers
 			return RotateFlipTypes[(int)orientation];
 		}
 
-		private Image GetVideoThumbnail(string filePath, double frameTimeSeconds)
+		private static Image GetVideoThumbnail(string filePath, double frameTimeSeconds)
 		{
 			var videoConverter = new FFMpegConverter();
             using (var stream = new MemoryStream())

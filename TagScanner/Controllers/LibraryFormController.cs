@@ -207,11 +207,9 @@ namespace TagScanner.Controllers
 		{
 			var visibleTags = Metadata.GetVisibleTags();
 			var ok = new TagSelectorController(Metadata.SelectionPropertyInfos).Execute(visibleTags);
-			if (ok)
-			{
-				Metadata.SetVisibleTags(visibleTags);
-				UpdatePropertyGrid();
-			}
+			if (!ok) return;
+			Metadata.SetVisibleTags(visibleTags);
+			UpdatePropertyGrid();
 		}
 
 		#endregion
@@ -286,7 +284,7 @@ namespace TagScanner.Controllers
 			return Model.Tracks.Where(track => track.FileStatus == status).ToList();
 		}
 
-		private void Say(StringBuilder message, List<Track> tracks, FileStatus status, string format)
+		private static void Say(StringBuilder message, List<Track> tracks, FileStatus status, string format)
 		{
 			var count = tracks.Count(t => (t.FileStatus & status) != 0);
 			if (count > 0)
@@ -311,11 +309,14 @@ namespace TagScanner.Controllers
 		}
 
 		private FilterDialogController _filterDialogController;
-		private FilterDialogController FilterDialogController => _filterDialogController
-		                                                         ?? (_filterDialogController = new FilterDialogController(LibraryGridController, null));
+
+		private FilterDialogController FilterDialogController =>
+			_filterDialogController ?? (_filterDialogController = new FilterDialogController(LibraryGridController, null));
 
 		private FindReplaceDialogController _findReplaceDialogController;
-		private FindReplaceDialogController FindReplaceDialogController => _findReplaceDialogController
-		                                                                   ?? (_findReplaceDialogController = new FindReplaceDialogController(LibraryGridController));
+
+		private FindReplaceDialogController FindReplaceDialogController =>
+			_findReplaceDialogController ??
+			(_findReplaceDialogController = new FindReplaceDialogController(LibraryGridController));
 	}
 }
