@@ -26,16 +26,15 @@ namespace TagScanner.Models
 		public List<Track> Tracks => Library.Tracks;
 
 		private bool _modified;
+
 		public bool Modified
 		{
 			get => _modified;
 			set
 			{
-				if (Modified != value)
-				{
-					_modified = value;
-					OnModifiedChanged();
-				}
+				if (Modified == value) return;
+				_modified = value;
+				OnModifiedChanged();
 			}
 		}
 
