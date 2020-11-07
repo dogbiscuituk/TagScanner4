@@ -30,10 +30,7 @@ namespace TagScanner.Controllers
 		private Model _model;
 		public Model Model
 		{
-			get
-			{
-				return _model;
-			}
+			get => _model;
 			set
 			{
 				_model = value;
@@ -53,10 +50,7 @@ namespace TagScanner.Controllers
 		private ElementHost _view;
 		private ElementHost View
 		{
-			get
-			{
-				return _view;
-			}
+			get => _view;
 			set
 			{
 				_view = value;
@@ -67,12 +61,12 @@ namespace TagScanner.Controllers
 			}
 		}
 
-		protected override DataGrid DataGrid { get { return ((GridElement)View.Child).DataGrid; } }
+		protected override DataGrid DataGrid => ((GridElement)View.Child).DataGrid;
 
 		private ListCollectionView ListCollectionView
 		{
-			get { return (ListCollectionView)DataGrid.ItemsSource; }
-			set { DataGrid.ItemsSource = value; }
+			get => (ListCollectionView)DataGrid.ItemsSource;
+			set => DataGrid.ItemsSource = value;
 		}
 
 		private void RefreshDataSource()
@@ -118,10 +112,7 @@ namespace TagScanner.Controllers
 		private IEnumerable<string> _visibleTags = new[] { "FilePath" };
 		public IEnumerable<string> VisibleTags
 		{
-			get
-			{
-				return _visibleTags;
-			}
+			get => _visibleTags;
 			set
 			{
 				if (VisibleTags.SequenceEqual(value))
@@ -151,10 +142,7 @@ namespace TagScanner.Controllers
 		private Predicate<object> _filter = p => true;
 		public Predicate<object> Filter
 		{
-			get
-			{
-				return _filter;
-			}
+			get => _filter;
 			set
 			{
 				_filter = value;
@@ -174,10 +162,7 @@ namespace TagScanner.Controllers
 		private IEnumerable<SortDescription> _sortDescriptions = new SortDescription[0];
 		public IEnumerable<SortDescription> SortDescriptions
 		{
-			get
-			{
-				return _sortDescriptions;
-			}
+			get => _sortDescriptions;
 			set
 			{
 				if (SortDescriptions.SequenceEqual(value))
@@ -190,10 +175,7 @@ namespace TagScanner.Controllers
 		private IEnumerable<string> _groupDescriptions = new string[0];
 		public IEnumerable<string> GroupDescriptions
 		{
-			get
-			{
-				return _groupDescriptions;
-			}
+			get => _groupDescriptions;
 			set
 			{
 				if (GroupDescriptions.SequenceEqual(value))
@@ -220,10 +202,7 @@ namespace TagScanner.Controllers
 		#region Selection
 
 		private Selection _selection;
-		public Selection Selection
-		{
-			get { return _selection ?? (_selection = GetSelection()); }
-		}
+		public Selection Selection => _selection ?? (_selection = GetSelection());
 
 		public event EventHandler SelectionChanged;
 
@@ -251,8 +230,7 @@ namespace TagScanner.Controllers
 			{
 				InvalidateSelection();
 				var selectionChanged = SelectionChanged;
-				if (selectionChanged != null)
-					selectionChanged(this, EventArgs.Empty);
+				selectionChanged?.Invoke(this, EventArgs.Empty);
 			}
 		}
 
@@ -302,8 +280,10 @@ namespace TagScanner.Controllers
 
 		#region Presets
 
-		private static IEnumerable<string>
-			VisibleTagsDefault = new[] { "DiscTrack", "Title", "Duration", "FileSize" },
+		private static readonly IEnumerable<string>
+			VisibleTagsDefault = new[] { "DiscTrack", "Title", "Duration", "FileSize" };
+
+		private static readonly IEnumerable<string>
 			VisibleTagsExtended = VisibleTagsDefault.Union(new[] { "JoinedPerformers", "Album" });
 
 		public void ViewByAlbum()

@@ -19,12 +19,8 @@ namespace TagScanner.ValueConverters
 			AddTracks(tracks, group);
 			var summary = new Selection(tracks);
 			var trackCount = tracks.Count;
-			return string.Format(
-				" ({0:n0} {1}, {2}, {3})",
-				trackCount,
-				trackCount == 1 ? "track" : "tracks",
-                summary.FileSize.AsString(false),
-				summary.Duration.AsString(false));
+			return
+				$" ({trackCount:n0} {(trackCount == 1 ? "track" : "tracks")}, {summary.FileSize.AsString(false)}, {summary.Duration.AsString(false)})";
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

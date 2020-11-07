@@ -9,8 +9,8 @@ namespace TagScanner.ValueConverters
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (value is TimeSpan)
-				return ((TimeSpan)value).AsString(false);
+			if (value is TimeSpan timeSpan)
+				return timeSpan.AsString(false);
 			return value;
 		}
 

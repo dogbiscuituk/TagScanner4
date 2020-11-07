@@ -145,32 +145,85 @@
   <data name="Views_7953_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\views_7953_32.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ConfirmSync" xml:space="preserve">
+  <data name="S_ConfirmSync" xml:space="preserve">
     <value>
 Continue to synchronize and save?</value>
   </data>
-  <data name="TracksChanged" xml:space="preserve">
+  <data name="S_TracksChanged" xml:space="preserve">
     <value>You may synchronise the library file with the ID3 track data in your media prior to saving. If you choose to do this, the following {0:n0} operation(s) will be performed:
 
 </value>
   </data>
-  <data name="TracksDeleted" xml:space="preserve">
+  <data name="S_TracksDeleted" xml:space="preserve">
     <value>-- The previously loaded ID3 tag data of {0:n0} missing track(s) will be removed from the library file.
 </value>
   </data>
-  <data name="TracksPending" xml:space="preserve">
+  <data name="S_TracksPending" xml:space="preserve">
     <value>-- The embedded ID3 tag data of {0:n0} track(s) will be overwritten to match the current contents of the library file.
 </value>
   </data>
-  <data name="TracksUpdated" xml:space="preserve">
+  <data name="S_TracksUpdated" xml:space="preserve">
     <value>-- The contents of the library file will be updated to match the currently embedded ID3 tag data of {0:n0} track(s).
 </value>
   </data>
-  <data name="ConfirmSyncCaption" xml:space="preserve">
+  <data name="S_ConfirmSyncCaption" xml:space="preserve">
     <value>Synchronise library file</value>
   </data>
-  <data name="TracksAdded" xml:space="preserve">
+  <data name="S_TracksAdded" xml:space="preserve">
     <value>-- {0:n0} new track(s) will be added to the library file.
 </value>
+  </data>
+	<data name="S_ReplacementsMade" xml:space="preserve">
+    <value>{0} replacement(s) made.</value>
+  </data>
+	<data name="S_Replace" xml:space="preserve">
+    <value>Replace</value>
+  </data>
+	<data name="S_Version" xml:space="preserve">
+    <value>{0}
+{1}
+Version {2}</value>
+  </data>
+	<data name="S_ErrorStreamingTrack" xml:space="preserve">
+    <value>Error streaming track</value>
+  </data>
+	<data name="S_SelectTheMediaFilesToAdd" xml:space="preserve">
+    <value>Select the media file(s) to add</value>
+  </data>
+	<data name="S_SelectTheMediaFolderToAdd" xml:space="preserve">
+    <value>Select the media folder to add</value>
+  </data>
+	<data name="S_FolderNoLongerExists" xml:space="preserve">
+    <value>Folder "{0}" no longer exists. Remove from menu?</value>
+  </data>
+	<data name="S_AddRecentFolder" xml:space="preserve">
+    <value>Add Recent Folder</value>
+  </data>
+	<data name="S_ReplacePreview" xml:space="preserve">
+    <value>Replace preview - {0} matches found</value>
+  </data>
+	<data name="S_SelectFileToOpen" xml:space="preserve">
+    <value>Select the file to open</value>
+  </data>
+	<data name="S_SaveFile" xml:space="preserve">
+    <value>Save file</value>
+  </data>
+	<data name="S_FileContentsHaveChanged" xml:space="preserve">
+    <value>The contents of this file have changed. Do you want to save the changes?</value>
+  </data>
+	<data name="S_FileModified" xml:space="preserve">
+    <value>File modified</value>
+  </data>
+	<data name="S_FileNoLongerExists" xml:space="preserve">
+    <value>File "{0}" no longer exists. Remove from menu?</value>
+  </data>
+	<data name="S_RepoenFile" xml:space="preserve">
+    <value>Reopen file</value>
+  </data>
+	<data name="S_CustomDateTimeFormat" xml:space="preserve">
+    <value>dd/MM/yyyy HH:mm</value>
+  </data>
+	<data name="S_Cancel" xml:space="preserve">
+    <value>Cancel</value>
   </data>
 </root>

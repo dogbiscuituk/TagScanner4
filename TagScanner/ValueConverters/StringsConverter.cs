@@ -10,9 +10,8 @@ namespace TagScanner.ValueConverters
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (value is IEnumerable<string>)
+			if (value is IEnumerable<string> strings)
 			{
-				var strings = (IEnumerable<string>)value;
 				return strings.Any() ? strings.Aggregate((x, y) => string.Concat(x, '\n', y)) : string.Empty;
 			}
 			return value;

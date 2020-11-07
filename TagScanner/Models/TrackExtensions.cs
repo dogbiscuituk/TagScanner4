@@ -44,13 +44,11 @@ namespace TagScanner.Models
 				{
 					var value = Decimal.Divide(bytes, chunk);
 					return String.Format(
-						String.Format(
-							"{{0:{0}}} {{1}}{{2}}B",
-							value >= 100 ? "#" : value >= 10 ? "#.#" : "#.##"),
+						$"{{0:{(value >= 100 ? "#" : value >= 10 ? "#.#" : "#.##")}}} {{1}}{{2}}B",
 							value, units[scale - 1], binary ? "i" : "");
 				}
 			}
-			return String.Format("{0} Bytes", bytes);
+			return $"{bytes} Bytes";
 		}
 
 		public static string AsString(this TimeSpan t, bool exact)
@@ -82,13 +80,13 @@ namespace TagScanner.Models
 					return ((TimeSpan) value).AsString(exact);
 				case "FileSize":
                     var fileSize = (long) value;
-					return exact ? string.Format("{0:n0}", fileSize) : fileSize.AsString(true);
+					return exact ? $"{fileSize:n0}" : fileSize.AsString(true);
 				case "Year":
 					return (int)value == 0 ? string.Empty : value.ToString();
 			}
 			return
 				type == typeof (int?) || type == typeof (uint?) || type == typeof (long?)
-					? Convert.ToInt64(value) == 0 ? string.Empty : string.Format("{0:n0}", value)
+					? Convert.ToInt64(value) == 0 ? string.Empty : $"{value:n0}"
 					: value.ToString();
 		}
 

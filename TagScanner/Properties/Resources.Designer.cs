@@ -19,7 +19,7 @@ namespace TagScanner.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -91,25 +91,6 @@ namespace TagScanner.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 
-        ///Continue to synchronize and save?.
-        /// </summary>
-        internal static string ConfirmSync {
-            get {
-                return ResourceManager.GetString("ConfirmSync", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Synchronise library file.
-        /// </summary>
-        internal static string ConfirmSyncCaption {
-            get {
-                return ResourceManager.GetString("ConfirmSyncCaption", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Expand {
@@ -160,12 +141,175 @@ namespace TagScanner.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Recent Folder.
+        /// </summary>
+        internal static string S_AddRecentFolder {
+            get {
+                return ResourceManager.GetString("S_AddRecentFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string S_Cancel {
+            get {
+                return ResourceManager.GetString("S_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///Continue to synchronize and save?.
+        /// </summary>
+        internal static string S_ConfirmSync {
+            get {
+                return ResourceManager.GetString("S_ConfirmSync", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronise library file.
+        /// </summary>
+        internal static string S_ConfirmSyncCaption {
+            get {
+                return ResourceManager.GetString("S_ConfirmSyncCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dd/MM/yyyy HH:mm.
+        /// </summary>
+        internal static string S_CustomDateTimeFormat {
+            get {
+                return ResourceManager.GetString("S_CustomDateTimeFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error streaming track.
+        /// </summary>
+        internal static string S_ErrorStreamingTrack {
+            get {
+                return ResourceManager.GetString("S_ErrorStreamingTrack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The contents of this file have changed. Do you want to save the changes?.
+        /// </summary>
+        internal static string S_FileContentsHaveChanged {
+            get {
+                return ResourceManager.GetString("S_FileContentsHaveChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File modified.
+        /// </summary>
+        internal static string S_FileModified {
+            get {
+                return ResourceManager.GetString("S_FileModified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File &quot;{0}&quot; no longer exists. Remove from menu?.
+        /// </summary>
+        internal static string S_FileNoLongerExists {
+            get {
+                return ResourceManager.GetString("S_FileNoLongerExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Folder &quot;{0}&quot; no longer exists. Remove from menu?.
+        /// </summary>
+        internal static string S_FolderNoLongerExists {
+            get {
+                return ResourceManager.GetString("S_FolderNoLongerExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace.
+        /// </summary>
+        internal static string S_Replace {
+            get {
+                return ResourceManager.GetString("S_Replace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} replacement(s) made..
+        /// </summary>
+        internal static string S_ReplacementsMade {
+            get {
+                return ResourceManager.GetString("S_ReplacementsMade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace preview - {0} matches found.
+        /// </summary>
+        internal static string S_ReplacePreview {
+            get {
+                return ResourceManager.GetString("S_ReplacePreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reopen file.
+        /// </summary>
+        internal static string S_RepoenFile {
+            get {
+                return ResourceManager.GetString("S_RepoenFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save file.
+        /// </summary>
+        internal static string S_SaveFile {
+            get {
+                return ResourceManager.GetString("S_SaveFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the file to open.
+        /// </summary>
+        internal static string S_SelectFileToOpen {
+            get {
+                return ResourceManager.GetString("S_SelectFileToOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the media file(s) to add.
+        /// </summary>
+        internal static string S_SelectTheMediaFilesToAdd {
+            get {
+                return ResourceManager.GetString("S_SelectTheMediaFilesToAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the media folder to add.
+        /// </summary>
+        internal static string S_SelectTheMediaFolderToAdd {
+            get {
+                return ResourceManager.GetString("S_SelectTheMediaFolderToAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to -- {0:n0} new track(s) will be added to the library file.
         ///.
         /// </summary>
-        internal static string TracksAdded {
+        internal static string S_TracksAdded {
             get {
-                return ResourceManager.GetString("TracksAdded", resourceCulture);
+                return ResourceManager.GetString("S_TracksAdded", resourceCulture);
             }
         }
         
@@ -174,9 +318,9 @@ namespace TagScanner.Properties {
         ///
         ///.
         /// </summary>
-        internal static string TracksChanged {
+        internal static string S_TracksChanged {
             get {
-                return ResourceManager.GetString("TracksChanged", resourceCulture);
+                return ResourceManager.GetString("S_TracksChanged", resourceCulture);
             }
         }
         
@@ -184,9 +328,9 @@ namespace TagScanner.Properties {
         ///   Looks up a localized string similar to -- The previously loaded ID3 tag data of {0:n0} missing track(s) will be removed from the library file.
         ///.
         /// </summary>
-        internal static string TracksDeleted {
+        internal static string S_TracksDeleted {
             get {
-                return ResourceManager.GetString("TracksDeleted", resourceCulture);
+                return ResourceManager.GetString("S_TracksDeleted", resourceCulture);
             }
         }
         
@@ -194,9 +338,9 @@ namespace TagScanner.Properties {
         ///   Looks up a localized string similar to -- The embedded ID3 tag data of {0:n0} track(s) will be overwritten to match the current contents of the library file.
         ///.
         /// </summary>
-        internal static string TracksPending {
+        internal static string S_TracksPending {
             get {
-                return ResourceManager.GetString("TracksPending", resourceCulture);
+                return ResourceManager.GetString("S_TracksPending", resourceCulture);
             }
         }
         
@@ -204,9 +348,20 @@ namespace TagScanner.Properties {
         ///   Looks up a localized string similar to -- The contents of the library file will be updated to match the currently embedded ID3 tag data of {0:n0} track(s).
         ///.
         /// </summary>
-        internal static string TracksUpdated {
+        internal static string S_TracksUpdated {
             get {
-                return ResourceManager.GetString("TracksUpdated", resourceCulture);
+                return ResourceManager.GetString("S_TracksUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}
+        ///{1}
+        ///Version {2}.
+        /// </summary>
+        internal static string S_Version {
+            get {
+                return ResourceManager.GetString("S_Version", resourceCulture);
             }
         }
         

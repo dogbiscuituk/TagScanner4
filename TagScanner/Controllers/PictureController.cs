@@ -27,24 +27,30 @@ namespace TagScanner.Controllers
 		private PictureBox _pictureBox;
 		private PictureBox PictureBox
 		{
-			get { return _pictureBox; }
+			get => _pictureBox;
 			set
 			{
+				if (PictureBox != null)
+					PictureBox.Resize -= PictureBox_Resize;
 				_pictureBox = value;
-				PictureBox.Resize += PictureBox_Resize;
+				if (PictureBox != null)
+					PictureBox.Resize += PictureBox_Resize;
 			}
 		}
 
 		private PropertyGrid _propertyGrid;
 		private PropertyGrid PropertyGrid
 		{
-			get
-			{
-				return _propertyGrid;
-			}
+			get => _propertyGrid;
 			set
 			{
+				if (PropertyGrid != null)
+				{
+					PropertyGrid.SelectedObjectsChanged -= PropertyGrid_SelectedObjectsChanged;
+					PropertyGrid.SelectedGridItemChanged -= PropertyGrid_SelectedGridItemChanged;
+				}
 				_propertyGrid = value;
+				if (PropertyGrid == null) return;
 				PropertyGrid.SelectedGridItemChanged += PropertyGrid_SelectedGridItemChanged;
 				PropertyGrid.SelectedObjectsChanged += PropertyGrid_SelectedObjectsChanged;
 			}
@@ -53,14 +59,14 @@ namespace TagScanner.Controllers
 		private System.Windows.Controls.DataGrid _playlistGrid;
 		private System.Windows.Controls.DataGrid PlaylistGrid
 		{
-			get
-			{
-				return _playlistGrid;
-			}
+			get => _playlistGrid;
 			set
 			{
+				if (PlaylistGrid != null)
+					PlaylistGrid.SelectionChanged -= PlaylistGrid_SelectionChanged;
 				_playlistGrid = value;
-				PlaylistGrid.SelectionChanged += PlaylistGrid_SelectionChanged;
+				if (PlaylistGrid != null)
+					PlaylistGrid.SelectionChanged += PlaylistGrid_SelectionChanged;
 			}
 		}
 
@@ -105,7 +111,7 @@ namespace TagScanner.Controllers
 
 		#region Methods
 
-		private Image GetImageFromFile(string filePath, TagLib.Image.ImageOrientation orientation)
+		private static Image GetImageFromFile(string filePath, TagLib.Image.ImageOrientation orientation)
 		{
 			Image image;
 			try
@@ -123,17 +129,14 @@ namespace TagScanner.Controllers
 			return image;
 		}
 
-		private Image GetImageFromTrack(ITrack track)
+		private static Image GetImageFromTrack(ITrack track)
 		{
 			if (track == null)
 				return null;
 			var pictures = track.Pictures;
-			if (pictures != null)
-			{
-				var picture = pictures.FirstOrDefault(p => p != null);
-				if (picture != null)
-					return picture.GetImage();
-			}
+			var picture = pictures?.FirstOrDefault(p => p != null);
+			if (picture != null)
+				return picture.GetImage();
 			var filePath = track.FilePath;
 			if (string.IsNullOrWhiteSpace(filePath) || filePath.EndsWith(@"\"))
 				return null;
@@ -155,7 +158,7 @@ namespace TagScanner.Controllers
 			return RotateFlipTypes[(int)orientation];
 		}
 
-		private Image GetVideoThumbnail(string filePath, double frameTimeSeconds)
+		private static Image GetVideoThumbnail(string filePath, double frameTimeSeconds)
 		{
 			var videoConverter = new FFMpegConverter();
             using (var stream = new MemoryStream())
@@ -170,14 +173,10 @@ namespace TagScanner.Controllers
 			// If a Picture is selected in the PropertyGrid,
 			// then use that particular Picture.
 			var gridItem = PropertyGrid.SelectedGridItem;
-			if (gridItem != null)
+			if (gridItem?.Value is Picture picture)
 			{
-				var picture = gridItem.Value as Picture;
-				if (picture != null)
-				{
-					SetPicture(picture);
-					return;
-				}
+				SetPicture(picture);
+				return;
 			}
 			// If no Picture is selected in the PropertyGrid,
 			// then use the first Picture in the selection, if any.
@@ -208,7 +207,7 @@ namespace TagScanner.Controllers
 
 		private void SetPicture(Picture picture)
 		{
-			SetImage(picture != null ? picture.GetImage() : null);
+			SetImage(picture?.GetImage());
 		}
 
 		#endregion

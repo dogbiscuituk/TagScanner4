@@ -57,13 +57,7 @@ namespace TagScanner.Models
 		[Browsable(true)]
 		[Category("Selection")]
 		[Description("The total number of tracks in the current selection.")]
-		public int SelectedTracksCount
-		{
-			get
-			{
-				return Tracks.Count();
-			}
-		}
+		public int SelectedTracksCount => Tracks.Count();
 
 		#endregion
 
@@ -103,13 +97,7 @@ namespace TagScanner.Models
 		[Browsable(false)]
 		[Category("Personnel")]
 		[DefaultValue(0)]
-		public int AlbumArtistsCount
-		{
-			get
-			{
-				return AlbumArtists.Length;
-			}
-		}
+		public int AlbumArtistsCount => AlbumArtists.Length;
 
 		private string[] _albumArtistsSort;
 		[Browsable(false)]
@@ -129,13 +117,7 @@ namespace TagScanner.Models
 		[Browsable(false)]
 		[Category("Personnel")]
 		[DefaultValue(0)]
-		public int AlbumArtistsSortCount
-		{
-			get
-			{
-				return AlbumArtistsSort.Length;
-			}
-		}
+		public int AlbumArtistsSortCount => AlbumArtistsSort.Length;
 
 		private string _albumSort;
 		[Browsable(false)]
@@ -184,13 +166,7 @@ namespace TagScanner.Models
 		[Browsable(false)]
 		[Category("Personnel")]
 		[DefaultValue(0)]
-		public int ArtistsCount
-		{
-			get
-			{
-				return Artists.Length;
-			}
-		}
+		public int ArtistsCount => Artists.Length;
 
 		private int _audioBitrate = int.MaxValue;
 		[Browsable(true)]
@@ -298,13 +274,7 @@ namespace TagScanner.Models
 		[Browsable(false)]
 		[Category("Personnel")]
 		[DefaultValue(0)]
-		public int ComposersCount
-		{
-			get
-			{
-				return Composers.Length;
-			}
-		}
+		public int ComposersCount => Composers.Length;
 
 		private string[] _composersSort;
 		[Browsable(false)]
@@ -324,13 +294,7 @@ namespace TagScanner.Models
 		[Browsable(false)]
 		[Category("Personnel")]
 		[DefaultValue(0)]
-		public int ComposersSortCount
-		{
-			get
-			{
-				return ComposersSort.Length;
-			}
-		}
+		public int ComposersSortCount => ComposersSort.Length;
 
 		private string _conductor;
 		[Browsable(true)]
@@ -675,13 +639,7 @@ namespace TagScanner.Models
 		[Browsable(false)]
 		[Category("Category")]
 		[DefaultValue(0)]
-		public int GenresCount
-		{
-			get
-			{
-				return Genres.Length;
-			}
-		}
+		public int GenresCount => Genres.Length;
 
 		private string _grouping;
 		[Browsable(false)]
@@ -1210,13 +1168,7 @@ namespace TagScanner.Models
 		[Browsable(false)]
 		[Category("Personnel")]
 		[DefaultValue(0)]
-		public int PerformersCount
-		{
-			get
-			{
-				return Performers.Length;
-			}
-		}
+		public int PerformersCount => Performers.Length;
 
 		private string[] _performersSort;
 		[Browsable(false)]
@@ -1237,13 +1189,7 @@ namespace TagScanner.Models
 		[Browsable(false)]
 		[Category("Personnel")]
 		[DefaultValue(0)]
-		public int PerformersSortCount
-		{
-			get
-			{
-				return PerformersSort.Length;
-			}
-		}
+		public int PerformersSortCount => PerformersSort.Length;
 
 		private int _photoHeight = int.MaxValue;
 		[Browsable(false)]
@@ -1440,25 +1386,21 @@ namespace TagScanner.Models
 
 		private DateTime GetDateTime(Func<ITrack, DateTime> getDateTime, ref DateTime result)
 		{
-			if (result == DateTime.MaxValue)
+			if (result != DateTime.MaxValue) return result;
+			result = DateTime.MinValue;
+			if (Tracks == null) return result;
+			var first = true;
+			foreach (var value in Tracks.Select(getDateTime))
 			{
-				result = DateTime.MinValue;
-				if (Tracks != null)
+				if (first)
 				{
-					var first = true;
-					foreach (var value in Tracks.Select(getDateTime))
-					{
-						if (first)
-						{
-							result = value;
-							first = false;
-						}
-						else if (result != value)
-						{
-							result = DateTime.MinValue;
-							break;
-						}
-					}
+					result = value;
+					first = false;
+				}
+				else if (result != value)
+				{
+					result = DateTime.MinValue;
+					break;
 				}
 			}
 			return result;
@@ -1466,25 +1408,21 @@ namespace TagScanner.Models
 
 		private double GetDouble(Func<ITrack, double> getDouble, ref double result)
 		{
-			if (result == double.MaxValue)
+			if (result != double.MaxValue) return result;
+			result = 0;
+			if (Tracks == null) return result;
+			var first = true;
+			foreach (var value in Tracks.Select(getDouble))
 			{
-				result = 0;
-				if (Tracks != null)
+				if (first)
 				{
-					var first = true;
-					foreach (var value in Tracks.Select(getDouble))
-					{
-						if (first)
-						{
-							result = value;
-							first = false;
-						}
-						else if (result != value)
-						{
-							result = 0;
-							break;
-						}
-					}
+					result = value;
+					first = false;
+				}
+				else if (result != value)
+				{
+					result = 0;
+					break;
 				}
 			}
 			return result;
@@ -1492,27 +1430,23 @@ namespace TagScanner.Models
 
 		private string GetFileOrCommonFolderPath(Func<ITrack, string> getString, ref string result)
 		{
-			if (result == null)
+			if (result != null) return result;
+			result = string.Empty;
+			if (Tracks == null || !Tracks.Any()) return result;
+			// The following adapted from http://rosettacode.org/wiki/Find_common_directory_path#C.23
+			var path = result;
+			var paths = Tracks.Select(getString).ToList();
+			var segments = paths.First(s => s.Length == paths.Max(t => t.Length)).Split('\\').ToList();
+			for (var index = 0; index < segments.Count; index++)
 			{
-				result = string.Empty;
-				if (Tracks != null && Tracks.Any())
-				{
-					// The following adapted from http://rosettacode.org/wiki/Find_common_directory_path#C.23
-					var path = result;
-					var paths = Tracks.Select(getString).ToList();
-					var segments = paths.First(s => s.Length == paths.Max(t => t.Length)).Split('\\').ToList();
-					for (var index = 0; index < segments.Count; index++)
-					{
-						var segment = segments[index];
-						if (!paths.All(s => s.StartsWith(path + segment)))
-							break;
-						path += segment;
-						if (index < segments.Count - 1)
-							path += "\\";
-					}
-					result = path;
-				}
+				var segment = segments[index];
+				if (!paths.All(s => s.StartsWith(path + segment)))
+					break;
+				path += segment;
+				if (index < segments.Count - 1)
+					path += "\\";
 			}
+			result = path;
 			return result;
 		}
 
@@ -1529,45 +1463,39 @@ namespace TagScanner.Models
 			Func<ITrack, TagLib.Image.ImageOrientation> getImageOrientation,
 			ref TagLib.Image.ImageOrientation result)
 		{
-			if (result == TagLib.Image.ImageOrientation.None)
-			{
-				var first = true;
-				foreach (var value in Tracks.Select(getImageOrientation))
-					if (first)
-					{
-						result = value;
-						first = false;
-					}
-					else if (result != value)
-					{
-						result = TagLib.Image.ImageOrientation.None;
-						break;
-					}
-			}
+			if (result != TagLib.Image.ImageOrientation.None) return result;
+			var first = true;
+			foreach (var value in Tracks.Select(getImageOrientation))
+				if (first)
+				{
+					result = value;
+					first = false;
+				}
+				else if (result != value)
+				{
+					result = TagLib.Image.ImageOrientation.None;
+					break;
+				}
 			return result;
 		}
 
 		private int GetInt(Func<ITrack, int> getInt, ref int result)
 		{
-			if (result == int.MaxValue)
+			if (result != int.MaxValue) return result;
+			result = 0;
+			if (Tracks == null) return result;
+			var first = true;
+			foreach (var value in Tracks.Select(getInt))
 			{
-				result = 0;
-				if (Tracks != null)
+				if (first)
 				{
-					var first = true;
-					foreach (var value in Tracks.Select(getInt))
-					{
-						if (first)
-						{
-							result = value;
-							first = false;
-						}
-						else if (result != value)
-						{
-							result = 0;
-							break;
-						}
-					}
+					result = value;
+					first = false;
+				}
+				else if (result != value)
+				{
+					result = 0;
+					break;
 				}
 			}
 			return result;
@@ -1575,136 +1503,120 @@ namespace TagScanner.Models
 
 		private Logical GetLogical(Func<ITrack, Logical> getLogical, ref Logical result)
 		{
-			if (result == Logical.Unknown && Tracks != null)
-				foreach (var value in Tracks.Select(getLogical))
-				{
-					result |= value;
-					if (result == (Logical.Yes | Logical.No))
-						break;
-				}
+			if (result != Logical.Unknown || Tracks == null) return result;
+			foreach (var value in Tracks.Select(getLogical))
+			{
+				result |= value;
+				if (result == (Logical.Yes | Logical.No))
+					break;
+			}
 			return result;
 		}
 
 		private long GetLong(Func<ITrack, long> getLong, ref long result, bool sum)
 		{
-			if (result == long.MaxValue)
-			{
-				result = 0;
-				if (Tracks != null)
+			if (result != long.MaxValue) return result;
+			result = 0;
+			if (Tracks == null) return result;
+			var first = true;
+			foreach (var value in Tracks.Select(getLong))
+				if (first)
 				{
-					var first = true;
-					foreach (var value in Tracks.Select(getLong))
-						if (first)
-						{
-							result = value;
-							first = false;
-						}
-						else if (sum)
-							result += value;
-						else if (result != value)
-						{
-							result = 0;
-							break;
-						}
+					result = value;
+					first = false;
 				}
-			}
+				else if (sum)
+					result += value;
+				else if (result != value)
+				{
+					result = 0;
+					break;
+				}
 			return result;
 		}
 
 		private TagLib.MediaTypes GetMediaTypes(Func<ITrack, TagLib.MediaTypes> getMediaTypes, ref TagLib.MediaTypes result)
 		{
-			if (result == AllMediaTypes)
-			{
-				result = 0;
-				if (Tracks != null)
-					result = Tracks
-						.Select(getMediaTypes)
-						.Aggregate(result, (current, mediaTypes) => current | mediaTypes);
-			}
+			if (result != AllMediaTypes) return result;
+			result = 0;
+			if (Tracks != null)
+				result = Tracks
+					.Select(getMediaTypes)
+					.Aggregate(result, (current, mediaTypes) => current | mediaTypes);
 			return result;
 		}
 
 		private Picture[] GetPictures(Func<ITrack, Picture[]> getPictures, ref Picture[] result)
 		{
-			if (result == null)
-			{
-				var pictureList = new List<Picture>();
-				if (Tracks != null)
-					foreach (var pictures in Tracks
-						.Select(getPictures)
-						.Where(p => p != null))
-					{
-						pictureList.AddRange(pictures);
-						if (pictureList.Any())
-							break;
-					}
-				result = pictureList.ToArray();
-			}
+			if (result != null) return result;
+			var pictureList = new List<Picture>();
+			if (Tracks != null)
+				foreach (var pictures in Tracks
+					.Select(getPictures)
+					.Where(p => p != null))
+				{
+					pictureList.AddRange(pictures);
+					if (pictureList.Any())
+						break;
+				}
+			result = pictureList.ToArray();
 			return result;
 		}
 
 		private string GetString(Func<ITrack, string> getString, ref string result)
 		{
-			if (result == null)
-			{
-				result = string.Empty;
-				var first = true;
-				foreach (var value in Tracks.Select(getString))
-					if (first)
-					{
-						result = value;
-						first = false;
-					}
-					else if (result != value)
-					{
-						result = string.Empty;
-						break;
-					}
-			}
+			if (result != null) return result;
+			result = string.Empty;
+			var first = true;
+			foreach (var value in Tracks.Select(getString))
+				if (first)
+				{
+					result = value;
+					first = false;
+				}
+				else if (result != value)
+				{
+					result = string.Empty;
+					break;
+				}
 			return result;
 		}
 
 		private string[] GetStringArray(Func<ITrack, string[]> getStringArray, ref string[] result)
 		{
-			if (result == null)
-			{
-				var values = new List<string>();
-				if (Tracks != null)
-					try
-					{
-						values.AddRange(Tracks.SelectMany(getStringArray).Distinct());
-					}
-					catch (NullReferenceException)
-					{
-					}
-				result = values.ToArray();
-			}
+			if (result != null) return result;
+			var values = new List<string>();
+			if (Tracks != null)
+				try
+				{
+					values.AddRange(Tracks.SelectMany(getStringArray).Distinct());
+				}
+				catch (NullReferenceException)
+				{
+				}
+			result = values.ToArray();
 			return result;
 		}
 
 		private TagLib.TagTypes GetTagTypes(Func<ITrack, TagLib.TagTypes> getTagTypes, ref TagLib.TagTypes result)
 		{
-			if (result == TagLib.TagTypes.AllTags)
-			{
-				result = 0;
-				if (Tracks != null)
-					result = Tracks
-						.Select(getTagTypes)
-						.Aggregate(result, (current, tagTypes) => current | tagTypes);
-			}
+			if (result != TagLib.TagTypes.AllTags) return result;
+			result = 0;
+			if (Tracks != null)
+				result = Tracks
+					.Select(getTagTypes)
+					.Aggregate(result, (current, tagTypes) => current | tagTypes);
 			return result;
 		}
 
 		private TimeSpan GetTimeSpan(Func<ITrack, TimeSpan> getTimeSpan, ref TimeSpan result)
 		{
-			if (result == TimeSpan.MaxValue)
-			{
-				result = TimeSpan.Zero;
-				if (Tracks != null)
-					result = Tracks
-						.Select(getTimeSpan)
-						.Aggregate(result, (current, timeSpan) => current + timeSpan);
-			}
+			if (result != TimeSpan.MaxValue) return result;
+			result = TimeSpan.Zero;
+			if (Tracks != null)
+				result = Tracks
+					.Select(getTimeSpan)
+					.Aggregate(result, (current, timeSpan) => current + timeSpan);
 			return result;
 		}
 

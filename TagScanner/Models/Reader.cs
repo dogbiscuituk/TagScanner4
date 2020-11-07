@@ -41,7 +41,7 @@ namespace TagScanner.Models
 		public readonly List<string> ExistingFilePaths;
 		public readonly List<Track> Tracks = new List<Track>();
 		private int TrackIndex, TrackCount;
-		private IProgress<ProgressEventArgs> Progress;
+		private readonly IProgress<ProgressEventArgs> Progress;
 
 		#endregion
 

@@ -13,13 +13,9 @@ namespace TagScanner.Controllers
 		protected MruController(Model model, string subKeyName, ToolStripDropDownItem recentMenu)
 		{
 			if (string.IsNullOrWhiteSpace(subKeyName))
-				throw new ArgumentNullException("subKeyName");
+				throw new ArgumentNullException(nameof(subKeyName));
 			Model = model;
-			SubKeyName = string.Format(
-				@"Software\{0}\{1}\{2}",
-				Application.CompanyName,
-				Application.ProductName,
-				subKeyName);
+			SubKeyName = $@"Software\{Application.CompanyName}\{Application.ProductName}\{subKeyName}";
 			RecentMenu = recentMenu;
 			RefreshRecentMenu();
 		}
@@ -36,7 +32,7 @@ namespace TagScanner.Controllers
 				try
 				{
 					DeleteItem(key, item);
-					key.SetValue(string.Format("{0:yyyyMMddHHmmssFF}", DateTime.Now), item);
+					key.SetValue($"{DateTime.Now:yyyyMMddHHmmssFF}", item);
 				}
 				finally
 				{
@@ -75,9 +71,9 @@ namespace TagScanner.Controllers
 
 		private void DeleteItem(Win32.RegistryKey key, string item)
 		{
-			var name = key.GetValueNames()
-				.Where(n => key.GetValue(n, null) as string == item)
-				.FirstOrDefault();
+			var name = key
+				.GetValueNames()
+				.FirstOrDefault(n => key.GetValue(n, null) as string == item);
 			if (name != null)
 				key.DeleteValue(name);
 		}
@@ -86,8 +82,8 @@ namespace TagScanner.Controllers
 		{
 		}
 
-		private string SubKeyName;
-		private ToolStripDropDownItem RecentMenu;
+		private readonly string SubKeyName;
+		private readonly ToolStripDropDownItem RecentMenu;
 
 		private void OnItemClick(object sender, EventArgs e)
 		{

@@ -58,7 +58,7 @@ namespace TagScanner.Controllers
 
 		private TagSelectorDialog _dialog;
 		private ListView _listView;
-		private IEnumerable<PropertyInfo> _propertyInfos;
+		private readonly IEnumerable<PropertyInfo> _propertyInfos;
 		private int _sortColumn;
 		private bool _sortDescending;
 
@@ -117,7 +117,7 @@ namespace TagScanner.Controllers
 
 		public int Compare(object x, object y)
 		{
-			var result = string.Compare(GetValue(x), GetValue(y));
+			var result = String.CompareOrdinal(GetValue(x), GetValue(y));
 			return _sortDescending ? -result : +result;
 		}
 
@@ -128,7 +128,7 @@ namespace TagScanner.Controllers
 			for (var index = 0; index < groups.Count; index++)
 			{
 				group = groups[index];
-				switch (Math.Sign(string.Compare(group.Header, header)))
+				switch (Math.Sign(String.CompareOrdinal(group.Header, header)))
 				{
 					case 0:
 						return group;
@@ -145,8 +145,10 @@ namespace TagScanner.Controllers
 
 		private ListViewGroup NewGroup(string header)
 		{
-			var group = new ListViewGroup(header);
-			group.HeaderAlignment = HorizontalAlignment.Right;
+			var group = new ListViewGroup(header)
+			{
+				HeaderAlignment = HorizontalAlignment.Right
+			};
 			return group;
 		}
 

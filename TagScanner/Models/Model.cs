@@ -13,10 +13,7 @@ namespace TagScanner.Models
 		private Library _library = new Library();
 		public Library Library
 		{
-			get
-			{
-				return _library;
-			}
+			get => _library;
 			set
 			{
 				_library = value;
@@ -24,36 +21,20 @@ namespace TagScanner.Models
 			}
 		}
 
-		public List<string> Folders
-		{
-			get
-			{
-				return Library.Folders;
-			}
-		}
+		public List<string> Folders => Library.Folders;
 
-		public List<Track> Tracks
-		{
-			get
-			{
-				return Library.Tracks;
-			}
-		}
+		public List<Track> Tracks => Library.Tracks;
 
 		private bool _modified;
+
 		public bool Modified
 		{
-			get
-			{
-				return _modified;
-			}
+			get => _modified;
 			set
 			{
-				if (Modified != value)
-				{
-					_modified = value;
-					OnModifiedChanged();
-				}
+				if (Modified == value) return;
+				_modified = value;
+				OnModifiedChanged();
 			}
 		}
 
@@ -130,9 +111,7 @@ namespace TagScanner.Models
 
 		protected virtual void OnModifiedChanged()
 		{
-			var modifiedChanged = ModifiedChanged;
-			if (modifiedChanged != null)
-				modifiedChanged(this, EventArgs.Empty);
+			ModifiedChanged?.Invoke(this, EventArgs.Empty);
 		}
 
 		protected virtual void OnTracksChanged()

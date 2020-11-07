@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using TagScanner.Models;
+using TagScanner.Properties;
 using TagScanner.Views;
 
 namespace TagScanner.Controllers
@@ -18,10 +20,7 @@ namespace TagScanner.Controllers
 
 		protected override FilterDialog View
 		{
-			get
-			{
-				return base.View;
-			}
+			get => base.View;
 			set
 			{
 				base.View = value;
@@ -33,32 +32,20 @@ namespace TagScanner.Controllers
 			}
 		}
 
-		private ComboBox OperatorBox { get { return View.OperatorBox; } }
+		private ComboBox OperatorBox => View.OperatorBox;
 
-		private ComboBox PropertyBox { get { return View.PropertyBox; } }
+		private ComboBox PropertyBox => View.PropertyBox;
 
-		private Control ValueBox { get { return View.ValueBox; } }
+		private Control ValueBox => View.ValueBox;
 
-		private Control.ControlCollection ValueControls { get { return ValueBox.Controls; } }
+		private Control.ControlCollection ValueControls => ValueBox.Controls;
 
-		private Control ValueEdit
-		{
-			get
-			{
-				return ValueControls[0];
-			}
-		}
+		private Control ValueEdit => ValueControls[0];
 
 		public override bool Visible
 		{
-			get
-			{
-				return PropertyBox.Visible;
-			}
-			set
-			{
-				PropertyBox.Visible = OperatorBox.Visible = ValueBox.Visible = value;
-            }
+			get => PropertyBox.Visible;
+			set => PropertyBox.Visible = OperatorBox.Visible = ValueBox.Visible = value;
 		}
 
 		#region Value Edits
@@ -114,7 +101,7 @@ namespace TagScanner.Controllers
 					{
 						Dock = DockStyle.Bottom,
 						Format = DateTimePickerFormat.Custom,
-						CustomFormat = "dd/MM/yyyy HH:mm",
+						CustomFormat = Resources.S_CustomDateTimeFormat,
 						ShowUpDown = true,
 						Value = DateTime.Now
 					};
@@ -211,13 +198,8 @@ namespace TagScanner.Controllers
 			get
 			{
 				var valueEdit = ValueEdit;
-				return string.Format(
-					"{0} {1} {2}",
-					PropertyBox.Text,
-					OperatorBox.Text,
-					valueEdit is NumericUpDown
-						? ((NumericUpDown)valueEdit).Value.ToString()
-						: valueEdit.Text);
+				return
+					$"{PropertyBox.Text} {OperatorBox.Text} {(valueEdit is NumericUpDown upDown ? upDown.Value.ToString(CultureInfo.InvariantCulture) : valueEdit.Text)}";
 			}
 			set
 			{
@@ -239,10 +221,7 @@ namespace TagScanner.Controllers
 		private string _propertyTypeName;
 		private string PropertyTypeName
 		{
-			get
-			{
-				return _propertyTypeName;
-			}
+			get => _propertyTypeName;
 			set
 			{
 				if (PropertyTypeName == value)

@@ -23,7 +23,7 @@ namespace TagScanner.Controllers
 			LibraryGridController = new LibraryGridController(Model, View.GridElementHost);
 			LibraryGridController.SelectionChanged += LibraryGridController_SelectionChanged;
 			StatusController = new StatusController(Model, View.StatusBar);
-			PersistenceController = new PersistenceController(Model, View, View.FileReopen);
+			PersistenceController = new PersistenceController(Model, View.FileReopen);
             PersistenceController.FilePathChanged += PersistenceController_FilePathChanged;
 			PersistenceController.FileSaving += PersistenceController_FileSaving;
 			MediaController = new MediaController(this, View.AddRecentFolders);
@@ -41,10 +41,7 @@ namespace TagScanner.Controllers
 		private LibraryForm _view;
 		public LibraryForm View
 		{
-			get
-			{
-				return _view;
-			}
+			get => _view;
 			set
 			{
 				_view = value;
@@ -188,10 +185,7 @@ namespace TagScanner.Controllers
 		private void HelpAbout_Click(object sender, EventArgs e)
 		{
 			MessageBox.Show(
-				string.Format("{0}\n{1}\nVersion {2}", 
-					Application.CompanyName,
-					Application.ProductName,
-					Application.ProductVersion),
+				string.Format(Resources.S_Version, Application.CompanyName, Application.ProductName, Application.ProductVersion),
 				string.Concat("About ", Application.ProductName));
 		}
 
@@ -213,11 +207,9 @@ namespace TagScanner.Controllers
 		{
 			var visibleTags = Metadata.GetVisibleTags();
 			var ok = new TagSelectorController(Metadata.SelectionPropertyInfos).Execute(visibleTags);
-			if (ok)
-			{
-				Metadata.SetVisibleTags(visibleTags);
-				UpdatePropertyGrid();
-			}
+			if (!ok) return;
+			Metadata.SetVisibleTags(visibleTags);
+			UpdatePropertyGrid();
 		}
 
 		#endregion
@@ -256,15 +248,15 @@ namespace TagScanner.Controllers
 			if (!tracks.Any())
 				return true;
 			var message = new StringBuilder();
-			Say(message, tracks, FileStatus.Changed, Resources.TracksChanged);
-			Say(message, tracks, FileStatus.New, Resources.TracksAdded);
-			Say(message, tracks, FileStatus.Updated, Resources.TracksUpdated);
-			Say(message, tracks, FileStatus.Pending, Resources.TracksPending);
-			Say(message, tracks, FileStatus.Deleted, Resources.TracksDeleted);
-			message.Append(Resources.ConfirmSync);
+			Say(message, tracks, FileStatus.Changed, Resources.S_TracksChanged);
+			Say(message, tracks, FileStatus.New, Resources.S_TracksAdded);
+			Say(message, tracks, FileStatus.Updated, Resources.S_TracksUpdated);
+			Say(message, tracks, FileStatus.Pending, Resources.S_TracksPending);
+			Say(message, tracks, FileStatus.Deleted, Resources.S_TracksDeleted);
+			message.Append(Resources.S_ConfirmSync);
 			var decision = MessageBox.Show(
 				message.ToString(),
-				Resources.ConfirmSyncCaption,
+				Resources.S_ConfirmSyncCaption,
 				MessageBoxButtons.YesNo,
 				MessageBoxIcon.Question) == DialogResult.Yes;
 			if (decision)
@@ -282,7 +274,7 @@ namespace TagScanner.Controllers
 			}
 			catch (IOException ex)
 			{
-				MessageBox.Show(View, ex.Message, "Error streaming track", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(View, ex.Message, Resources.S_ErrorStreamingTrack, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 			return result;
 		}
@@ -292,7 +284,7 @@ namespace TagScanner.Controllers
 			return Model.Tracks.Where(track => track.FileStatus == status).ToList();
 		}
 
-		private void Say(StringBuilder message, List<Track> tracks, FileStatus status, string format)
+		private static void Say(StringBuilder message, List<Track> tracks, FileStatus status, string format)
 		{
 			var count = tracks.Count(t => (t.FileStatus & status) != 0);
 			if (count > 0)
@@ -317,25 +309,14 @@ namespace TagScanner.Controllers
 		}
 
 		private FilterDialogController _filterDialogController;
-		private FilterDialogController FilterDialogController
-		{
-			get
-			{
-				return
-					_filterDialogController
-					?? (_filterDialogController = new FilterDialogController(LibraryGridController, null));
-			}
-		}
+
+		private FilterDialogController FilterDialogController =>
+			_filterDialogController ?? (_filterDialogController = new FilterDialogController(LibraryGridController, null));
 
 		private FindReplaceDialogController _findReplaceDialogController;
-		private FindReplaceDialogController FindReplaceDialogController
-		{
-			get
-			{
-				return
-					_findReplaceDialogController
-					?? (_findReplaceDialogController = new FindReplaceDialogController(LibraryGridController));
-			}
-		}
+
+		private FindReplaceDialogController FindReplaceDialogController =>
+			_findReplaceDialogController ??
+			(_findReplaceDialogController = new FindReplaceDialogController(LibraryGridController));
 	}
 }

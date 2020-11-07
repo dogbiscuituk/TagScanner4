@@ -23,21 +23,12 @@ namespace TagScanner.Controllers
 			Player.CurrentItemChange += Player_CurrentItemChange;
 		}
 
-		public System.Windows.Controls.DataGrid PlaylistGrid
-		{
-			get
-			{
-				return DataGrid;
-			}
-		}
+		public System.Windows.Controls.DataGrid PlaylistGrid => DataGrid;
 
 		private LibraryFormController _gridFormController;
 		private LibraryFormController GridFormController
 		{
-			get
-			{
-				return _gridFormController;
-			}
+			get => _gridFormController;
 			set
 			{
 				_gridFormController = value;
@@ -46,31 +37,13 @@ namespace TagScanner.Controllers
 			}
 		}
 
-		private LibraryForm View
-		{
-			get
-			{
-				return GridFormController.View;
-			}
-		}
+		private LibraryForm View => GridFormController.View;
 
-		private AxWindowsMediaPlayer Player
-		{
-			get
-			{
-				return View.MediaPlayer;
-			}
-		}
+		private AxWindowsMediaPlayer Player => View.MediaPlayer;
 
-		protected override System.Windows.Controls.DataGrid DataGrid
-		{
-			get
-			{
-				return ((GridElement)View.PlaylistElementHost.Child).DataGrid;
-			}
-		}
+		protected override System.Windows.Controls.DataGrid DataGrid => ((GridElement)View.PlaylistElementHost.Child).DataGrid;
 
-		private ObservableCollection<Track> CurrentPlaylist = new ObservableCollection<Track>();
+		private readonly ObservableCollection<Track> CurrentPlaylist = new ObservableCollection<Track>();
 
 		private void PlaylistAddToQueue_Click(object sender, EventArgs e)
 		{
@@ -108,11 +81,11 @@ namespace TagScanner.Controllers
 
 		private void UpdatePlaylist(IWMPMedia currentItem)
 		{
-			for (var index = 0; index < CurrentPlaylist.Count; index++)
-				if (CurrentPlaylist[index].FilePath == currentItem.sourceURL)
+			foreach (var t in CurrentPlaylist)
+				if (t.FilePath == currentItem.sourceURL)
 				{
 					DataGrid.SelectedItems.Clear();
-					DataGrid.SelectedItems.Add(CurrentPlaylist[index]);
+					DataGrid.SelectedItems.Add(t);
 					break;
 				}
 		}
