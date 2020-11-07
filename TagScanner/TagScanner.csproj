@@ -76,6 +76,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\GainController.cs" />
     <Compile Include="Controllers\GridController.cs" />
     <Compile Include="Controllers\LibraryFormController.cs" />
     <Compile Include="Controllers\PlayerController.cs" />

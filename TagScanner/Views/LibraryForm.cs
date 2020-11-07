@@ -4,6 +4,10 @@
 
     public partial class LibraryForm : Form
     {
-        public LibraryForm() => InitializeComponent();
+        public LibraryForm()
+        {
+            InitializeComponent();
+            new TagScanner.Controllers.GainController().GetGain("");
+        }
     }
 }
