@@ -1,204 +1,187 @@
-﻿using System;
-using System.ComponentModel;
-using System.IO;
-using System.Windows.Forms;
-using TagScanner.Models;
-
-namespace TagScanner.Controllers
+﻿namespace TagScanner.Controllers
 {
-	public abstract class SdiController : MruController
-	{
-		protected SdiController(Model model, string filter, string subKeyName, ToolStripDropDownItem recentMenu)
-			: base(model, subKeyName, recentMenu)
-		{
-			OpenFileDialog = new OpenFileDialog
-			{
-				Filter = filter,
-				Title = "Select the file to open"
-			};
-			SaveFileDialog = new SaveFileDialog
-			{
-				Filter = filter,
-				Title = "Save file"
-			};
-		}
+    using System;
+    using System.ComponentModel;
+    using System.IO;
+    using System.Windows.Forms;
+    using TagScanner.Models;
 
-		public bool Clear()
-		{
-			var result = SaveIfModified();
-			if (result)
-			{
-				ClearDocument();
-				Model.Modified = false;
-				FilePath = string.Empty;
-			}
-			return result;
-		}
+    public abstract class SdiController : MruController
+    {
+        protected SdiController(Model model, string filter, string subKeyName, ToolStripDropDownItem recentMenu)
+            : base(model, subKeyName, recentMenu)
+        {
+            OpenFileDialog = new OpenFileDialog
+            {
+                Filter = filter,
+                Title = "Select the file to open"
+            };
+            SaveFileDialog = new SaveFileDialog
+            {
+                Filter = filter,
+                Title = "Save file"
+            };
+        }
 
-		public bool Open()
-		{
-			return SaveIfModified() && OpenFileDialog.ShowDialog() == DialogResult.OK && LoadFromFile(OpenFileDialog.FileName);
-		}
+        public bool Clear()
+        {
+            var result = SaveIfModified();
+            if (result)
+            {
+                ClearDocument();
+                Model.Modified = false;
+                FilePath = string.Empty;
+            }
+            return result;
+        }
 
-		public bool Save()
-		{
-			return string.IsNullOrEmpty(FilePath) ? SaveAs() : SaveToFile(FilePath);
-		}
+        public bool Open() => SaveIfModified() && OpenFileDialog.ShowDialog() == DialogResult.OK && LoadFromFile(OpenFileDialog.FileName);
 
-		public bool SaveAs()
-		{
-			return SaveFileDialog.ShowDialog() == DialogResult.OK && SaveToFile(SaveFileDialog.FileName);
-		}
+        public bool Save() => string.IsNullOrEmpty(FilePath) ? SaveAs() : SaveToFile(FilePath);
 
-		public bool SaveIfModified()
-		{
-			if (Model.Modified)
-				switch (MessageBox.Show(
-					"The contents of this file have changed. Do you want to save the changes?",
-					"File modified",
-					MessageBoxButtons.YesNoCancel,
-					MessageBoxIcon.Warning))
-				{
-					case DialogResult.Yes:
-						return Save();
-					case DialogResult.No:
-						return true;
-					case DialogResult.Cancel:
-						return false;
-				}
-			return true;
-		}
+        public bool SaveAs() => SaveFileDialog.ShowDialog() == DialogResult.OK && SaveToFile(SaveFileDialog.FileName);
 
-		public event EventHandler FilePathChanged;
+        public bool SaveIfModified()
+        {
+            if (Model.Modified)
+                switch (MessageBox.Show(
+                    "The contents of this file have changed. Do you want to save the changes?",
+                    "File modified",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Warning))
+                {
+                    case DialogResult.Yes:
+                        return Save();
+                    case DialogResult.No:
+                        return true;
+                    case DialogResult.Cancel:
+                        return false;
+                }
+            return true;
+        }
 
-		public event EventHandler<CancelEventArgs> FileLoading;
-		public event EventHandler<CancelEventArgs> FileSaving;
+        public event EventHandler FilePathChanged;
 
-		private string _filePath = string.Empty;
-		protected string FilePath
-		{
-			get
-			{
-				return _filePath;
-			}
-			set
-			{
-				if (FilePath != value)
-				{
-					_filePath = value;
-					OnFilePathChanged();
-				}
-			}
-		}
+        public event EventHandler<CancelEventArgs> FileLoading;
+        public event EventHandler<CancelEventArgs> FileSaving;
 
-		protected abstract void ClearDocument();
+        private string _filePath = string.Empty;
+        protected string FilePath
+        {
+            get => _filePath;
+            set
+            {
+                if (FilePath != value)
+                {
+                    _filePath = value;
+                    OnFilePathChanged();
+                }
+            }
+        }
 
-		protected abstract bool LoadFromStream(Stream stream, string format);
+        protected abstract void ClearDocument();
 
-		protected virtual void OnFilePathChanged()
-		{
-			var filePathChanged = FilePathChanged;
-			if (filePathChanged != null)
-				filePathChanged(this, EventArgs.Empty);
-		}
+        protected abstract bool LoadFromStream(Stream stream, string format);
 
-		protected virtual bool OnFileLoading()
-		{
-			var result = true;
-			var fileLoading = FileLoading;
-			if (fileLoading != null)
-			{
-				var e = new CancelEventArgs();
-				fileLoading(this, e);
-				result = !e.Cancel;
-			}
-			return result;
-		}
+        protected virtual void OnFilePathChanged() => FilePathChanged?.Invoke(this, EventArgs.Empty);
 
-		protected virtual bool OnFileSaving()
-		{
-			var result = true;
-			var fileSaving = FileSaving;
-			if (fileSaving != null)
-			{
-				var e = new CancelEventArgs();
-				fileSaving(this, e);
-				result = !e.Cancel;
-			}
-			return result;
-		}
+        protected virtual bool OnFileLoading()
+        {
+            var result = true;
+            var fileLoading = FileLoading;
+            if (fileLoading != null)
+            {
+                var e = new CancelEventArgs();
+                fileLoading(this, e);
+                result = !e.Cancel;
+            }
+            return result;
+        }
 
-		protected override void Reopen(ToolStripItem menuItem)
-		{
-			var filePath = menuItem.ToolTipText;
-			if (File.Exists(filePath))
-			{
-				if (SaveIfModified())
-					LoadFromFile(filePath);
-			}
-			else if (MessageBox.Show(
-				string.Format("File \"{0}\" no longer exists. Remove from menu?", filePath),
-				"Reopen file",
-				MessageBoxButtons.YesNo) == DialogResult.Yes)
-				RemoveItem(filePath);
-		}
+        protected virtual bool OnFileSaving()
+        {
+            var result = true;
+            var fileSaving = FileSaving;
+            if (fileSaving != null)
+            {
+                var e = new CancelEventArgs();
+                fileSaving(this, e);
+                result = !e.Cancel;
+            }
+            return result;
+        }
 
-		protected abstract bool SaveToStream(Stream stream, string format);
+        protected override void Reopen(ToolStripItem menuItem)
+        {
+            var filePath = menuItem.ToolTipText;
+            if (File.Exists(filePath))
+            {
+                if (SaveIfModified())
+                    LoadFromFile(filePath);
+            }
+            else if (MessageBox.Show(
+                string.Format("File \"{0}\" no longer exists. Remove from menu?", filePath),
+                "Reopen file",
+                MessageBoxButtons.YesNo) == DialogResult.Yes)
+                RemoveItem(filePath);
+        }
 
-		protected bool UseStream(Action action)
-		{
-			var result = true;
-			try
-			{
-				action();
-				Model.Modified = false;
-			}
-			catch (Exception x)
-			{
-				MessageBox.Show(
-					x.Message,
-					x.GetType().Name,
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error);
-				result = false;
-			}
-			return result;
-		}
+        protected abstract bool SaveToStream(Stream stream, string format);
 
-		private readonly OpenFileDialog OpenFileDialog;
-		private readonly SaveFileDialog SaveFileDialog;
+        protected bool UseStream(Action action)
+        {
+            var result = true;
+            try
+            {
+                action();
+                Model.Modified = false;
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show(
+                    x.Message,
+                    x.GetType().Name,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                result = false;
+            }
+            return result;
+        }
 
-		private bool LoadFromFile(string filePath)
-		{
-			var result = false;
-			if (OnFileLoading())
-			{
-				using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-					result = LoadFromStream(stream, Path.GetExtension(filePath));
-				if (result)
-				{
-					FilePath = filePath;
-					AddItem(filePath);
-				}
-			}
-			return result;
-		}
+        private readonly OpenFileDialog OpenFileDialog;
+        private readonly SaveFileDialog SaveFileDialog;
 
-		private bool SaveToFile(string filePath)
-		{
-			var result = false;
-			if (OnFileSaving())
-				using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-				{
-					result = SaveToStream(stream, Path.GetExtension(filePath));
-					if (result)
-					{
-						stream.Flush();
-						FilePath = filePath;
-						AddItem(filePath);
-					}
-				}
-			return result;
-		}
-	}
+        private bool LoadFromFile(string filePath)
+        {
+            var result = false;
+            if (OnFileLoading())
+            {
+                using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                    result = LoadFromStream(stream, Path.GetExtension(filePath));
+                if (result)
+                {
+                    FilePath = filePath;
+                    AddItem(filePath);
+                }
+            }
+            return result;
+        }
+
+        private bool SaveToFile(string filePath)
+        {
+            var result = false;
+            if (OnFileSaving())
+                using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                {
+                    result = SaveToStream(stream, Path.GetExtension(filePath));
+                    if (result)
+                    {
+                        stream.Flush();
+                        FilePath = filePath;
+                        AddItem(filePath);
+                    }
+                }
+            return result;
+        }
+    }
 }

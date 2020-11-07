@@ -1,22 +1,14 @@
-﻿using System;
-using System.Globalization;
-using System.Windows.Data;
-using TagScanner.Models;
-
-namespace TagScanner.ValueConverters
+﻿namespace TagScanner.ValueConverters
 {
-	public class FileSizeConverter : IValueConverter
-	{
-		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-		{
-			if (value is long)
-				return ((long)value).AsString(false);
-			return value;
-		}
+    using System;
+    using System.Globalization;
+    using System.Windows.Data;
+    using TagScanner.Models;
 
-		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-		{
-			return value;
-		}
-	}
+    public class FileSizeConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => value is long v ? v.AsString(false) : value;
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => value;
+    }
 }

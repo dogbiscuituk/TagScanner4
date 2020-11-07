@@ -1,217 +1,174 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-
-namespace TagScanner.Models
+﻿namespace TagScanner.Models
 {
-	public static class Metadata
-	{
-		#region Fields
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Reflection;
 
-		public static readonly PropertyInfo[] SelectionPropertyInfos = typeof(Selection).GetProperties();
-		public static readonly PropertyInfo[] TrackPropertyInfos = typeof(ITrack).GetProperties();
+    public static class Metadata
+    {
+        #region Fields
 
-		private static readonly IEnumerable<PropertyInfo> SortablePropertyInfos =
-			from prop in TrackPropertyInfos
-			let type = prop.PropertyType
-			let typeName = type.Name
-			where !type.IsArray && typeName != "TagTypes" && typeName != "FileStatus"
-			select prop;
+        public static readonly PropertyInfo[] SelectionPropertyInfos = typeof(Selection).GetProperties();
+        public static readonly PropertyInfo[] TrackPropertyInfos = typeof(ITrack).GetProperties();
 
-		private static readonly IEnumerable<PropertyInfo> StringPropertyInfos =
-			TrackPropertyInfos.Where(p => p.PropertyType.Name == "String");
+        private static readonly IEnumerable<PropertyInfo> SortablePropertyInfos =
+            from prop in TrackPropertyInfos
+            let type = prop.PropertyType
+            let typeName = type.Name
+            where !type.IsArray && typeName != "TagTypes" && typeName != "FileStatus"
+            select prop;
 
-		private static readonly IEnumerable<PropertyInfo> TextPropertyInfos =
-			TrackPropertyInfos.Where(p => p.PropertyType.Name.StartsWith("String"));
+        private static readonly IEnumerable<PropertyInfo> StringPropertyInfos =
+            TrackPropertyInfos.Where(p => p.PropertyType.Name == "String");
 
-		private static readonly IEnumerable<PropertyInfo> WritableStringPropertyInfos =
-			StringPropertyInfos.Where(p => p.CanWrite);
+        private static readonly IEnumerable<PropertyInfo> TextPropertyInfos =
+            TrackPropertyInfos.Where(p => p.PropertyType.Name.StartsWith("String"));
 
-		private static readonly IEnumerable<PropertyInfo> WritableTextPropertyInfos =
-			TextPropertyInfos.Where(p => p.CanWrite);
+        private static readonly IEnumerable<PropertyInfo> WritableStringPropertyInfos =
+            StringPropertyInfos.Where(p => p.CanWrite);
 
-		public static readonly IEnumerable<string> SelectionTags = SelectionPropertyInfos.Select(p => p.Name);
+        private static readonly IEnumerable<PropertyInfo> WritableTextPropertyInfos =
+            TextPropertyInfos.Where(p => p.CanWrite);
 
-		public static readonly string[] SortableTags = SortablePropertyInfos.Select(p => p.Name).ToArray();
-		public static readonly string[] StringTags = StringPropertyInfos.Select(p => p.Name).ToArray();
-		public static readonly string[] TextTags = TextPropertyInfos.Select(p => p.Name).ToArray();
-		public static readonly string[] WritableStringTags = WritableStringPropertyInfos.Select(p => p.Name).ToArray();
-		public static readonly string[] WritableTextTags = WritableTextPropertyInfos.Select(p => p.Name).ToArray();
+        public static readonly IEnumerable<string> SelectionTags = SelectionPropertyInfos.Select(p => p.Name);
 
-		#endregion
+        public static readonly string[] SortableTags = SortablePropertyInfos.Select(p => p.Name).ToArray();
+        public static readonly string[] StringTags = StringPropertyInfos.Select(p => p.Name).ToArray();
+        public static readonly string[] TextTags = TextPropertyInfos.Select(p => p.Name).ToArray();
+        public static readonly string[] WritableStringTags = WritableStringPropertyInfos.Select(p => p.Name).ToArray();
+        public static readonly string[] WritableTextTags = WritableTextPropertyInfos.Select(p => p.Name).ToArray();
 
-		#region Tag Attributes
+        #endregion
 
-		public static string GetTagCategory(string propertyName)
-		{
-			return (string)UseTagAttribute(propertyName, typeof(CategoryAttribute), "categoryValue");
-		}
+        #region Tag Attributes
 
-		public static string GetTagDescription(string propertyName)
-		{
-			return (string)UseTagAttribute(propertyName, typeof(DescriptionAttribute), "description");
-		}
+        public static string GetTagCategory(string propertyName) => (string)UseTagAttribute(propertyName, typeof(CategoryAttribute), "categoryValue");
 
-		private static bool GetTagVisible(string propertyName)
-		{
-			return UseTagVisible(propertyName);
-		}
+        public static string GetTagDescription(string propertyName) => (string)UseTagAttribute(propertyName, typeof(DescriptionAttribute), "description");
 
-		public static List<string> GetVisibleTags()
-		{
-			return SelectionTags.Where(t => GetTagVisible(t)).ToList();
-		}
+        private static bool GetTagVisible(string propertyName) => UseTagVisible(propertyName);
 
-		private static void SetTagVisible(string propertyName, bool isBrowsable)
-		{
-			UseTagVisible(propertyName, isBrowsable);
-		}
+        public static List<string> GetVisibleTags() => SelectionTags.Where(t => GetTagVisible(t)).ToList();
 
-		public static void SetVisibleTags(IEnumerable<string> visibleTags)
-		{
-			foreach (var t in SelectionTags)
-				SetTagVisible(t, visibleTags.Contains(t));
-		}
+        private static void SetTagVisible(string propertyName, bool isBrowsable) => UseTagVisible(propertyName, isBrowsable);
 
-		#endregion
+        public static void SetVisibleTags(IEnumerable<string> visibleTags)
+        {
+            foreach (var t in SelectionTags)
+                SetTagVisible(t, visibleTags.Contains(t));
+        }
 
-		#region Quantifiers
+        #endregion
 
-		[Flags]
-		public enum Quantifiers
-		{
-			None = 0,
-			And = 1,
-			Or = 2,
-			Not = 4,
-			Nand = Not | And,
-			Nor = Not | Or
-		}
+        #region Quantifiers
 
-		private const string
-			QuantifierStringAnd = "All of these are true:",
-			QuantifierStringOr = "At least one of these is true:",
-			QuantifierStringNand = "At least one of these is false:",
-			QuantifierStringNor = "All of these are false:";
+        [Flags]
+        public enum Quantifiers
+        {
+            None = 0,
+            And = 1,
+            Or = 2,
+            Not = 4,
+            Nand = Not | And,
+            Nor = Not | Or
+        }
 
-		public static readonly string[] QuantifierStrings = new[]
-		{
-			QuantifierStringAnd,
-			QuantifierStringOr,
-			QuantifierStringNand,
-			QuantifierStringNor
-		};
+        private const string
+            QuantifierStringAnd = "All of these are true:",
+            QuantifierStringOr = "At least one of these is true:",
+            QuantifierStringNand = "At least one of these is false:",
+            QuantifierStringNor = "All of these are false:";
 
-		public static Quantifiers GetQuantifier(string quantifierString)
-		{
-			switch (quantifierString)
-			{
-				case QuantifierStringAnd:
-					return Quantifiers.And;
-				case QuantifierStringOr:
-					return Quantifiers.Or;
-				case QuantifierStringNand:
-					return Quantifiers.Nand;
-				case QuantifierStringNor:
-					return Quantifiers.Nor;
-			}
-			return Quantifiers.None;
-		}
+        public static readonly string[] QuantifierStrings = new[]
+        {
+            QuantifierStringAnd,
+            QuantifierStringOr,
+            QuantifierStringNand,
+            QuantifierStringNor
+        };
 
-		#endregion
+        public static Quantifiers GetQuantifier(string quantifierString)
+        {
+            switch (quantifierString)
+            {
+                case QuantifierStringAnd: return Quantifiers.And;
+                case QuantifierStringOr: return Quantifiers.Or;
+                case QuantifierStringNand: return Quantifiers.Nand;
+                case QuantifierStringNor: return Quantifiers.Nor;
+                default: return Quantifiers.None;
+            };
+        }
 
-		#region Public Utility Methods
+        #endregion
 
-		public static string AmpersandEscape(this string s)
-		{
-			return s.Replace("&", "&&");
-		}
+        #region Public Utility Methods
 
-		public static string AmpersandUnescape(this string s)
-		{
-			return s.Replace("&&", "&");
-		}
+        public static string AmpersandEscape(this string s) => s.Replace("&", "&&");
 
-		public static IEnumerable<string> GetDependentPropertyNames(string propertyName)
-		{
-			switch (propertyName)
-			{
-				case "Album":
-					return new[] { "YearAlbum" };
-				case "AlbumArtists":
-					return new[] { "AlbumArtistsCount", "FirstAlbumArtist", "JoinedAlbumArtists" };
-				case "AlbumArtistsSort":
-					return new[] { "AlbumArtistsSortCount", "FirstAlbumArtistSort" };
-				case "Artists":
-					return new[] { "ArtistsCount", "FirstArtist", "JoinedArtists" };
-				case "Composers":
-					return new[] { "ComposersCount, FirstComposer", "JoinedComposers" };
-				case "ComposersSort":
-					return new[] { "ComposersSortCount, FirstComposerSort" };
-				case "DiscCount":
-				case "DiscNumber":
-					return new[] { "DiscOf", "DiscTrack" };
-				case "Genres":
-					return new[] { "FirstGenre", "GenresCount", "IsClassical", "JoinedGenres" };
-				case "Performers":
-					return new[] { "PerformersCount", "FirstPerformer", "JoinedPerformers" };
-				case "PerformersSort":
-					return new[] { "PerformersSortCount", "FirstPerformerSort", "JoinedPerformersSort" };
-				case "TrackCount":
-				case "TrackNumber":
-					return new[] { "TrackOf", "DiscTrack" };
-				case "Year":
-					return new[] { "Decade", "Century", "Millennium", "YearAlbum" };
-			}
-			return Enumerable.Empty<string>();
-		}
+        public static string AmpersandUnescape(this string s) => s.Replace("&&", "&");
 
-		public static PropertyInfo GetPropertyInfo(string propertyName)
-		{
-			return TrackPropertyInfos.FirstOrDefault(p => p.Name == propertyName);
-		}
+        public static IEnumerable<string> GetDependentPropertyNames(string propertyName)
+        {
+            switch (propertyName)
+            {
+                case "Album":
+                    return new[] { "YearAlbum" };
+                case "AlbumArtists":
+                    return new[] { "AlbumArtistsCount", "FirstAlbumArtist", "JoinedAlbumArtists" };
+                case "AlbumArtistsSort":
+                    return new[] { "AlbumArtistsSortCount", "FirstAlbumArtistSort" };
+                case "Artists":
+                    return new[] { "ArtistsCount", "FirstArtist", "JoinedArtists" };
+                case "Composers":
+                    return new[] { "ComposersCount, FirstComposer", "JoinedComposers" };
+                case "ComposersSort":
+                    return new[] { "ComposersSortCount, FirstComposerSort" };
+                case "DiscCount":
+                case "DiscNumber":
+                    return new[] { "DiscOf", "DiscTrack" };
+                case "Genres":
+                    return new[] { "FirstGenre", "GenresCount", "IsClassical", "JoinedGenres" };
+                case "Performers":
+                    return new[] { "PerformersCount", "FirstPerformer", "JoinedPerformers" };
+                case "PerformersSort":
+                    return new[] { "PerformersSortCount", "FirstPerformerSort", "JoinedPerformersSort" };
+                case "TrackCount":
+                case "TrackNumber":
+                    return new[] { "TrackOf", "DiscTrack" };
+                case "Year":
+                    return new[] { "Decade", "Century", "Millennium", "YearAlbum" };
+            }
+            return Enumerable.Empty<string>();
+        }
 
-		public static string GetPropertyTypeName(string propertyName)
-		{
-			return GetPropertyType(propertyName).Name;
-		}
+        public static PropertyInfo GetPropertyInfo(string propertyName) => TrackPropertyInfos.FirstOrDefault(p => p.Name == propertyName);
 
-		#endregion
+        public static string GetPropertyTypeName(string propertyName) => GetPropertyType(propertyName).Name;
 
-		#region Private Helper Methods
+        #endregion
 
-		private static PropertyDescriptor GetPropertyDescriptor(string propertyName)
-		{
-			return TypeDescriptor.GetProperties(typeof(Selection))[propertyName];
-		}
+        #region Private Helper Methods
 
-		private static Type GetPropertyType(string propertyName)
-		{
-			return GetPropertyInfo(propertyName).PropertyType;
-		}
+        private static PropertyDescriptor GetPropertyDescriptor(string propertyName) => TypeDescriptor.GetProperties(typeof(Selection))[propertyName];
 
-		private static object UseTagAttribute(string propertyName, Type attributeType, string fieldName, object value = null)
-		{
-			return UseTagAttribute(GetPropertyDescriptor(propertyName), attributeType, fieldName, value);
-		}
+        private static Type GetPropertyType(string propertyName) => GetPropertyInfo(propertyName).PropertyType;
 
-		private static object UseTagAttribute(PropertyDescriptor descriptor, Type attributeType, string fieldName, object value = null)
-		{
-			var fieldInfo = attributeType.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
-			var attribute = descriptor.Attributes[attributeType];
-			if (value == null)
-				return fieldInfo.GetValue(attribute);
-			fieldInfo.SetValue(attribute, value);
-			return value;
-		}
+        private static object UseTagAttribute(string propertyName, Type attributeType, string fieldName, object value = null) => UseTagAttribute(GetPropertyDescriptor(propertyName), attributeType, fieldName, value);
 
-		private static bool UseTagVisible(string propertyName, bool? isBrowsable = null)
-		{
-			return (bool)UseTagAttribute(propertyName, typeof(BrowsableAttribute), "browsable", isBrowsable);
-		}
+        private static object UseTagAttribute(PropertyDescriptor descriptor, Type attributeType, string fieldName, object value = null)
+        {
+            var fieldInfo = attributeType.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
+            var attribute = descriptor.Attributes[attributeType];
+            if (value == null)
+                return fieldInfo.GetValue(attribute);
+            fieldInfo.SetValue(attribute, value);
+            return value;
+        }
 
-		#endregion
-	}
+        private static bool UseTagVisible(string propertyName, bool? isBrowsable = null) => (bool)UseTagAttribute(propertyName, typeof(BrowsableAttribute), "browsable", isBrowsable);
+
+        #endregion
+    }
 }

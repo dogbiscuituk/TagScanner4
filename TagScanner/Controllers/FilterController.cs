@@ -1,54 +1,51 @@
-﻿using System;
-using TagScanner.Views;
-
-namespace TagScanner.Controllers
+﻿namespace TagScanner.Controllers
 {
-	public abstract class FilterController
-	{
-		#region Lifetime Management
+    using System;
+    using TagScanner.Views;
 
-		protected FilterController(FilterDialog view)
-		{
-			View = view;
-			Visible = false;
-		}
+    public abstract class FilterController
+    {
+        #region Lifetime Management
 
-		#endregion
+        protected FilterController(FilterDialog view)
+        {
+            View = view;
+            Visible = false;
+        }
 
-		#region View
+        #endregion
 
-		protected FilterDialog _view;
-		protected virtual FilterDialog View
-		{
-			get { return _view; }
-			set { _view = value; }
-		}
+        #region View
 
-		public abstract bool Visible { get; set; }
+        protected FilterDialog _view;
+        protected virtual FilterDialog View
+        {
+            get => _view;
+            set => _view = value;
+        }
 
-		#endregion
+        public abstract bool Visible { get; set; }
 
-		#region Text
+        #endregion
 
-		public abstract string Text { get; set; }
+        #region Text
 
-		#endregion
+        public abstract string Text { get; set; }
 
-		#region Control Events
+        #endregion
 
-		protected bool Updating;
+        #region Control Events
 
-		public event EventHandler ValueChanged;
+        protected bool Updating;
 
-		protected virtual void OnValueChanged()
-		{
-			if (Updating)
-				return;
-			var valueChanged = ValueChanged;
-			if (valueChanged != null)
-				valueChanged(this, EventArgs.Empty);
-		}
+        public event EventHandler ValueChanged;
 
-		#endregion
-	}
+        protected virtual void OnValueChanged()
+        {
+            if (!Updating)
+                ValueChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        #endregion
+    }
 }

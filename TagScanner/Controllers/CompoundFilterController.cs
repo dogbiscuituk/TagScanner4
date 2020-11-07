@@ -1,75 +1,57 @@
-﻿using System;
-using System.Windows.Forms;
-using TagScanner.Models;
-using TagScanner.Views;
-
-namespace TagScanner.Controllers
+﻿namespace TagScanner.Controllers
 {
-	public class CompoundFilterController : FilterController
-	{
-		#region Lifetime Management
+    using System;
+    using System.Windows.Forms;
+    using TagScanner.Models;
+    using TagScanner.Views;
 
-		public CompoundFilterController(FilterDialog view) : base(view) { }
+    public class CompoundFilterController : FilterController
+    {
+        #region Lifetime Management
 
-		#endregion
+        public CompoundFilterController(FilterDialog view) : base(view) { }
 
-		#region View
+        #endregion
 
-		protected override FilterDialog View
-		{
-			get
-			{
-				return base.View;
-			}
-			set
-			{
-				base.View = value;
-				var items = QuantifierBox.Items;
-				items.Clear();
-				items.AddRange(Metadata.QuantifierStrings);
-				QuantifierBox.SelectedValueChanged += QuantifierBox_ValueChanged;
-			}
-		}
+        #region View
 
-		private ComboBox QuantifierBox { get { return View.QuantifierBox; } }
+        protected override FilterDialog View
+        {
+            get => base.View;
+            set
+            {
+                base.View = value;
+                var items = QuantifierBox.Items;
+                items.Clear();
+                items.AddRange(Metadata.QuantifierStrings);
+                QuantifierBox.SelectedValueChanged += QuantifierBox_ValueChanged;
+            }
+        }
 
-		public override bool Visible
-		{
-			get
-			{
-				return QuantifierBox.Visible;
-			}
-			set
-			{
-				QuantifierBox.Visible = value;
-			}
-		}
+        private ComboBox QuantifierBox => View.QuantifierBox;
 
-		#endregion
+        public override bool Visible
+        {
+            get => QuantifierBox.Visible;
+            set => QuantifierBox.Visible = value;
+        }
 
-		#region Text
+        #endregion
 
-		public override string Text
-		{
-			get
-			{
-				return QuantifierBox.Text;
-			}
-			set
-			{
-				QuantifierBox.Text = value;
-			}
-		}
+        #region Text
 
-		#endregion
+        public override string Text
+        {
+            get => QuantifierBox.Text;
+            set => QuantifierBox.Text = value;
+        }
 
-		#region Control Events
+        #endregion
 
-		private void QuantifierBox_ValueChanged(object sender, EventArgs e)
-		{
-			OnValueChanged();
-		}
+        #region Control Events
 
-		#endregion
-	}
+        private void QuantifierBox_ValueChanged(object sender, EventArgs e) => OnValueChanged();
+
+        #endregion
+    }
 }

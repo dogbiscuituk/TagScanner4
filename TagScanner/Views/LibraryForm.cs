@@ -1,12 +1,9 @@
-﻿using System.Windows.Forms;
-
-namespace TagScanner.Views
+﻿namespace TagScanner.Views
 {
-	public partial class LibraryForm : Form
-	{
-		public LibraryForm()
-		{
-			InitializeComponent();
-		}
-	}
+    using System.Windows.Forms;
+
+    public partial class LibraryForm : Form
+    {
+        public LibraryForm() => InitializeComponent();
+    }
 }
