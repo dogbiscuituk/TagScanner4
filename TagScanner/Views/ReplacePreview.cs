@@ -1,12 +1,9 @@
 ﻿namespace TagScanner.Views
 {
-	using System.Windows.Forms;
+    using System.Windows.Forms;
 
-	public partial class ReplacePreview : Form
-	{
-		public ReplacePreview()
-		{
-			InitializeComponent();
-		}
-	}
+    public partial class ReplacePreview : Form
+    {
+        public ReplacePreview() => InitializeComponent();
+    }
 }
