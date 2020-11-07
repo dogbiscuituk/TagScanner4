@@ -1,9 +1,12 @@
-﻿namespace TagScanner.Views
-{
-    using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
-    public partial class FilterDialog : Form
-    {
-        public FilterDialog() => InitializeComponent();
-    }
+namespace TagScanner.Views
+{
+	public partial class FilterDialog : Form
+	{
+		public FilterDialog()
+		{
+			InitializeComponent();
+		}
+	}
 }

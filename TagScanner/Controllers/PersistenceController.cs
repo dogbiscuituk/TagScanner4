@@ -1,39 +1,45 @@
-﻿namespace TagScanner.Controllers
+﻿using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Serialization;
+using TagScanner.Models;
+
+namespace TagScanner.Controllers
 {
-    using System.IO;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using System.Windows.Forms;
-    using System.Xml;
-    using System.Xml.Serialization;
-    using TagScanner.Models;
+	public class PersistenceController : SdiController
+	{
+		public PersistenceController(Model model, Control view, ToolStripDropDownItem recentMenu)
+			: base(model, Properties.Settings.Default.LibraryFilter, "LibraryMRU", recentMenu)
+		{
+			View = view;
+		}
 
-    public class PersistenceController : SdiController
-    {
-        public PersistenceController(Model model, Control view, ToolStripDropDownItem recentMenu)
-            : base(model, Properties.Settings.Default.LibraryFilter, "LibraryMRU", recentMenu) => View = view;
+		private readonly Control View;
 
-        private readonly Control View;
+		public string WindowCaption
+		{
+			get
+			{
+				var text = Path.GetFileNameWithoutExtension(FilePath);
+				if (string.IsNullOrWhiteSpace(text))
+					text = "(untitled)";
+				var modified = Model.Modified;
+				if (modified)
+					text = string.Concat("* ", text);
+				text = string.Concat(text, " - ", Application.ProductName);
+				return text;
+			}
+		}
 
-        public string WindowCaption
-        {
-            get
-            {
-                var text = Path.GetFileNameWithoutExtension(FilePath);
-                if (string.IsNullOrWhiteSpace(text))
-                    text = "(untitled)";
-                var modified = Model.Modified;
-                if (modified)
-                    text = string.Concat("* ", text);
-                text = string.Concat(text, " - ", Application.ProductName);
-                return text;
-            }
-        }
+		protected override void ClearDocument()
+		{
+			Model.Clear();
+		}
 
-        protected override void ClearDocument() => Model.Clear();
-
-        protected override bool LoadFromStream(Stream stream, string format)
-        {
-            /*
+		protected override bool LoadFromStream(Stream stream, string format)
+		{
+			/*
 				The asymmetrical use of XmlTextReader below is necessitated by a bug in .NET's XML Serialization routines.
 				These can serialize an object to XML, which will subsequently throw an exception when trying to deserialize.
 				For example, when a string contains an unprintable character like char(1), this will get serialized to &#x1;
@@ -48,23 +54,36 @@
 				allowed during deserialization too. The default TextReader variant on the other hand creates an XmlTextReader
 				with its Normalization property set to true, which was causing the observed failure at deserialization time.
 			*/
-            var result =
-                IsXml(format)
-                    ? UseStream(() => Model.Library = (Library)GetXmlSerializer().Deserialize(new XmlTextReader(stream)))
-                    : UseStream(() => Model.Library = (Library)GetBinaryFormatter().Deserialize(stream));
-            foreach (var track in Model.Tracks)
-                track.PropertyChanged += Model.Track_PropertyChanged;
-            return result;
+			var result =
+				IsXml(format)
+					? UseStream(() => Model.Library = (Library)GetXmlSerializer().Deserialize(new XmlTextReader(stream)))
+					: UseStream(() => Model.Library = (Library)GetBinaryFormatter().Deserialize(stream));
+			foreach (var track in Model.Tracks)
+				track.PropertyChanged += Model.Track_PropertyChanged;
+			return result;
+		}
+
+		protected override bool SaveToStream(Stream stream, string format)
+		{
+			return
+				IsXml(format)
+					? UseStream(() => GetXmlSerializer().Serialize(stream, Model.Library))
+					: UseStream(() => GetBinaryFormatter().Serialize(stream, Model.Library));
+		}
+
+		private static BinaryFormatter GetBinaryFormatter()
+		{
+			return new BinaryFormatter();
         }
 
-        protected override bool SaveToStream(Stream stream, string format) => IsXml(format)
-                    ? UseStream(() => GetXmlSerializer().Serialize(stream, Model.Library))
-                    : UseStream(() => GetBinaryFormatter().Serialize(stream, Model.Library));
+		private static XmlSerializer GetXmlSerializer()
+		{
+			return new XmlSerializer(typeof(Library));
+		}
 
-        private static BinaryFormatter GetBinaryFormatter() => new BinaryFormatter();
-
-        private static XmlSerializer GetXmlSerializer() => new XmlSerializer(typeof(Library));
-
-        private static bool IsXml(string format) => format.EndsWith("x");
-    }
+		private static bool IsXml(string format)
+		{
+			return format.EndsWith("x");
+        }
+	}
 }
