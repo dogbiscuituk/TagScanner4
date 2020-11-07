@@ -1,10 +1,10 @@
-﻿using System;
-using System.Windows.Forms;
-using TagScanner.Models;
-using TagScanner.Views;
-
-namespace TagScanner.Controllers
+﻿namespace TagScanner.Controllers
 {
+	using System;
+	using System.Windows.Forms;
+	using TagScanner.Models;
+	using TagScanner.Views;
+
 	public class CompoundFilterController : FilterController
 	{
 		#region Lifetime Management

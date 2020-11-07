@@ -1,8 +1,8 @@
-﻿using System;
-using System.Diagnostics;
-
-namespace TagScanner.Logging
+﻿namespace TagScanner.Logging
 {
+	using System;
+	using System.Diagnostics;
+
 	public static class Logger
 	{
 		public static void LogException(Exception ex, string filePath)

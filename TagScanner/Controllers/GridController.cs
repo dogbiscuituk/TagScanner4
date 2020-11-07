@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Reflection;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using TagScanner.ValueConverters;
-
-namespace TagScanner.Controllers
+﻿namespace TagScanner.Controllers
 {
+	using System.Collections.Generic;
+	using System.Drawing;
+	using System.Linq;
+	using System.Reflection;
+	using System.Windows;
+	using System.Windows.Controls;
+	using System.Windows.Data;
+	using TagScanner.ValueConverters;
+
 	public abstract class GridController
 	{
 		protected abstract DataGrid DataGrid { get; }

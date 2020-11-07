@@ -1,12 +1,12 @@
-﻿using System;
-using System.ComponentModel;
-using System.IO;
-using System.Windows.Forms;
-using TagScanner.Models;
-using TagScanner.Properties;
-
-namespace TagScanner.Controllers
+﻿namespace TagScanner.Controllers
 {
+	using System;
+	using System.ComponentModel;
+	using System.IO;
+	using System.Windows.Forms;
+	using TagScanner.Models;
+	using TagScanner.Properties;
+
 	public abstract class SdiController : MruController
 	{
 		protected SdiController(Model model, string filter, string subKeyName, ToolStripDropDownItem recentMenu)

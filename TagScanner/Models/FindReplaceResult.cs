@@ -1,7 +1,7 @@
-﻿using System.Linq;
-
-namespace TagScanner.Models
+﻿namespace TagScanner.Models
 {
+	using System.Linq;
+
 	public class FindReplaceResult
 	{
 		public FindReplaceResult(Track track, string tag, object oldValue, object newValue)

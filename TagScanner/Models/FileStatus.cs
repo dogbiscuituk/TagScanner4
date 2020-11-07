@@ -1,8 +1,8 @@
-﻿using System;
-using System.ComponentModel;
-
-namespace TagScanner.Models
+﻿namespace TagScanner.Models
 {
+	using System;
+	using System.ComponentModel;
+
 	[Flags]
 	public enum FileStatus
 	{

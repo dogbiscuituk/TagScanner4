@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reflection;
-using System.Windows.Data;
-using System.Windows.Forms;
-using AxWMPLib;
-using WMPLib;
-using TagScanner.Models;
-using TagScanner.Views;
-
-namespace TagScanner.Controllers
+﻿namespace TagScanner.Controllers
 {
+	using System;
+	using System.Collections.ObjectModel;
+	using System.Linq;
+	using System.Reflection;
+	using System.Windows.Data;
+	using System.Windows.Forms;
+	using AxWMPLib;
+	using WMPLib;
+	using TagScanner.Models;
+	using TagScanner.Views;
+
 	public class PlayerController : GridController
 	{
 		public PlayerController(LibraryFormController gridFormController, ToolStripDropDownItem recentMenu)

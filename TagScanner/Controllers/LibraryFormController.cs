@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using TagScanner.Models;
-using TagScanner.Properties;
-using TagScanner.Views;
-
-namespace TagScanner.Controllers
+﻿namespace TagScanner.Controllers
 {
+	using System;
+	using System.Collections.Generic;
+	using System.ComponentModel;
+	using System.IO;
+	using System.Linq;
+	using System.Text;
+	using System.Windows.Forms;
+	using TagScanner.Models;
+	using TagScanner.Properties;
+	using TagScanner.Views;
+
 	public class LibraryFormController
 	{
 		#region Lifetime Management

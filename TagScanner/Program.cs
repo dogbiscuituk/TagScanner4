@@ -1,9 +1,9 @@
-﻿using System;
-using System.Windows.Forms;
-using TagScanner.Controllers;
-
-namespace TagScanner
+﻿namespace TagScanner
 {
+	using System;
+	using System.Windows.Forms;
+	using TagScanner.Controllers;
+
 	static class Program
 	{
 		/// <summary>

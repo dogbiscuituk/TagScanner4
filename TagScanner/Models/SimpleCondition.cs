@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-
-namespace TagScanner.Models
+﻿namespace TagScanner.Models
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Linq.Expressions;
+
 	public class SimpleCondition
 	{
 		#region Public Interface

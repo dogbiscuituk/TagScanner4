@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-
-namespace TagScanner.Models
+﻿namespace TagScanner.Models
 {
+	using System;
+	using System.Collections.Generic;
+	using System.ComponentModel;
+	using System.Linq;
+	using System.Reflection;
+
 	public static class Metadata
 	{
 		#region Fields

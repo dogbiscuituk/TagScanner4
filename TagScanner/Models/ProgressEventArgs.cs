@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace TagScanner.Models
+﻿namespace TagScanner.Models
 {
+	using System;
+
 	public class ProgressEventArgs : EventArgs
 	{
 		public bool Continue { get; set; }

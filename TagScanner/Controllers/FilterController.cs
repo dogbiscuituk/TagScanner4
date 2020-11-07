@@ -1,8 +1,8 @@
-﻿using System;
-using TagScanner.Views;
-
-namespace TagScanner.Controllers
+﻿namespace TagScanner.Controllers
 {
+	using System;
+	using TagScanner.Views;
+
 	public abstract class FilterController
 	{
 		#region Lifetime Management

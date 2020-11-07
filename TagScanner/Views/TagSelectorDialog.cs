@@ -1,7 +1,7 @@
-﻿using System.Windows.Forms;
-
-namespace TagScanner.Views
+﻿namespace TagScanner.Views
 {
+	using System.Windows.Forms;
+
 	public partial class TagSelectorDialog : Form
 	{
 		public TagSelectorDialog()

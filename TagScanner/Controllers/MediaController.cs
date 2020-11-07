@@ -1,12 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using TagScanner.Models;
-using TagScanner.Properties;
-
-namespace TagScanner.Controllers
+﻿namespace TagScanner.Controllers
 {
+	using System;
+	using System.IO;
+	using System.Threading.Tasks;
+	using System.Windows.Forms;
+	using TagScanner.Models;
+	using TagScanner.Properties;
+
 	public class MediaController : MruController
 	{
 		#region Public Interface

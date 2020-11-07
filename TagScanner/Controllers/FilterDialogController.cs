@@ -1,14 +1,14 @@
-﻿using System;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Windows.Forms;
-using TagScanner.Models;
-using TagScanner.Views;
-
-namespace TagScanner.Controllers
+﻿namespace TagScanner.Controllers
 {
+	using System;
+	using System.Drawing;
+	using System.IO;
+	using System.Linq;
+	using System.Linq.Expressions;
+	using System.Windows.Forms;
+	using TagScanner.Models;
+	using TagScanner.Views;
+
 	public class FilterDialogController : SdiController
 	{
 		#region Lifetime Management

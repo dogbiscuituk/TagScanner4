@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using TagScanner.Logging;
-
-namespace TagScanner.Models
+﻿namespace TagScanner.Models
 {
+	using System;
+	using System.Collections.Generic;
+	using System.IO;
+	using System.Linq;
+	using TagScanner.Logging;
+
 	public class Reader
 	{
 		public Reader(List<string> existingFilePaths, IProgress<ProgressEventArgs> progress)

@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Forms;
-using System.Windows.Media;
-using TagScanner.Models;
-using TagScanner.Properties;
-using TagScanner.ValueConverters;
-using TagScanner.Views;
-
-namespace TagScanner.Controllers
+﻿namespace TagScanner.Controllers
 {
+	using System.Collections.Generic;
+	using System.Reflection;
+	using System.Windows.Controls;
+	using System.Windows.Data;
+	using System.Windows.Forms;
+	using System.Windows.Media;
+	using TagScanner.Models;
+	using TagScanner.Properties;
+	using TagScanner.ValueConverters;
+	using TagScanner.Views;
+
 	public class ReplacePreviewController : GridController
 	{
 		public ReplacePreviewController(IWin32Window owner)

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Windows.Forms;
-using TagScanner.Models;
-using TagScanner.Properties;
-
-namespace TagScanner.Controllers
+﻿namespace TagScanner.Controllers
 {
+	using System;
+	using System.Windows.Forms;
+	using TagScanner.Models;
+	using TagScanner.Properties;
+
 	public class StatusController
 	{
 		public StatusController(Model model, StatusStrip statusStrip)

@@ -1,14 +1,14 @@
-﻿using System;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Windows.Forms;
-using NReco.VideoConverter;
-using TagScanner.Logging;
-using TagScanner.Models;
-
-namespace TagScanner.Controllers
+﻿namespace TagScanner.Controllers
 {
+	using System;
+	using System.Drawing;
+	using System.IO;
+	using System.Linq;
+	using System.Windows.Forms;
+	using NReco.VideoConverter;
+	using TagScanner.Logging;
+	using TagScanner.Models;
+
 	public class PictureController
 	{
 		#region Lifetime Management

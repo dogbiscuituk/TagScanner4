@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-
-namespace TagScanner.Models
+﻿namespace TagScanner.Models
 {
+	using System;
+	using System.Collections.Generic;
+	using System.ComponentModel;
+	using System.Linq;
+
 	[DefaultProperty("Title")]
 	public class Selection : ITrack
 	{

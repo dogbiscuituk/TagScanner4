@@ -1,9 +1,9 @@
-﻿using System;
-using System.Globalization;
-using System.Windows.Data;
-
-namespace TagScanner.ValueConverters
+﻿namespace TagScanner.ValueConverters
 {
+	using System;
+	using System.Globalization;
+	using System.Windows.Data;
+
 	public class LogicalConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

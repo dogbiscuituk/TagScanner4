@@ -1,12 +1,12 @@
-﻿using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Serialization;
-using TagScanner.Models;
-
-namespace TagScanner.Controllers
+﻿namespace TagScanner.Controllers
 {
+	using System.IO;
+	using System.Runtime.Serialization.Formatters.Binary;
+	using System.Windows.Forms;
+	using System.Xml;
+	using System.Xml.Serialization;
+	using TagScanner.Models;
+
 	public class PersistenceController : SdiController
 	{
 		public PersistenceController(Model model, ToolStripDropDownItem recentMenu)

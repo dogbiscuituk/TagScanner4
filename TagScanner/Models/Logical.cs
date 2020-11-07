@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace TagScanner.Models
+﻿namespace TagScanner.Models
 {
+	using System;
+
 	[Flags]
 	public enum Logical
 	{

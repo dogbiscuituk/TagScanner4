@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
-using TagScanner.Models;
-using TagScanner.Properties;
-using TagScanner.Views;
-
-namespace TagScanner.Controllers
+﻿namespace TagScanner.Controllers
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Diagnostics;
+	using System.Drawing;
+	using System.Linq;
+	using System.Text;
+	using System.Text.RegularExpressions;
+	using System.Windows.Forms;
+	using TagScanner.Models;
+	using TagScanner.Properties;
+	using TagScanner.Views;
+
 	public class FindReplaceDialogController
 	{
 		#region Constructors

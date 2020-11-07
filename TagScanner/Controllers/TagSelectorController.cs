@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Windows.Forms;
-using TagScanner.Models;
-using TagScanner.Views;
-
-namespace TagScanner.Controllers
+﻿namespace TagScanner.Controllers
 {
+	using System;
+	using System.Collections;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Reflection;
+	using System.Windows.Forms;
+	using TagScanner.Models;
+	using TagScanner.Views;
+
 	public class TagSelectorController : IComparer
 	{
 		public TagSelectorController(IEnumerable<PropertyInfo> propertyInfos)

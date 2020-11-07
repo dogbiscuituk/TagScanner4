@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Forms.Integration;
-using TagScanner.Models;
-using TagScanner.ValueConverters;
-using TagScanner.Views;
-
-namespace TagScanner.Controllers
+﻿namespace TagScanner.Controllers
 {
+	using System;
+	using System.Collections.Generic;
+	using System.ComponentModel;
+	using System.Linq;
+	using System.Reflection;
+	using System.Windows;
+	using System.Windows.Controls;
+	using System.Windows.Data;
+	using System.Windows.Forms.Integration;
+	using TagScanner.Models;
+	using TagScanner.ValueConverters;
+	using TagScanner.Views;
+
 	public class LibraryGridController : GridController
 	{
 		#region Constructor

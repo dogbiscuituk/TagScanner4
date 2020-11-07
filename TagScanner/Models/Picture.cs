@@ -1,10 +1,10 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-
-namespace TagScanner.Models
+﻿namespace TagScanner.Models
 {
+	using System;
+	using System.Drawing;
+	using System.Drawing.Imaging;
+	using System.IO;
+
 	[Serializable]
     public class Picture
     {

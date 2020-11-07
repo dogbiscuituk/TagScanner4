@@ -1,10 +1,10 @@
-﻿using System;
-using System.Globalization;
-using System.Windows.Data;
-using TagScanner.Models;
-
-namespace TagScanner.ValueConverters
+﻿namespace TagScanner.ValueConverters
 {
+	using System;
+	using System.Globalization;
+	using System.Windows.Data;
+	using TagScanner.Models;
+
 	public class TimeSpanConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Xml;
-using System.Xml.Serialization;
-
-namespace TagScanner.Models
+﻿namespace TagScanner.Models
 {
+	using System;
+	using System.Collections.Generic;
+	using System.ComponentModel;
+	using System.IO;
+	using System.Linq;
+	using System.Reflection;
+	using System.Xml;
+	using System.Xml.Serialization;
+
 	[Serializable]
 	public class Track : ITrack, INotifyPropertyChanged
 	{
