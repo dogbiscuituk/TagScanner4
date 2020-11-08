@@ -1,184 +1,115 @@
 ﻿namespace TagScanner.Controllers
 {
+    using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
-
-    /*
-        This controller class makes extensive use of MP3Gain.exe version 1.4.6:
-            copyright(c) 2001-2004 by Glen Sawyer, uses mpglib, which can be found at http://www.mpg123.de.
-
-        Usage: c:\Program Files (x86)\MP3Gain\mp3gain [options] <infile> [<infile 2> ...]
-
-        options:
-        /v - show version number
-        /g <i>  - apply gain i to mp3 without doing any analysis
-        /l 0 <i> - apply gain i to channel 0 (left channel) of mp3 without doing any analysis (ONLY works for STEREO mp3s, not Joint Stereo mp3s)
-        /l 1 <i> - apply gain i to channel 1 (right channel) of mp3
-        /r - apply Track gain automatically (all files set to equal loudness)
-        /k - automatically lower Track/Album gain to not clip audio
-        /a - apply Album gain automatically (files are all from the same
-            album: a single gain change is applied to all files, so their loudness relative to each other remains unchanged, but the average album loudness is normalized)
-        /m <i> - modify suggested MP3 gain by integer i
-        /d <n> - modify suggested dB gain by floating-point n
-        /c - ignore clipping warning when applying gain
-        /o - output is a database-friendly tab-delimited list
-        /t - mp3gain writes modified mp3 to temp file, then deletes original instead of modifying bytes in original file
-        /q - Quiet mode: no status messages
-        /p - Preserve original file timestamp
-        /x - Only find max. amplitude of mp3
-        /f - Force mp3gain to assume input file is an MPEG 2 Layer III file (i.e. don't check for mis-named Layer I or Layer II files)
-        /? or /h - show this message
-        /s c - only check stored tag info (no other processing)
-        /s d - delete stored tag info (no other processing)
-        /s s - skip (ignore) stored tag info (do not read or write tags)
-        /s r - force re-calculation (do not read tag info)
-        /u - undo changes made by mp3gain (based on stored tag info)
-        /w - "wrap" gain change if gain+change > 255 or gain+change < 0 (use "/? wrap" switch for a complete explanation)
-
-        If you specify /r and /a, only the second one will work
-        If you do not specify /c, the program will stop and ask before applying gain change to a file that might clip
-     */
+    using System.Linq;
 
     public class GainController
     {
-        public enum OutputFormat
-        {
-            FreeText,
-            TabDelimited,
-        }
-
         public static string MP3GainPath { get; set; } = @"C:\Program Files (x86)\MP3Gain\mp3gain.exe";
 
         public GainController() { }
 
-        public OutputFormat Format { get; set; } = OutputFormat.TabDelimited;
-
-        public void GetGain(string mp3Path)
+        public void GetGain(IEnumerable<string> mp3Paths)
         {
-            mp3Path = @"""C:\mp3gaintest\1987 - In My Tribe\01 - What's the Matter Here.mp3"" ""C:\mp3gaintest\1987 - In My Tribe\04 - Cherry Tree.mp3""";
-            //mp3Path = @"""C:\mp3gaintest\1987 - In My Tribe\01 - What's the Matter Here.mp3"" ""C:\mp3gaintest\1987 - In My Tribe\04 - Cherry Tree.mp3""";
-            //mp3Path = @"""C:\mp3gaintest\1987 - In My Tribe\01 - What's the Matter Here.mp3""";
-
-            string
-                FormatSwitch = Format == OutputFormat.FreeText ? string.Empty : "/o";
-
-            var processInfo = new ProcessStartInfo
-            {
-                FileName = MP3GainPath,
-                Arguments = $"{FormatSwitch}/x {mp3Path}",
-                CreateNoWindow = true,
-                ErrorDialog = true,
-                RedirectStandardError = true,
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
-            };
-
-            var p = new Process();
-            var s = p.StartInfo;
-            s.FileName = MP3GainPath;
-            s.Arguments = $"{FormatSwitch}/x {mp3Path}";
-            s.CreateNoWindow = true;
-            s.ErrorDialog = true;
-            s.RedirectStandardError = true;
-            s.RedirectStandardOutput = true;
-            s.UseShellExecute = false;
-            p.OutputDataReceived += OutputDataReceived;
-            p.ErrorDataReceived += ErrorDataReceived;
-            p.Start();
-            p.BeginOutputReadLine();
-            //var output = p.StandardOutput.ReadToEnd();
-            //var error = p.StandardError.ReadToEnd();
-            p.WaitForExit();
-            p.Close();
-            p.ErrorDataReceived -= ErrorDataReceived;
-            p.OutputDataReceived -= OutputDataReceived;
-
-            /* 
-            The following are sample process outputs, in both string formats, for:
-                First track (no clipping);
-                Second track (warning for clipping);
-                Both tracks;
-                Error in path.
-
-            StringFormat.FreeText:
-            -------------------------
-            
-            "C:\\mp3gaintest\\1987 - In My Tribe\\01 - What's the Matter Here.mp3\r\n
-            Recommended \"Track\" dB change: 1.760000\r\n
-            Recommended \"Track\" mp3 gain change: 1\r\n
-            Max PCM sample at current gain: 24142.217216\r\n
-            Max mp3 global gain field: 210\r\n
-            Min mp3 global gain field: 94\r\n
-            \r\n
-            \r\n
-            Recommended \"Album\" dB change for all files: 1.760000\r\n
-            Recommended \"Album\" mp3 gain change for all files: 1\r\n"
-
-            "C:\\mp3gaintest\\1987 - In My Tribe\\04 - Cherry Tree.mp3\r\n
-            Recommended \"Track\" dB change: 1.850000\r\n
-            Recommended \"Track\" mp3 gain change: 1\r\n
-            WARNING: some clipping may occur with this gain change!\r\n
-            Max PCM sample at current gain: 29305.602048\r\n
-            Max mp3 global gain field: 183\r\n
-            Min mp3 global gain field: 121\r\n
-            \r\n
-            \r\n
-            Recommended \"Album\" dB change for all files: 1.850000\r\n
-            Recommended \"Album\" mp3 gain change for all files: 1\r\n
-            WARNING: with this global gain change, some clipping may occur in file C:\\mp3gaintest\\1987 - In My Tribe\\04 - Cherry Tree.mp3\r\n"
-
-            "C:\\mp3gaintest\\1987 - In My Tribe\\01 - What's the Matter Here.mp3\r\n
-            Recommended \"Track\" dB change: 1.760000\r\n
-            Recommended \"Track\" mp3 gain change: 1\r\n
-            Max PCM sample at current gain: 24142.217216\r\n
-            Max mp3 global gain field: 210\r\n
-            Min mp3 global gain field: 94\r\n
-            \r\n
-            C:\\mp3gaintest\\1987 - In My Tribe\\04 - Cherry Tree.mp3\r\n
-            Recommended \"Track\" dB change: 1.850000\r\n
-            Recommended \"Track\" mp3 gain change: 1\r\n
-            WARNING: some clipping may occur with this gain change!\r\n
-            Max PCM sample at current gain: 29305.602048\r\n
-            Max mp3 global gain field: 183\r\n
-            Min mp3 global gain field: 121\r\n
-            \r\n
-            \r\n
-            Recommended \"Album\" dB change for all files: 1.800000\r\n
-            Recommended \"Album\" mp3 gain change for all files: 1\r\n
-            WARNING: with this global gain change, some clipping may occur in file C:\\mp3gaintest\\1987 - In My Tribe\\04 - Cherry Tree.mp3\r\n"
-
-            "C:\\mp3gaintest\\1987 - In My Trube\\01 - What's the Matter Here.mp3\r\n
-            Can't open C:\\mp3gaintest\\1987 - In My Trube\\01 - What's the Matter Here.mp3 for reading\r\n"
-
-            StringFormat.TabDelimited:
-            -------------------------------
-
-            "File\t                                                                                                   MP3 gain\t  dB gain\t    Max Amplitude\t  Max global_gain\t  Min global_gain\r\n
-            C:\\mp3gaintest\\1987 - In My Tribe\\01 - What's the Matter Here.mp3\t  1\t              1.760000\t  24142.217216\t    210\t                     94\r\n\
-            "Album\"\t                                                                                           1\t               1.800000\t  24142.217216\t   210\t                      94\r\n"
-
-            "File\t                                                                                                   MP3 gain\t  dB gain\t    Max Amplitude\t  Max global_gain\t  Min global_gain\r\n
-            C:\\mp3gaintest\\1987 - In My Tribe\\04 - Cherry Tree.mp3\t                   1\t              1.850000\t  29305.602048\t     183\t                    121\r\n
-            \"Album\"\t                                                                                          1\t              1.850000\t  29305.602048\t     183\t                    121\r\n"
-
-            "File\t                                                                                                   MP3 gain\t  dB gain\t    Max Amplitude\t  Max global_gain\t  Min global_gain\r\n
-            C:\\mp3gaintest\\1987 - In My Tribe\\01 - What's the Matter Here.mp3\t  1\t              1.760000\t  24142.226249\t    210\t                     94\r\n
-            C:\\mp3gaintest\\1987 - In My Tribe\\04 - Cherry Tree.mp3\t                   1\t              1.850000\t  29305.598260\t    183\t                     121\r\n
-            \"Album\"\t                                                                                          1\t              1.800000\t  29305.602048\t    210\t                     94\r\n"
-
-            "File\t                                                                                                  MP3 gain\t  dB gain\t    Max Amplitude\t  Max global_gain\t  Min global_gain\r\n
-            Can't open C:\\mp3gaintest\\1987 - In My Trube\\04 - Cherry Tree.mp3 for reading\r\n"
-
-            */
-        }
-
-        private void ErrorDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            return;
+            var paths = mp3Paths.Select(s => $"\"{s}\"").Aggregate((s, t) => $"{s} {t}");
+            var process = new Process();
+            var startInfo = process.StartInfo;
+            startInfo.FileName = MP3GainPath;
+            //startInfo.Arguments = $"/o/x/ss {paths}";
+            startInfo.Arguments = $"/o/ss {paths}";
+            startInfo.CreateNoWindow = true;
+            startInfo.ErrorDialog = true;
+            startInfo.RedirectStandardError = true;
+            startInfo.RedirectStandardOutput = true;
+            startInfo.UseShellExecute = false;
+            process.OutputDataReceived += OutputDataReceived;
+            process.Start();
+            process.BeginOutputReadLine();
+            process.WaitForExit();
+            process.Close();
+            process.OutputDataReceived -= OutputDataReceived;
         }
 
         private void OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
-            return;
+            try
+            {
+                var info = e.Data;
+                if (string.IsNullOrWhiteSpace(info))
+                    return;
+                var g = new GainInfo(info);
+                Debug.WriteLine(g);
+            }
+            catch (FormatException)
+            {
+
+            }
         }
+
+        public class GainInfo
+        {
+            public string Filename { get; set; }
+            public int MP3Gain { get; set; }
+            public float DbGain { get; set; }
+            public double AmplitudeMax { get; set; }
+            public int GlobalGainMin { get; set; }
+            public int GlobalGainMax { get; set; }
+
+            public GainInfo(string info)
+            {
+                var infos = info.TrimEnd().Split('\t');
+                Filename = infos[0];
+                MP3Gain = int.Parse(infos[1]);
+                DbGain = float.Parse(infos[2]);
+                AmplitudeMax = double.Parse(infos[3]);
+                GlobalGainMax = int.Parse(infos[4]);
+                GlobalGainMin = int.Parse(infos[5]);
+            }
+
+            public override string ToString() =>
+                $"{Filename} MP3Gain={MP3Gain} DbGain={DbGain} AmplitudeMax={AmplitudeMax} GlobalGainMin={GlobalGainMin} Max={GlobalGainMax}";
+        }
+
+        #region Documentation
+
+        /*
+            This controller class makes extensive use of MP3Gain.exe version 1.4.6:
+                copyright(c) 2001-2004 by Glen Sawyer, uses mpglib, which can be found at http://www.mpg123.de.
+
+            Usage: c:\Program Files (x86)\MP3Gain\mp3gain [options] <infile> [<infile 2> ...]
+
+            options:
+            /? or /h - show this message
+            /a - apply Album gain automatically (files are all from the same album: a single gain change is applied to all files, 
+                  so their loudness relative to each other remains unchanged, but the average album loudness is normalized)
+            /c - ignore clipping warning when applying gain
+            /d<n> - modify suggested dB gain by floating-point n
+            /f - Force mp3gain to assume input file is an MPEG 2 Layer III file (i.e. don't check for mis-named Layer I or Layer II files)
+            /g<i>  - apply gain i to mp3 without doing any analysis
+            /k - automatically lower Track/Album gain to not clip audio
+            /l0<i> - apply gain i to channel 0 (left channel) of mp3 without doing any analysis (ONLY works for STEREO mp3s, not Joint Stereo mp3s)
+            /l1<i> - apply gain i to channel 1 (right channel) of mp3
+            /m<i> - modify suggested MP3 gain by integer i
+            /o - output is a database-friendly tab-delimited list
+            /p - Preserve original file timestamp
+            /q - Quiet mode: no status messages
+            /r - apply Track gain automatically (all files set to equal loudness)
+            /sc - only check stored tag info (no other processing)
+            /sd - delete stored tag info (no other processing)
+            /sr - force re-calculation (do not read tag info)
+            /ss - skip (ignore) stored tag info (do not read or write tags)
+            /t - mp3gain writes modified mp3 to temp file, then deletes original instead of modifying bytes in original file
+            /u - undo changes made by mp3gain (based on stored tag info)
+            /v - show version number
+            /w - "wrap" gain change if gain+change > 255 or gain+change < 0 (use "/? wrap" switch for a complete explanation)
+            /x - Only find max. amplitude of mp3
+
+            If you specify /r and /a, only the second one will work
+            If you do not specify /c, the program will stop and ask before applying gain change to a file that might clip
+         */
+
+        #endregion
     }
 }
